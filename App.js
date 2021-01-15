@@ -21,7 +21,7 @@ const App = () => {
           imageStyle={{}}
         ></ImageBackground>
         <Menu stroke="grey" width={35} height={35} style={GlobalStyles.menu} />
-        <Text style={GlobalStyles.hello}>Homeless Cats</Text>
+        <Text style={GlobalStyles.hello}>Random Pics</Text>
       </View>
       <List />
       <StatusBar style="auto" />
