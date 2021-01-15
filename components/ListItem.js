@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
     padding: 15,
     backgroundColor: '#eee',
     borderRadius: 9,
-    borderWidth: 5,
+    borderWidth: 3,
     borderColor: 'grey',
   },
   imagebox: {
@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
   },
   texts: {
     color: 'grey',
-    fontSize: 16,
+    fontSize: 17,
   },
 });
 
