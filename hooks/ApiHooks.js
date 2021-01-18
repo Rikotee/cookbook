@@ -1,6 +1,5 @@
 import {useEffect, useState} from 'react';
-
-const baseUrl = `http://media.mw.metropolia.fi/wbma/`;
+import {baseUrl} from '../utils/variables';
 
 const useLoadMedia = () => {
   const [mediaArray, setMediaArray] = useState([]);
@@ -9,7 +8,7 @@ const useLoadMedia = () => {
     try {
       const listResponse = await fetch(baseUrl + 'media?limit=' + limit);
       const listJson = await listResponse.json();
-      console.log('respnse json data', listJson);
+      console.log('response json data', listJson);
       const media = await Promise.all(
         listJson.map(async (item) => {
           const fileResponse = await fetch(baseUrl + 'media/' + item.file_id);
@@ -25,11 +24,9 @@ const useLoadMedia = () => {
       console.error('loadMedia error', error);
     }
   };
-
   useEffect(() => {
-    loadMedia();
+    loadMedia(10);
   }, []);
-
   return mediaArray;
 };
 
