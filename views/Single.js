@@ -1,7 +1,9 @@
 import React from 'react';
 import {StyleSheet, SafeAreaView, Text, Image} from 'react-native';
 import PropTypes from 'prop-types';
-import {uploadsUrl} from '../utils/variables';
+// import {uploadsUrl} from '../utils/variables';
+
+const uploadsUrl = 'http://media.mw.metropolia.fi/wbma/uploads/';
 
 const Single = ({route}) => {
   const {file} = route.params;
