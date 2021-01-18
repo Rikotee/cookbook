@@ -4,70 +4,58 @@ import PropTypes from 'prop-types';
 
 const uploadsUrl = 'http://media.mw.metropolia.fi/wbma/uploads/';
 
-const ListItem = (props) => {
-  console.log(props);
+const ListItem = ({navigation, singleMedia}) => {
+  // console.log(props);
   return (
-    <TouchableOpacity style={styles.container}>
-      <View style={styles.row}>
-        <View style={styles.imagebox}>
-          <Image
-            style={{width: 100, height: 100}}
-            source={{uri: uploadsUrl + props.singleMedia.thumbnails.w160}}
-          />
-        </View>
-        <View style={styles.textbox}>
-          <Text style={styles.listTile}>{props.singleMedia.title}</Text>
-          <Text style={styles.texts}>{props.singleMedia.description}</Text>
-        </View>
+    <TouchableOpacity
+      style={styles.row}
+      onPress={() => {
+        navigation.navigate('Single', {file: singleMedia});
+      }}
+    >
+      <View style={styles.imagebox}>
+        <Image
+          style={styles.image}
+          source={{uri: uploadsUrl + singleMedia.thumbnails.w160}}
+        />
+      </View>
+      <View style={styles.textbox}>
+        <Text style={styles.listTile}>{singleMedia.title}</Text>
+        <Text>{singleMedia.description}</Text>
       </View>
     </TouchableOpacity>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    paddingRight: 10,
-    paddingLeft: 10,
-    paddingTop: 10,
-  },
   row: {
     flexDirection: 'row',
     padding: 15,
+    marginBottom: 5,
     backgroundColor: '#eee',
-    borderRadius: 9,
-    borderWidth: 3,
-    borderColor: 'grey',
+    borderRadius: 6,
   },
   imagebox: {
     flex: 1,
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-    overflow: 'hidden',
-    borderWidth: 3,
-    borderColor: 'grey',
   },
   image: {
     flex: 1,
+    borderRadius: 6,
   },
   textbox: {
     flex: 2,
     padding: 10,
   },
-  listTile: {
+  listTitle: {
     fontWeight: 'bold',
     fontSize: 20,
     paddingBottom: 15,
-    color: 'orange',
-  },
-  texts: {
-    color: 'grey',
-    fontSize: 17,
   },
 });
 
 ListItem.propTypes = {
   singleMedia: PropTypes.object,
+  navigation: PropTypes.object,
 };
 
 export default ListItem;
