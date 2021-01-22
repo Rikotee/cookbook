@@ -1,5 +1,5 @@
 import {useEffect, useState} from 'react';
-import {baseUrl} from '../utils/variables.js';
+import {baseUrl} from '../utils/variables';
 
 const useLoadMedia = () => {
   const [mediaArray, setMediaArray] = useState([]);
@@ -70,7 +70,7 @@ const useLogin = () => {
     }
   };
 
-  return postLogin, checkToken;
+  return {postLogin, checkToken};
 };
 
 const useRegister = () => {

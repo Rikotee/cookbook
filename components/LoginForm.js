@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import {MainContext} from '../contexts/MainContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useLogin} from '../hooks/ApiHooks';
-import FormTextInput from '/FormTextInput';
+import FormTextInput from './FormTextInput';
 import useLoginForm from '../hooks/LoginHooks';
 
 const LoginForm = ({navigation}) => {
@@ -36,10 +36,11 @@ const LoginForm = ({navigation}) => {
         onChangeText={(txt) => handleInputChange('password', txt)}
         secureTextEntry={true}
       />
-      <Button title="Register!" onPress={doLogin} />
+      <Button title="Login" onPress={doLogin} />
     </View>
   );
 };
+
 LoginForm.propTypes = {
   navigation: PropTypes.object,
 };

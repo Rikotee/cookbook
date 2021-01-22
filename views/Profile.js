@@ -4,7 +4,7 @@ import {MainContext} from '../contexts/MainContext';
 import PropTypes from 'prop-types';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const Profile = (navigation) => {
+const Profile = ({navigation}) => {
   const {isLoggedIn, setIsLoggedIn, user} = useContext(MainContext);
   console.log('profile isLoggedIn?', isLoggedIn);
   console.log('profile user data', user);
@@ -21,7 +21,7 @@ const Profile = (navigation) => {
       <Text>Profile</Text>
       <Text>Name: {user.username}</Text>
       <Text>Email: {user.email}</Text>
-      {/* <Text>Name: {user.user_id}</Text> */}
+      {/* <Text>id: {user.user_id}</Text> */}
       <Button title={'Logout'} onPress={logout} />
     </SafeAreaView>
   );
