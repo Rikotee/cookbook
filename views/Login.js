@@ -1,5 +1,5 @@
 import React, {useContext, useEffect} from 'react';
-import {StyleSheet, View, Text} from 'react-native';
+import {StyleSheet, View, Text, KeyboardAvoidingView} from 'react-native';
 import PropTypes from 'prop-types';
 import {MainContext} from '../contexts/MainContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -32,10 +32,18 @@ const Login = ({navigation}) => {
 
   return (
     <View style={styles.container}>
-      <Text>Login</Text>
-      <LoginForm navigation={navigation} />
-      <Text>Register</Text>
-      <RegisterForm navigation={navigation} />
+      <KeyboardAvoidingView behavior="padding">
+        <View style={styles.login}>
+          <Text>Login</Text>
+          <LoginForm navigation={navigation} />
+        </View>
+      </KeyboardAvoidingView>
+      <KeyboardAvoidingView behavior="padding">
+        <View style={styles.register}>
+          <Text>Register</Text>
+          <RegisterForm navigation={navigation} />
+        </View>
+      </KeyboardAvoidingView>
     </View>
   );
 };
@@ -44,6 +52,21 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  login: {
+    height: 250,
+    width: 170,
+    backgroundColor: 'lightgrey',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  register: {
+    height: 250,
+    width: 170,
+    backgroundColor: 'lightblue',
     alignItems: 'center',
     justifyContent: 'center',
   },
