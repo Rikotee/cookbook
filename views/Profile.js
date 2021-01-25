@@ -1,14 +1,16 @@
-import React, {useContext} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {StyleSheet, ActivityIndicator} from 'react-native';
 import {MainContext} from '../contexts/MainContext';
 import PropTypes from 'prop-types';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {Card, Text, Button, ListItem, Avatar} from 'react-native-elements';
+import {useTag} from '../hooks/ApiHooks';
+import {uploadsUrl} from '../utils/variables';
 
 const Profile = ({navigation}) => {
   const {isLoggedIn, setIsLoggedIn, user} = useContext(MainContext);
-  console.log('profile isLoggedIn?', isLoggedIn);
-  console.log('profile user data', user);
+  const [avatar, setAvatar] = useState('http://placekitten.com/640');
+  const {getFilesByTag} = useTag();
   const logout = async () => {
     setIsLoggedIn(false);
     await AsyncStorage.clear();
@@ -17,13 +19,28 @@ const Profile = ({navigation}) => {
       navigation.navigate('Login');
     }
   };
+
+  useEffect(() => {
+    const fetchAvatar = async () => {
+      try {
+        const avatarList = await getFilesByTag('avatar_' + user.user_id);
+        if (avatarList.length > 0) {
+          setAvatar(uploadsUrl + avatarList.pop().filename);
+        }
+      } catch (error) {
+        console.error(error.message);
+      }
+    };
+    fetchAvatar();
+  }, []);
+
   return (
     <Card>
       <Card.Title>
         <Text h1>{user.username}</Text>
       </Card.Title>
       <Card.Image
-        source={{uri: 'http://placekitten.com/400'}}
+        source={{uri: avatar}}
         style={styles.image}
         PlaceholderContent={<ActivityIndicator />}
       />
