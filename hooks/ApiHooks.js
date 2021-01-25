@@ -1,27 +1,37 @@
 import {useEffect, useState} from 'react';
 import {baseUrl} from '../utils/variables';
 
+// general function for fetching (options default value is empty object)
+const doFetch = async (url, options = {}) => {
+  const response = await fetch(url, options);
+  const json = await response.json();
+  if (json.error) {
+    // if API response contains error message (use Postman to get further details)
+    throw new Error(json.message + ': ' + json.error);
+  } else if (!response.ok) {
+    // if API response does not contain error message, but there is some other error
+    throw new Error('doFetch failed');
+  } else {
+    // if all goes well
+    return json;
+  }
+};
+
 const useLoadMedia = () => {
   const [mediaArray, setMediaArray] = useState([]);
 
   const loadMedia = async (limit = 5) => {
     try {
-      const listResponse = await fetch(baseUrl + 'media?limit=' + limit);
-      const listJson = await listResponse.json();
-      console.log('response json data', listJson);
+      const listJson = await doFetch(baseUrl + 'media?limit=' + limit);
       const media = await Promise.all(
         listJson.map(async (item) => {
-          const fileResponse = await fetch(baseUrl + 'media/' + item.file_id);
-          const fileJson = fileResponse.json();
-          // console.log('media file data', json);
+          const fileJson = await doFetch(baseUrl + 'media/' + item.file_id);
           return fileJson;
         })
       );
-      console.log('media array data', media);
-
       setMediaArray(media);
     } catch (error) {
-      console.error('loadMedia error', error);
+      console.error('loadMedia error', error.message);
     }
   };
   useEffect(() => {
@@ -38,42 +48,17 @@ const useLogin = () => {
       body: JSON.stringify(userCredentials),
     };
     try {
-      const response = await fetch(baseUrl + 'login', options);
-      const userData = await response.json();
-      console.log('postLogin response status', response.status);
-      console.log('postLogin userData', userData);
-      if (response.ok) {
-        return userData;
-      } else {
-        throw new Error(userData.message);
-      }
+      const userData = await doFetch(baseUrl + 'login', options);
+      return userData;
     } catch (error) {
-      throw new Error(error.message);
+      throw new Error('postLogin error: ' + error.message);
     }
   };
 
-  const checkToken = async (token) => {
-    try {
-      const options = {
-        method: 'GET',
-        headers: {'x-access-token': token},
-      };
-      const response = await fetch(baseUrl + 'users/user', options);
-      const userData = response.json();
-      if (response.ok) {
-        return userData;
-      } else {
-        throw new Error(userData.message);
-      }
-    } catch (error) {
-      throw new Error(error.message);
-    }
-  };
-
-  return {postLogin, checkToken};
+  return {postLogin};
 };
 
-const useRegister = () => {
+const useUser = () => {
   const postRegister = async (inputs) => {
     console.log('trying to create user', inputs);
     const fetchOptions = {
@@ -84,20 +69,28 @@ const useRegister = () => {
       body: JSON.stringify(inputs),
     };
     try {
-      const response = await fetch(baseUrl + 'users', fetchOptions);
-      const json = await response.json();
+      const json = await doFetch(baseUrl + 'users', fetchOptions);
       console.log('register resp', json);
-      if (response.ok) {
-        return json;
-      } else {
-        throw new Error(json.message + ': ' + json.error);
-      }
+      return json;
     } catch (e) {
-      console.log('ApiHooks register', e.message);
       throw new Error(e.message);
     }
   };
-  return {postRegister};
+
+  const checkToken = async (token) => {
+    try {
+      const options = {
+        method: 'GET',
+        headers: {'x-access-token': token},
+      };
+      const userData = await fetch(baseUrl + 'users/user', options);
+      return userData;
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  };
+
+  return {postRegister, checkToken};
 };
 
-export {useLoadMedia, useLogin, useRegister};
+export {useLoadMedia, useLogin, useUser};
