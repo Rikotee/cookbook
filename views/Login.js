@@ -1,4 +1,4 @@
-import React, {useContext, useEffect} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {StyleSheet, View, KeyboardAvoidingView, Platform} from 'react-native';
 import PropTypes from 'prop-types';
 import {MainContext} from '../contexts/MainContext';
@@ -6,10 +6,11 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useUser} from '../hooks/ApiHooks';
 import LoginForm from '../components/LoginForm';
 import RegisterForm from '../components/RegisterForm';
-import {Card, Text} from 'react-native-elements';
+import {Button, Card, Text} from 'react-native-elements';
 
 const Login = ({navigation}) => {
   const {isLoggedIn, setIsLoggedIn, setUser} = useContext(MainContext);
+  const [formToggle, setFormToggle] = useState(true);
   console.log('isLoggedIn?', isLoggedIn);
   const {checkToken} = useUser();
 
@@ -40,16 +41,28 @@ const Login = ({navigation}) => {
         <Text h1>MyApp</Text>
       </View>
       <View style={styles.form}>
-        <Card>
-          <Card.Title h4>Login</Card.Title>
-          <Card.Divider />
-          <LoginForm navigation={navigation} />
-        </Card>
-        <Card>
-          <Card.Title h4>Register</Card.Title>
-          <Card.Divider />
-          <RegisterForm navigation={navigation} />
-        </Card>
+        <Text style={styles.text}>
+          {formToggle ? 'No account' : 'Already registered?'}
+        </Text>
+        <Button
+          title={formToggle ? 'Register' : 'Login'}
+          onPress={() => {
+            setFormToggle(!formToggle);
+          }}
+        />
+        {formToggle ? (
+          <Card>
+            <Card.Title h4>Login</Card.Title>
+            <Card.Divider />
+            <LoginForm navigation={navigation} />
+          </Card>
+        ) : (
+          <Card>
+            <Card.Title h4>Register</Card.Title>
+            <Card.Divider />
+            <RegisterForm navigation={navigation} />
+          </Card>
+        )}
       </View>
     </KeyboardAvoidingView>
   );
@@ -67,6 +80,10 @@ const styles = StyleSheet.create({
   },
   form: {
     flex: 4,
+  },
+  text: {
+    alignSelf: 'center',
+    paddingBottom: 20,
   },
 });
 
