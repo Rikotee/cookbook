@@ -37,7 +37,7 @@ const Login = ({navigation}) => {
       behavior={Platform.OS == 'ios' ? 'padding' : 'height'}
     >
       <View style={styles.appTitle}>
-        <Text h1>App Name</Text>
+        <Text h1>MyApp</Text>
       </View>
       <View style={styles.form}>
         <Card>

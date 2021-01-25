@@ -18,7 +18,7 @@ const Single = ({route}) => {
         PlaceholderContent={<ActivityIndicator />}
       />
       <Card.Divider />
-      <Text style={{marginBottom: 10}}>{file.description}</Text>
+      <Text style={styles.description}>{file.description}</Text>
       <ListItem>
         <Avatar source={{uri: 'http://placekitten.com/180'}} />
         <Text>Ownername</Text>
@@ -32,6 +32,9 @@ const styles = StyleSheet.create({
     width: '100%',
     height: undefined,
     aspectRatio: 1,
+  },
+  description: {
+    marginBottom: 10,
   },
 });
 
