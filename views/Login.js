@@ -7,11 +7,11 @@ import {useUser} from '../hooks/ApiHooks';
 import LoginForm from '../components/LoginForm';
 import RegisterForm from '../components/RegisterForm';
 import {Button, Card, Text} from 'react-native-elements';
+import {ScrollView} from 'react-native-gesture-handler';
 
 const Login = ({navigation}) => {
   const {isLoggedIn, setIsLoggedIn, setUser} = useContext(MainContext);
   const [formToggle, setFormToggle] = useState(true);
-  console.log('isLoggedIn?', isLoggedIn);
   const {checkToken} = useUser();
 
   const getToken = async () => {
@@ -42,7 +42,7 @@ const Login = ({navigation}) => {
       </View>
       <View style={styles.form}>
         <Text style={styles.text}>
-          {formToggle ? 'No account' : 'Already registered?'}
+          {formToggle ? 'No account?' : 'Already registered?'}
         </Text>
         <Button
           title={formToggle ? 'Register' : 'Login'}
@@ -79,11 +79,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   form: {
-    flex: 4,
+    flex: 2,
   },
   text: {
     alignSelf: 'center',
-    paddingBottom: 20,
+    padding: 20,
   },
 });
 
