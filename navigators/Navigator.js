@@ -40,7 +40,13 @@ const StackScreen = () => {
         </>
       ) : (
         <>
-          <Stack.Screen name="Login" component={Login} />
+          <Stack.Screen
+            name="Login"
+            component={Login}
+            options={({route}) => ({
+              headerShown: false,
+            })}
+          />
         </>
       )}
     </Stack.Navigator>

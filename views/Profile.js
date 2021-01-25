@@ -1,8 +1,9 @@
 import React, {useContext} from 'react';
-import {StyleSheet, SafeAreaView, Text, Button} from 'react-native';
+import {StyleSheet, ActivityIndicator} from 'react-native';
 import {MainContext} from '../contexts/MainContext';
 import PropTypes from 'prop-types';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {Card, Text, Button, ListItem, Avatar} from 'react-native-elements';
 
 const Profile = ({navigation}) => {
   const {isLoggedIn, setIsLoggedIn, user} = useContext(MainContext);
@@ -17,24 +18,26 @@ const Profile = ({navigation}) => {
     }
   };
   return (
-    <SafeAreaView style={styles.container}>
-      <Text>Profile</Text>
-      <Text>Name: {user.username}</Text>
-      <Text>Email: {user.email}</Text>
-      {/* <Text>id: {user.user_id}</Text> */}
+    <Card>
+      <Card.Title>
+        <Text h1>{user.username}</Text>
+      </Card.Title>
+      <Card.Image
+        source={{uri: 'http://placekitten.com/400'}}
+        style={styles.image}
+        PlaceholderContent={<ActivityIndicator />}
+      />
+      <ListItem>
+        <Avatar icon={{name: 'user', type: 'font-awesome', color: 'black'}} />
+        <Text>{user.full_name}</Text>
+      </ListItem>
       <Button title={'Logout'} onPress={logout} />
-    </SafeAreaView>
+    </Card>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingTop: 40,
-  },
+  image: {width: '100%', height: undefined, aspectRatio: 1},
 });
 
 Profile.propTypes = {

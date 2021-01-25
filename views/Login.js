@@ -1,11 +1,12 @@
 import React, {useContext, useEffect} from 'react';
-import {View, Text} from 'react-native';
+import {StyleSheet, View, KeyboardAvoidingView, Platform} from 'react-native';
 import PropTypes from 'prop-types';
 import {MainContext} from '../contexts/MainContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useUser} from '../hooks/ApiHooks';
 import LoginForm from '../components/LoginForm';
 import RegisterForm from '../components/RegisterForm';
+import {Card, Text} from 'react-native-elements';
 
 const Login = ({navigation}) => {
   const {isLoggedIn, setIsLoggedIn, setUser} = useContext(MainContext);
@@ -31,14 +32,43 @@ const Login = ({navigation}) => {
   }, []);
 
   return (
-    <View>
-      <Text>Login</Text>
-      <LoginForm navigation={navigation} />
-      <Text>Register</Text>
-      <RegisterForm navigation={navigation} />
-    </View>
+    <KeyboardAvoidingView
+      style={styles.container}
+      behavior={Platform.OS == 'ios' ? 'padding' : 'height'}
+    >
+      <View style={styles.appTitle}>
+        <Text h1>App Name</Text>
+      </View>
+      <View style={styles.form}>
+        <Card>
+          <Card.Title h4>Login</Card.Title>
+          <Card.Divider />
+          <LoginForm navigation={navigation} />
+        </Card>
+        <Card>
+          <Card.Title h4>Register</Card.Title>
+          <Card.Divider />
+          <RegisterForm navigation={navigation} />
+        </Card>
+      </View>
+    </KeyboardAvoidingView>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 16,
+  },
+  appTitle: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  form: {
+    flex: 4,
+  },
+});
 
 Login.propTypes = {
   navigation: PropTypes.object,

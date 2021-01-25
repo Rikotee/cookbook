@@ -83,7 +83,7 @@ const useUser = () => {
         method: 'GET',
         headers: {'x-access-token': token},
       };
-      const userData = await fetch(baseUrl + 'users/user', options);
+      const userData = await doFetch(baseUrl + 'users/user', options);
       return userData;
     } catch (error) {
       throw new Error(error.message);
