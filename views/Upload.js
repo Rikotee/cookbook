@@ -1,20 +1,31 @@
 import React from 'react';
-import {View} from 'react-native';
-import {Input, Text, Image, Button} from 'react-native-elements';
+import {ScrollView} from 'react-native';
+import {Input, Text, Image, Button, Card} from 'react-native-elements';
+import useUploadForm from '../hooks/UploadHooks';
 
 const Upload = () => {
+  const {handleInputChange, inputs} = useUploadForm();
+
   return (
-    <View>
-      <Text>Upload media file</Text>
+    <ScrollView>
+      <Text h4>Upload media file</Text>
       <Image
         source={{uri: 'http://placekitten.com/400'}}
-        style={{width: '100%', height: undefined, aspectRatio: 16 / 9}}
+        style={{width: '100%', height: undefined, aspectRatio: 1}}
       />
-      <Input />
-      <Input />
+      <Input
+        placeholder="title"
+        value={inputs.title}
+        onChangeText={(txt) => handleInputChange('title', txt)}
+      />
+      <Input
+        placeholder="description"
+        value={inputs.description}
+        onChangeText={(txt) => handleInputChange('description', txt)}
+      />
       <Button title="Choose file" />
       <Button title="Upload file" />
-    </View>
+    </ScrollView>
   );
 };
 

@@ -1,6 +1,6 @@
 import {useState} from 'react';
 
-const useUpload = (callback) => {
+const useUploadForm = (callback) => {
   const [inputs, setInputs] = useState({
     title: '',
     description: '',
@@ -8,7 +8,7 @@ const useUpload = (callback) => {
 
   const handleInputChange = (name, text) => {
     // console.log(name, text);
-    // console.log('inputs state', inputs);
+    console.log('inputs state', inputs);
     setInputs((inputs) => {
       return {
         ...inputs,
@@ -22,4 +22,4 @@ const useUpload = (callback) => {
   };
 };
 
-export default useUpload;
+export default useUploadForm;
