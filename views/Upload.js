@@ -11,14 +11,16 @@ import {Input, Text, Image, Button, Card} from 'react-native-elements';
 import useUploadForm from '../hooks/UploadHooks';
 import * as ImagePicker from 'expo-image-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {useMedia} from '../hooks/ApiHooks';
+import {useMedia, useTag} from '../hooks/ApiHooks';
 import {MainContext} from '../contexts/MainContext';
+import {appIdentifier} from '../utils/variables';
 
 const Upload = ({navigation}) => {
   const [image, setImage] = useState(null);
   const [filetype, setFiletype] = useState('');
   const [isUploading, setIsUploading] = useState(false);
   const {upload} = useMedia();
+  const {postTag} = useTag();
   const {update, setUpdate} = useContext(MainContext);
 
   const {handleInputChange, inputs, uploadErrors, reset} = useUploadForm();
@@ -43,6 +45,14 @@ const Upload = ({navigation}) => {
       const userToken = await AsyncStorage.getItem('userToken');
       const resp = await upload(formData, userToken);
       console.log('upload response', resp);
+      const tagResponse = await postTag(
+        {
+          file_id: resp.file_id,
+          tag: appIdentifier,
+        },
+        userToken
+      );
+      console.log('posting app identifier', tagResponse);
       Alert.alert(
         'Upload',
         'File uploaded',
