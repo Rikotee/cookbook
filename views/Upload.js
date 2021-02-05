@@ -21,7 +21,7 @@ const Upload = ({navigation}) => {
   const {upload} = useMedia();
   const {update, setUpdate} = useContext(MainContext);
 
-  const {handleInputChange, inputs} = useUploadForm();
+  const {handleInputChange, inputs, uploadErrors, reset} = useUploadForm();
 
   const doUpload = async () => {
     const formData = new FormData();
@@ -51,6 +51,7 @@ const Upload = ({navigation}) => {
             text: 'Ok',
             onPress: () => {
               setUpdate(update + 1);
+              doReset();
               navigation.navigate('Home');
             },
           },
@@ -101,6 +102,11 @@ const Upload = ({navigation}) => {
     }
   };
 
+  const doReset = () => {
+    setImage(null);
+    reset();
+  };
+
   return (
     <ScrollView>
       <KeyboardAvoidingView behavior="position" enabled>
@@ -116,16 +122,27 @@ const Upload = ({navigation}) => {
             placeholder="title"
             value={inputs.title}
             onChangeText={(txt) => handleInputChange('title', txt)}
+            errorMessage={uploadErrors.title}
           />
           <Input
             placeholder="description"
             value={inputs.description}
             onChangeText={(txt) => handleInputChange('description', txt)}
+            errorMessage={uploadErrors.description}
           />
           <Button title="Choose from library" onPress={() => pickImage(true)} />
           <Button title="Use camera" onPress={() => pickImage(false)} />
           {isUploading && <ActivityIndicator size="large" color="#0000ff" />}
-          <Button title="Upload file" onPress={doUpload} />
+          <Button
+            title="Upload file"
+            onPress={doUpload}
+            disabled={
+              uploadErrors.title !== null ||
+              uploadErrors.description !== null ||
+              image === null
+            }
+          />
+          <Button title="Reset" onPress={doReset} />
         </Card>
       </KeyboardAvoidingView>
     </ScrollView>
