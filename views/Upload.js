@@ -1,14 +1,25 @@
-import React, {useEffect, useState} from 'react';
-import {Platform, ScrollView} from 'react-native';
+import React, {useContext, useEffect, useState} from 'react';
+import {
+  ActivityIndicator,
+  Alert,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+} from 'react-native';
+import PropTypes from 'prop-types';
 import {Input, Text, Image, Button, Card} from 'react-native-elements';
 import useUploadForm from '../hooks/UploadHooks';
 import * as ImagePicker from 'expo-image-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useMedia} from '../hooks/ApiHooks';
+import {MainContext} from '../contexts/MainContext';
 
-const Upload = () => {
+const Upload = ({navigation}) => {
   const [image, setImage] = useState(null);
+  const [filetype, setFiletype] = useState('');
+  const [isUploading, setIsUploading] = useState(false);
   const {upload} = useMedia();
+  const {update, setUpdate} = useContext(MainContext);
 
   const {handleInputChange, inputs} = useUploadForm();
 
@@ -18,13 +29,39 @@ const Upload = () => {
     formData.append('title', inputs.title);
     formData.append('description', inputs.description);
     // add image to formData
-    formData.append('file', {uri: image, name: 'filename', type: 'image/jpeg'});
+    const filename = image.split('/').pop();
+    const match = /\.(\w+)$/.exec(filename);
+    let type = match ? `${filetype}/${match[1]}` : filetype;
+    if (type === 'image/jpg') type = 'image/jpeg';
+    formData.append('file', {
+      uri: image,
+      name: filename,
+      type: type,
+    });
     try {
+      setIsUploading(true);
       const userToken = await AsyncStorage.getItem('userToken');
       const resp = await upload(formData, userToken);
       console.log('upload response', resp);
+      Alert.alert(
+        'Upload',
+        'File uploaded',
+        [
+          {
+            text: 'Ok',
+            onPress: () => {
+              setUpdate(update + 1);
+              navigation.navigate('Home');
+            },
+          },
+        ],
+        {cancelable: false}
+      );
     } catch (error) {
+      Alert.alert('Upload', 'Failed');
       console.error(error);
+    } finally {
+      setIsUploading(false);
     }
   };
 
@@ -58,34 +95,45 @@ const Upload = () => {
     console.log(result);
 
     if (!result.cancelled) {
+      // console.log('pickImage result', result);
+      setFiletype(result.type);
       setImage(result.uri);
     }
   };
 
   return (
     <ScrollView>
-      <Text h4>Upload media file</Text>
-      {image && (
-        <Image
-          source={{uri: image}}
-          style={{width: '100%', height: undefined, aspectRatio: 1}}
-        />
-      )}
-      <Input
-        placeholder="title"
-        value={inputs.title}
-        onChangeText={(txt) => handleInputChange('title', txt)}
-      />
-      <Input
-        placeholder="description"
-        value={inputs.description}
-        onChangeText={(txt) => handleInputChange('description', txt)}
-      />
-      <Button title="Choose from library" onPress={() => pickImage(true)} />
-      <Button title="Use camera" onPress={() => pickImage(false)} />
-      <Button title="Upload file" onPress={doUpload} />
+      <KeyboardAvoidingView behavior="position" enabled>
+        <Card>
+          <Text h4>Upload media file</Text>
+          {image && (
+            <Image
+              source={{uri: image}}
+              style={{width: '100%', height: undefined, aspectRatio: 1}}
+            />
+          )}
+          <Input
+            placeholder="title"
+            value={inputs.title}
+            onChangeText={(txt) => handleInputChange('title', txt)}
+          />
+          <Input
+            placeholder="description"
+            value={inputs.description}
+            onChangeText={(txt) => handleInputChange('description', txt)}
+          />
+          <Button title="Choose from library" onPress={() => pickImage(true)} />
+          <Button title="Use camera" onPress={() => pickImage(false)} />
+          {isUploading && <ActivityIndicator size="large" color="#0000ff" />}
+          <Button title="Upload file" onPress={doUpload} />
+        </Card>
+      </KeyboardAvoidingView>
     </ScrollView>
   );
+};
+
+Upload.propTypes = {
+  navigation: PropTypes.object,
 };
 
 export default Upload;
