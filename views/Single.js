@@ -31,21 +31,19 @@ const Single = ({route}) => {
       <Card.Title h4>{file.title}</Card.Title>
       <Card.Title>{moment(file.time_added).format('LLL')}</Card.Title>
       <Card.Divider />
-      <>
-        {file.media_type === 'image' ? (
-          <Card.Image
-            source={{uri: uploadsUrl + file.filename}}
-            style={styles.image}
-            PlaceholderContent={<ActivityIndicator />}
-          />
-        ) : (
-          <Video
-            source={{uri: uploadsUrl + file.filename}}
-            style={styles.image}
-            useNativeControls={true}
-          />
-        )}
-      </>
+      {file.media_type === 'image' ? (
+        <Card.Image
+          source={{uri: uploadsUrl + file.filename}}
+          style={styles.image}
+          PlaceholderContent={<ActivityIndicator />}
+        />
+      ) : (
+        <Video
+          source={{uri: uploadsUrl + file.filename}}
+          style={styles.image}
+          useNativeControls={true}
+        />
+      )}
       <Card.Divider />
       <Text style={styles.description}>{file.description}</Text>
       <ListItem>
