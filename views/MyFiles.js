@@ -3,10 +3,10 @@ import {SafeAreaView, StatusBar, StyleSheet} from 'react-native';
 import List from '../components/List';
 import PropTypes from 'prop-types';
 
-const Home = ({navigation}) => {
+const MyFiles = ({navigation}) => {
   return (
     <SafeAreaView style={styles.StyleSheet}>
-      <List navigation={navigation} myFilesOnly={false} />
+      <List navigation={navigation} myFilesOnly={true} />
       <StatusBar style="auto" />
     </SafeAreaView>
   );
@@ -14,8 +14,8 @@ const Home = ({navigation}) => {
 
 const styles = StyleSheet.create({});
 
-Home.propTypes = {
+MyFiles.propTypes = {
   navigation: PropTypes.object,
 };
 
-export default Home;
+export default MyFiles;
