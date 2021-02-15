@@ -17,6 +17,7 @@ module.exports = {
     'react/jsx-uses-react': 'error',
     'react/jsx-uses-vars': 'error',
     'react-native/no-inline-styles': 2,
+    'react-native/no-unused-styles': 2,
     'require-jsdoc': 0,
   },
 };
