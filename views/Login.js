@@ -45,7 +45,7 @@ const Login = ({navigation}) => {
   return (
     <SafeAreaView style={styles.container}>
       <Image
-        source={require('../assets/cat1.jpg')}
+        source={require('../assets/TestLogo.jpg')}
         style={styles.image}
       ></Image>
       <View style={styles.form}>
@@ -63,10 +63,11 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   image: {
-    height: 100,
+    height: 120,
   },
   form: {
     height: 180,
+    width: 130,
   },
   list: {
     flex: 1,
