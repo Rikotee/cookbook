@@ -68,8 +68,8 @@ const StackScreen = () => {
       ) : (
         <>
           <Stack.Screen
-            name="Login"
-            component={Login}
+            name="Home"
+            component={Home}
             options={() => ({
               headerShown: false,
             })}
