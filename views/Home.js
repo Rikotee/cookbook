@@ -4,7 +4,7 @@ import List from '../components/List';
 import PropTypes from 'prop-types';
 import {Button} from 'react-native-elements';
 import {Image} from 'react-native';
-import Login from '../views/Login';
+// import Login from '../views/Login';
 
 const Home = ({navigation}) => {
   return (
@@ -13,7 +13,10 @@ const Home = ({navigation}) => {
         source={require('../assets/TestLogo.jpg')}
         style={styles.image}
       ></Image>
-      <Button title="Login" onPress={() => navigation.navigate(Login)} />
+      <Button
+        title="Login/Register"
+        onPress={() => navigation.navigate('Login')}
+      />
       <List navigation={navigation} myFilesOnly={false} />
       <StatusBar style="auto" />
     </SafeAreaView>
