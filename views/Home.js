@@ -13,7 +13,7 @@ const Home = ({navigation}) => {
         source={require('../assets/TestLogo.jpg')}
         style={styles.image}
       ></Image>
-      <Button title="login" onPress={() => navigation.navigate('Login')} />
+      <Button title="Login" onPress={() => navigation.navigate(Login)} />
       <List navigation={navigation} myFilesOnly={false} />
       <StatusBar style="auto" />
     </SafeAreaView>

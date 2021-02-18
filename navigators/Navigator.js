@@ -74,6 +74,7 @@ const StackScreen = () => {
               headerShown: false,
             })}
           />
+          <Stack.Screen name="Login" component={Login} />
         </>
       )}
     </Stack.Navigator>
