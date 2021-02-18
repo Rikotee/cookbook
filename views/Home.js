@@ -4,20 +4,16 @@ import List from '../components/List';
 import PropTypes from 'prop-types';
 import {Button} from 'react-native-elements';
 import {Image} from 'react-native';
-// import Login from '../views/Login';
+import Login from '../views/Login';
 
 const Home = ({navigation}) => {
-  // const goLogin = () => {
-
-  // };
-
   return (
     <SafeAreaView style={styles.StyleSheet}>
       <Image
         source={require('../assets/TestLogo.jpg')}
         style={styles.image}
       ></Image>
-      <Button title="Login" />
+      <Button title="login" onPress={() => navigation.navigate('Login')} />
       <List navigation={navigation} myFilesOnly={false} />
       <StatusBar style="auto" />
     </SafeAreaView>
