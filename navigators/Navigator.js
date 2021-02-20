@@ -94,6 +94,7 @@ const StackScreen = () => {
               headerTintColor: '#FFF',
             }}
           />
+          <Stack.Screen name="Single" component={Single} />
         </>
       )}
     </Stack.Navigator>
