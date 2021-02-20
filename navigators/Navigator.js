@@ -65,9 +65,42 @@ const StackScreen = () => {
               headerTintColor: '#FFF',
             })}
           />
-          <Stack.Screen name="Modify" component={Modify} />
-          <Stack.Screen name="My Files" component={MyFiles} />
-          <Stack.Screen name="Single" component={Single} />
+          <Stack.Screen
+            name="Modify"
+            component={Modify}
+            options={{
+              title: 'MODIFY',
+              headerTitleAlign: 'center',
+              headerStyle: {
+                backgroundColor: '#3d9f9f',
+              },
+              headerTintColor: '#FFF',
+            }}
+          />
+          <Stack.Screen
+            name="My Files"
+            component={MyFiles}
+            options={{
+              title: 'MY FILES',
+              headerTitleAlign: 'center',
+              headerStyle: {
+                backgroundColor: '#3d9f9f',
+              },
+              headerTintColor: '#FFF',
+            }}
+          />
+          <Stack.Screen
+            name="Single"
+            component={Single}
+            options={{
+              title: 'RECIPE',
+              headerTitleAlign: 'center',
+              headerStyle: {
+                backgroundColor: '#3d9f9f',
+              },
+              headerTintColor: '#FFF',
+            }}
+          />
         </>
       ) : (
         <>
@@ -76,6 +109,7 @@ const StackScreen = () => {
             component={Home}
             options={{
               title: 'COOKBOOK',
+              headerTitleAlign: 'center',
               headerStyle: {
                 backgroundColor: '#3d9f9f',
               },
