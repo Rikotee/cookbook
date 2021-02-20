@@ -94,7 +94,18 @@ const StackScreen = () => {
               headerTintColor: '#FFF',
             }}
           />
-          <Stack.Screen name="Single" component={Single} />
+          <Stack.Screen
+            name="Single"
+            component={Single}
+            options={{
+              title: 'RECIPE',
+              headerTitleAlign: 'center',
+              headerStyle: {
+                backgroundColor: '#3d9f9f',
+              },
+              headerTintColor: '#FFF',
+            }}
+          />
         </>
       )}
     </Stack.Navigator>
