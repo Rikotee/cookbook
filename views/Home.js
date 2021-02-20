@@ -5,19 +5,22 @@ import PropTypes from 'prop-types';
 import {View} from 'react-native';
 import {Text} from 'react-native';
 import {MainContext} from '../contexts/MainContext';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Home = ({navigation}) => {
-  const {isLoggedIn} = useContext(MainContext);
+  const {isLoggedIn, setIsLoggedIn} = useContext(MainContext);
+
+  const logout = async () => {
+    setIsLoggedIn(false);
+    await AsyncStorage.clear();
+  };
 
   return (
     <SafeAreaView style={styles.StyleSheet}>
       <View style={styles.loginArea}>
         {isLoggedIn ? (
-          <Text
-            style={styles.loginText}
-            onPress={() => navigation.navigate('Login')}
-          >
-            Logged in
+          <Text style={styles.loginText} onPress={logout}>
+            Logout
           </Text>
         ) : (
           <Text
