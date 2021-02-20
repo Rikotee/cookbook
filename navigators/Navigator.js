@@ -70,11 +70,27 @@ const StackScreen = () => {
           <Stack.Screen
             name="Home"
             component={Home}
-            options={() => ({
-              headerShown: false,
-            })}
+            options={{
+              title: 'COOKBOOK',
+              headerTitleAlign: 'center',
+              headerStyle: {
+                backgroundColor: '#3d9f9f',
+              },
+              headerTintColor: '#FFF',
+            }}
           />
-          <Stack.Screen name="Login" component={Login} />
+          <Stack.Screen
+            name="Login"
+            component={Login}
+            options={{
+              title: 'LOGIN',
+              headerTitleAlign: 'center',
+              headerStyle: {
+                backgroundColor: '#3d9f9f',
+              },
+              headerTintColor: '#FFF',
+            }}
+          />
         </>
       )}
     </Stack.Navigator>
