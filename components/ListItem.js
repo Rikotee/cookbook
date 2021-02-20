@@ -7,12 +7,10 @@ import {
   Text,
   ListItem as RNEListItem,
 } from 'react-native-elements';
-import {Button} from 'react-native';
+import {Button, Alert} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {useMedia} from '../hooks/ApiHooks';
+import {useMedia, useTag, useUser} from '../hooks/ApiHooks';
 import {MainContext} from '../contexts/MainContext';
-import {Alert} from 'react-native';
-import {useTag, useUser} from '../hooks/ApiHooks';
 import moment from 'moment';
 
 const ListItem = ({navigation, singleMedia, isMyFile}) => {
