@@ -11,7 +11,7 @@ import {Alert} from 'react-native';
 const ListItem = ({navigation, singleMedia, isMyFile}) => {
   // console.log(props);
   const {deleteFile} = useMedia();
-  const {setUpdate, update} = useContext(MainContext);
+  const {setUpdate, update, isLoggedIn} = useContext(MainContext);
 
   const doDelete = () => {
     Alert.alert(
@@ -52,7 +52,7 @@ const ListItem = ({navigation, singleMedia, isMyFile}) => {
       <RNEListItem.Content>
         <RNEListItem.Title h4>{singleMedia.title}</RNEListItem.Title>
         <RNEListItem.Subtitle>{singleMedia.description}</RNEListItem.Subtitle>
-        {isMyFile && (
+        {isMyFile && isLoggedIn && (
           <>
             <Button
               title="Modify"
