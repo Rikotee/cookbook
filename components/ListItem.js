@@ -13,6 +13,7 @@ import {useMedia} from '../hooks/ApiHooks';
 import {MainContext} from '../contexts/MainContext';
 import {Alert} from 'react-native';
 import {useTag, useUser} from '../hooks/ApiHooks';
+import moment from 'moment';
 
 const ListItem = ({navigation, singleMedia, isMyFile}) => {
   // console.log(props);
@@ -83,6 +84,10 @@ const ListItem = ({navigation, singleMedia, isMyFile}) => {
       <Card>
         <Avatar source={{uri: avatar}} />
         <Text>{owner.username}</Text>
+        {/* <Text>file_id: {singleMedia.file_id}</Text>
+        <Text>user_id: {singleMedia.user_id}</Text>
+        <Text>type: {singleMedia.media_type}</Text> */}
+        <Text>added: {moment(singleMedia.time_added).format('LL')}</Text>
         <Avatar
           size="large"
           square
@@ -102,8 +107,6 @@ const ListItem = ({navigation, singleMedia, isMyFile}) => {
           )}
         </RNEListItem.Content>
       </Card>
-
-      <RNEListItem.Chevron />
     </RNEListItem>
   );
 };
