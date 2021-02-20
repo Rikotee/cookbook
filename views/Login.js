@@ -48,7 +48,7 @@ const Login = ({navigation}) => {
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={styles.inner}>
           <View style={styles.form}>
-            <Card>
+            <View>
               {formToggle ? (
                 <>
                   <Card.Title h5>Login</Card.Title>
@@ -76,7 +76,7 @@ const Login = ({navigation}) => {
                 </ListItem.Content>
                 <ListItem.Chevron />
               </ListItem>
-            </Card>
+            </View>
           </View>
         </View>
       </TouchableWithoutFeedback>
@@ -99,6 +99,8 @@ const styles = StyleSheet.create({
   form: {
     flex: 1,
     justifyContent: 'center',
+    padding: 30,
+    backgroundColor: '#FFF',
   },
   text: {
     alignSelf: 'center',
