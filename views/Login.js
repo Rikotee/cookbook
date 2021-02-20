@@ -7,7 +7,6 @@ import {
   Platform,
   Keyboard,
   TouchableWithoutFeedback,
-  ImageBackground,
 } from 'react-native';
 import PropTypes from 'prop-types';
 import {MainContext} from '../contexts/MainContext';
@@ -48,42 +47,37 @@ const Login = ({navigation}) => {
     >
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={styles.inner}>
-          <ImageBackground
-            source={require('../assets/bg.png')}
-            style={styles.image}
-          >
-            <View style={styles.form}>
-              <Card>
-                {formToggle ? (
-                  <>
-                    <Card.Title h5>Login</Card.Title>
-                    <Card.Divider />
-                    <LoginForm navigation={navigation} />
-                  </>
-                ) : (
-                  <>
-                    <Card.Title h5>Register</Card.Title>
-                    <Card.Divider />
-                    <RegisterForm navigation={navigation} />
-                  </>
-                )}
-                <ListItem
-                  onPress={() => {
-                    setFormToggle(!formToggle);
-                  }}
-                >
-                  <ListItem.Content>
-                    <Text style={styles.text}>
-                      {formToggle
-                        ? 'No account? Register here.'
-                        : 'Already registered? Login here.'}
-                    </Text>
-                  </ListItem.Content>
-                  <ListItem.Chevron />
-                </ListItem>
-              </Card>
-            </View>
-          </ImageBackground>
+          <View style={styles.form}>
+            <Card>
+              {formToggle ? (
+                <>
+                  <Card.Title h5>Login</Card.Title>
+                  <Card.Divider />
+                  <LoginForm navigation={navigation} />
+                </>
+              ) : (
+                <>
+                  <Card.Title h5>Register</Card.Title>
+                  <Card.Divider />
+                  <RegisterForm navigation={navigation} />
+                </>
+              )}
+              <ListItem
+                onPress={() => {
+                  setFormToggle(!formToggle);
+                }}
+              >
+                <ListItem.Content>
+                  <Text style={styles.text}>
+                    {formToggle
+                      ? 'No account? Register here.'
+                      : 'Already registered? Login here.'}
+                  </Text>
+                </ListItem.Content>
+                <ListItem.Chevron />
+              </ListItem>
+            </Card>
+          </View>
         </View>
       </TouchableWithoutFeedback>
     </KeyboardAvoidingView>
