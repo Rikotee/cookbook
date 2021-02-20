@@ -28,8 +28,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#97caca',
   },
   loginText: {
-    color: '#FFF',
+    color: '#000',
     textAlign: 'right',
+    paddingRight: 15,
+    paddingBottom: 5,
+    paddingTop: 5,
   },
 });
 
