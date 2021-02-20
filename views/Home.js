@@ -1,9 +1,7 @@
 import React, {useContext} from 'react';
-import {SafeAreaView, StatusBar, StyleSheet} from 'react-native';
+import {SafeAreaView, StatusBar, StyleSheet, View, Text} from 'react-native';
 import List from '../components/List';
 import PropTypes from 'prop-types';
-import {View} from 'react-native';
-import {Text} from 'react-native';
 import {MainContext} from '../contexts/MainContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
