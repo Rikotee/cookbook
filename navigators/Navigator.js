@@ -59,6 +59,10 @@ const StackScreen = () => {
             component={TabScreen}
             options={({route}) => ({
               headerTitle: getFocusedRouteNameFromRoute(route),
+              headerStyle: {
+                backgroundColor: '#3d9f9f',
+              },
+              headerTintColor: '#FFF',
             })}
           />
           <Stack.Screen name="Modify" component={Modify} />
@@ -72,7 +76,6 @@ const StackScreen = () => {
             component={Home}
             options={{
               title: 'COOKBOOK',
-              headerTitleAlign: 'center',
               headerStyle: {
                 backgroundColor: '#3d9f9f',
               },

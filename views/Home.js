@@ -1,20 +1,32 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {SafeAreaView, StatusBar, StyleSheet} from 'react-native';
 import List from '../components/List';
 import PropTypes from 'prop-types';
 import {View} from 'react-native';
 import {Text} from 'react-native';
+import {MainContext} from '../contexts/MainContext';
 
 const Home = ({navigation}) => {
+  const {isLoggedIn} = useContext(MainContext);
+
   return (
     <SafeAreaView style={styles.StyleSheet}>
       <View style={styles.loginArea}>
-        <Text
-          style={styles.loginText}
-          onPress={() => navigation.navigate('Login')}
-        >
-          Login/Register
-        </Text>
+        {isLoggedIn ? (
+          <Text
+            style={styles.loginText}
+            onPress={() => navigation.navigate('Login')}
+          >
+            Logged in
+          </Text>
+        ) : (
+          <Text
+            style={styles.loginText}
+            onPress={() => navigation.navigate('Login')}
+          >
+            Login/Register
+          </Text>
+        )}
       </View>
       <List navigation={navigation} myFilesOnly={false} />
       <StatusBar style="auto" />
