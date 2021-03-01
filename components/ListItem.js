@@ -19,6 +19,7 @@ import {useMedia, useTag, useUser} from '../hooks/ApiHooks';
 import {MainContext} from '../contexts/MainContext';
 import moment from 'moment';
 import {Video} from 'expo-av';
+import {View} from 'react-native';
 
 const ListItem = ({navigation, singleMedia, isMyFile}) => {
   // console.log(props);
@@ -101,6 +102,19 @@ const ListItem = ({navigation, singleMedia, isMyFile}) => {
         />
         <Card.Divider />
         <Text style={styles.description}>{singleMedia.description}</Text>
+                {isLoggedIn ? (
+          <View>
+            <Avatar source={{uri: avatar}} />
+            <Text>{owner.username}</Text>
+          </View>
+        ) : (
+          <Text
+            style={styles.loginText}
+            onPress={() => navigation.navigate('Login')}
+          >
+            Login to see userinfo
+          </Text>
+        )}
         <RNEListItem.Content>
           {isMyFile && isLoggedIn && (
             <>
@@ -125,6 +139,7 @@ const styles = StyleSheet.create({
   },
   description: {
     marginBottom: 10,
+    textAlign: 'center',
   },
 });
 
