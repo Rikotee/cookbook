@@ -13,13 +13,13 @@ import {
   TouchableOpacity,
   StyleSheet,
   ActivityIndicator,
+  View,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useMedia, useTag, useUser} from '../hooks/ApiHooks';
 import {MainContext} from '../contexts/MainContext';
 import moment from 'moment';
 import {Video} from 'expo-av';
-import {View} from 'react-native';
 
 const ListItem = ({navigation, singleMedia, isMyFile}) => {
   // console.log(props);
@@ -31,25 +31,25 @@ const ListItem = ({navigation, singleMedia, isMyFile}) => {
   const {getUser} = useUser();
   // const {file} = route.params;
 
-  // const fetchAvatar = async () => {
-  //   try {
-  //     const avatarList = await getFilesByTag('avatar_' + singleMedia.user_id);
-  //     if (avatarList.length > 0) {
-  //       setAvatar(uploadsUrl + avatarList.pop().filename);
-  //     }
-  //   } catch (error) {
-  //     console.error(error.message);
-  //   }
-  // };
-  // const fetchOwner = async () => {
-  //   try {
-  //     const userToken = await AsyncStorage.getItem('userToken');
-  //     const userData = await getUser(singleMedia.user_id, userToken);
-  //     setOwner(userData);
-  //   } catch (error) {
-  //     console.error(error.message);
-  //   }
-  // };
+  const fetchAvatar = async () => {
+    try {
+      const avatarList = await getFilesByTag('avatar_' + singleMedia.user_id);
+      if (avatarList.length > 0) {
+        setAvatar(uploadsUrl + avatarList.pop().filename);
+      }
+    } catch (error) {
+      console.error(error.message);
+    }
+  };
+  const fetchOwner = async () => {
+    try {
+      const userToken = await AsyncStorage.getItem('userToken');
+      const userData = await getUser(singleMedia.user_id, userToken);
+      setOwner(userData);
+    } catch (error) {
+      console.error(error.message);
+    }
+  };
 
   const doDelete = () => {
     Alert.alert(
@@ -75,10 +75,10 @@ const ListItem = ({navigation, singleMedia, isMyFile}) => {
     );
   };
 
-  // useEffect(() => {
-  //   fetchAvatar();
-  //   fetchOwner();
-  // });
+  useEffect(() => {
+    fetchAvatar();
+    fetchOwner();
+  });
 
   return (
     <TouchableOpacity
@@ -102,7 +102,7 @@ const ListItem = ({navigation, singleMedia, isMyFile}) => {
         />
         <Card.Divider />
         <Text style={styles.description}>{singleMedia.description}</Text>
-                {isLoggedIn ? (
+        {isLoggedIn ? (
           <View>
             <Avatar source={{uri: avatar}} />
             <Text>{owner.username}</Text>
@@ -118,6 +118,7 @@ const ListItem = ({navigation, singleMedia, isMyFile}) => {
         <RNEListItem.Content>
           {isMyFile && isLoggedIn && (
             <>
+              <Card.Divider />
               <Button
                 title="Modify"
                 onPress={() => navigation.push('Modify', {file: singleMedia})}
