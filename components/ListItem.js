@@ -7,11 +7,18 @@ import {
   Text,
   ListItem as RNEListItem,
 } from 'react-native-elements';
-import {Button, Alert, TouchableOpacity} from 'react-native';
+import {
+  Button,
+  Alert,
+  TouchableOpacity,
+  StyleSheet,
+  ActivityIndicator,
+} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useMedia, useTag, useUser} from '../hooks/ApiHooks';
 import {MainContext} from '../contexts/MainContext';
 import moment from 'moment';
+import {Video} from 'expo-av';
 
 const ListItem = ({navigation, singleMedia, isMyFile}) => {
   // console.log(props);
@@ -73,24 +80,28 @@ const ListItem = ({navigation, singleMedia, isMyFile}) => {
   // });
 
   return (
-    <TouchableOpacity onPress={() => {
-      navigation.navigate('Single', {file: singleMedia});
-    }}>
+    <TouchableOpacity
+      onPress={() => {
+        navigation.navigate('Single', {file: singleMedia});
+      }}
+    >
       <Card>
+        <Card.Title h4>{singleMedia.title}</Card.Title>
+        <Card.Title>{moment(singleMedia.time_added).format('LL')}</Card.Title>
         {/* <Avatar source={{uri: avatar}} />
         <Text>{owner.username}</Text> */}
         {/* <Text>file_id: {singleMedia.file_id}</Text>
         <Text>user_id: {singleMedia.user_id}</Text>
         <Text>type: {singleMedia.media_type}</Text> */}
-        <Text>added: {moment(singleMedia.time_added).format('LL')}</Text>
-        <Avatar
-          size="large"
-          square
-          source={{uri: uploadsUrl + singleMedia.thumbnails.w160}}
-        ></Avatar>
+        <Card.Divider />
+        <Card.Image
+          source={{uri: uploadsUrl + singleMedia.filename}}
+          style={styles.image}
+          PlaceholderContent={<ActivityIndicator />}
+        />
+        <Card.Divider />
+        <Text style={styles.description}>{singleMedia.description}</Text>
         <RNEListItem.Content>
-          <RNEListItem.Title h4>{singleMedia.title}</RNEListItem.Title>
-          <RNEListItem.Subtitle>{singleMedia.description}</RNEListItem.Subtitle>
           {isMyFile && isLoggedIn && (
             <>
               <Button
@@ -105,6 +116,17 @@ const ListItem = ({navigation, singleMedia, isMyFile}) => {
     </TouchableOpacity>
   );
 };
+
+const styles = StyleSheet.create({
+  image: {
+    width: '100%',
+    height: undefined,
+    aspectRatio: 1,
+  },
+  description: {
+    marginBottom: 10,
+  },
+});
 
 ListItem.propTypes = {
   singleMedia: PropTypes.object,
