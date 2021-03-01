@@ -32,22 +32,26 @@ const ListItem = ({navigation, singleMedia, isMyFile}) => {
   // const {file} = route.params;
 
   const fetchAvatar = async () => {
-    try {
-      const avatarList = await getFilesByTag('avatar_' + singleMedia.user_id);
-      if (avatarList.length > 0) {
-        setAvatar(uploadsUrl + avatarList.pop().filename);
+    if (isLoggedIn) {
+      try {
+        const avatarList = await getFilesByTag('avatar_' + singleMedia.user_id);
+        if (avatarList.length > 0) {
+          setAvatar(uploadsUrl + avatarList.pop().filename);
+        }
+      } catch (error) {
+        console.error(error.message);
       }
-    } catch (error) {
-      console.error(error.message);
     }
   };
   const fetchOwner = async () => {
-    try {
-      const userToken = await AsyncStorage.getItem('userToken');
-      const userData = await getUser(singleMedia.user_id, userToken);
-      setOwner(userData);
-    } catch (error) {
-      console.error(error.message);
+    if (isLoggedIn) {
+      try {
+        const userToken = await AsyncStorage.getItem('userToken');
+        const userData = await getUser(singleMedia.user_id, userToken);
+        setOwner(userData);
+      } catch (error) {
+        console.error(error.message);
+      }
     }
   };
 
@@ -89,8 +93,6 @@ const ListItem = ({navigation, singleMedia, isMyFile}) => {
       <Card>
         <Card.Title h4>{singleMedia.title}</Card.Title>
         <Card.Title>{moment(singleMedia.time_added).format('LL')}</Card.Title>
-        {/* <Avatar source={{uri: avatar}} />
-        <Text>{owner.username}</Text> */}
         {/* <Text>file_id: {singleMedia.file_id}</Text>
         <Text>user_id: {singleMedia.user_id}</Text>
         <Text>type: {singleMedia.media_type}</Text> */}
