@@ -7,7 +7,7 @@ import {
   Text,
   ListItem as RNEListItem,
 } from 'react-native-elements';
-import {Button, Alert} from 'react-native';
+import {Button, Alert, TouchableOpacity} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useMedia, useTag, useUser} from '../hooks/ApiHooks';
 import {MainContext} from '../contexts/MainContext';
@@ -73,12 +73,9 @@ const ListItem = ({navigation, singleMedia, isMyFile}) => {
   // });
 
   return (
-    <RNEListItem
-      bottomDivider
-      onPress={() => {
-        navigation.navigate('Single', {file: singleMedia});
-      }}
-    >
+    <TouchableOpacity onPress={() => {
+      navigation.navigate('Single', {file: singleMedia});
+    }}>
       <Card>
         {/* <Avatar source={{uri: avatar}} />
         <Text>{owner.username}</Text> */}
@@ -105,7 +102,7 @@ const ListItem = ({navigation, singleMedia, isMyFile}) => {
           )}
         </RNEListItem.Content>
       </Card>
-    </RNEListItem>
+    </TouchableOpacity>
   );
 };
 
