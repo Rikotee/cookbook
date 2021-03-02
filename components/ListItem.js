@@ -93,21 +93,10 @@ const ListItem = ({navigation, singleMedia, isMyFile}) => {
       <Card>
         <Card.Title h4>{singleMedia.title}</Card.Title>
         <Card.Title>{moment(singleMedia.time_added).format('LL')}</Card.Title>
-        {/* <Text>file_id: {singleMedia.file_id}</Text>
-        <Text>user_id: {singleMedia.user_id}</Text>
-        <Text>type: {singleMedia.media_type}</Text> */}
-        <Card.Divider />
-        <Card.Image
-          source={{uri: uploadsUrl + singleMedia.filename}}
-          style={styles.image}
-          PlaceholderContent={<ActivityIndicator />}
-        />
-        <Card.Divider />
-        <Text style={styles.description}>{singleMedia.description}</Text>
         {isLoggedIn ? (
-          <View>
-            <Avatar source={{uri: avatar}} />
-            <Text>{owner.username}</Text>
+          <View style={styles.userInfo}>
+            <Avatar style={styles.avatarImage} source={{uri: avatar}} />
+            <Text style={styles.userInfoText}>{owner.username}</Text>
           </View>
         ) : (
           <Text
@@ -117,15 +106,28 @@ const ListItem = ({navigation, singleMedia, isMyFile}) => {
             Login to see userinfo
           </Text>
         )}
+        {/* <Text>file_id: {singleMedia.file_id}</Text>
+        <Text>user_id: {singleMedia.user_id}</Text>
+        <Text>type: {singleMedia.media_type}</Text> */}
+        <Card.Image
+          source={{uri: uploadsUrl + singleMedia.filename}}
+          style={styles.image}
+          PlaceholderContent={<ActivityIndicator />}
+        />
+
+        <Text style={styles.description}>{singleMedia.description}</Text>
+
         <RNEListItem.Content>
           {isMyFile && isLoggedIn && (
             <>
               <Card.Divider />
-              <Button
-                title="Modify"
-                onPress={() => navigation.push('Modify', {file: singleMedia})}
-              ></Button>
-              <Button title="Delete" color="red" onPress={doDelete}></Button>
+              <View style={styles.buttons}>
+                <Button
+                  title="Modify"
+                  onPress={() => navigation.push('Modify', {file: singleMedia})}
+                ></Button>
+                <Button title="Delete" color="red" onPress={doDelete}></Button>
+              </View>
             </>
           )}
         </RNEListItem.Content>
@@ -139,10 +141,34 @@ const styles = StyleSheet.create({
     width: '100%',
     height: undefined,
     aspectRatio: 1,
+    marginTop: 10,
+    marginBottom: 10,
+    // borderRadius: 10,
   },
   description: {
     marginBottom: 10,
     textAlign: 'center',
+    fontSize: 16,
+  },
+  userInfo: {
+    flex: 1,
+    flexDirection: 'row',
+  },
+  userInfoText: {
+    marginLeft: 10,
+    fontSize: 18,
+    fontWeight: 'bold',
+    textAlignVertical: 'center',
+  },
+  avatarImage: {
+    width: 40,
+    height: 40,
+    borderRadius: 25,
+    overflow: 'hidden',
+  },
+  buttons: {
+    flex: 1,
+    flexDirection: 'row',
   },
 });
 
