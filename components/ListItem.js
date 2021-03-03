@@ -140,7 +140,10 @@ const ListItem = ({navigation, singleMedia, isMyFile}) => {
         {isLoggedIn ? (
           <View style={styles.userInfo}>
             <Avatar style={styles.avatarImage} source={{uri: avatar}} />
-            <Text style={styles.userInfoText}>{owner.username}</Text>
+            <Text
+            style={styles.userInfoText}
+            onPress={() => navigation.navigate('Profile')}
+            >{owner.username}</Text>
           </View>
         ) : (
           <View style={styles.userInfo}>
@@ -189,7 +192,6 @@ const ListItem = ({navigation, singleMedia, isMyFile}) => {
             </>
           )}
         </RNEListItem.Content>
-        {/* <Card.Divider /> */}
       </View>
     </TouchableOpacity>
   );
