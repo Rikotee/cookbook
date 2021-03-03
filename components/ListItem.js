@@ -90,9 +90,7 @@ const ListItem = ({navigation, singleMedia, isMyFile}) => {
         navigation.navigate('Single', {file: singleMedia});
       }}
     >
-      <Card>
-        <Card.Title h4>{singleMedia.title}</Card.Title>
-        <Card.Title>{moment(singleMedia.time_added).format('LL')}</Card.Title>
+      <View style={styles.post}>
         {isLoggedIn ? (
           <View style={styles.userInfo}>
             <Avatar style={styles.avatarImage} source={{uri: avatar}} />
@@ -114,9 +112,9 @@ const ListItem = ({navigation, singleMedia, isMyFile}) => {
           style={styles.image}
           PlaceholderContent={<ActivityIndicator />}
         />
-
+        <Card.Title h4>{singleMedia.title}</Card.Title>
+        <Card.Title>{moment(singleMedia.time_added).format('LL')}</Card.Title>
         <Text style={styles.description}>{singleMedia.description}</Text>
-
         <RNEListItem.Content>
           {isMyFile && isLoggedIn && (
             <>
@@ -131,19 +129,25 @@ const ListItem = ({navigation, singleMedia, isMyFile}) => {
             </>
           )}
         </RNEListItem.Content>
-      </Card>
+        {/* <Card.Divider /> */}
+      </View>
     </TouchableOpacity>
   );
 };
 
 const styles = StyleSheet.create({
+  post: {
+    padding: 15,
+    backgroundColor: '#FFF',
+    // marginBottom: 10,
+  },
   image: {
     width: '100%',
     height: undefined,
     aspectRatio: 1,
     marginTop: 10,
     marginBottom: 10,
-    // borderRadius: 10,
+    borderRadius: 10,
   },
   description: {
     marginBottom: 10,
