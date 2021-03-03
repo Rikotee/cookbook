@@ -20,6 +20,7 @@ import {useMedia, useTag, useUser} from '../hooks/ApiHooks';
 import {MainContext} from '../contexts/MainContext';
 import moment from 'moment';
 import {Video} from 'expo-av';
+import * as ScreenOrientation from 'expo-screen-orientation';
 
 const ListItem = ({navigation, singleMedia, isMyFile}) => {
   // console.log(props);
@@ -29,6 +30,7 @@ const ListItem = ({navigation, singleMedia, isMyFile}) => {
   const {getFilesByTag} = useTag();
   const [owner, setOwner] = useState({username: 'somebody'});
   const {getUser} = useUser();
+  const [videoRef, setVideoRef] = useState(null);
   // const {file} = route.params;
 
   const fetchAvatar = async () => {
@@ -79,10 +81,54 @@ const ListItem = ({navigation, singleMedia, isMyFile}) => {
     );
   };
 
+  const unlock = async () => {
+    try {
+      await ScreenOrientation.unlockAsync();
+    } catch (error) {
+      console.error('unlock', error.message);
+    }
+  };
+
+  const lock = async () => {
+    try {
+      await ScreenOrientation.lockAsync(
+        ScreenOrientation.OrientationLock.PORTRAIT_UP
+      );
+    } catch (error) {
+      console.error('lock', error.message);
+    }
+  };
+
+  const handleVideoRef = (component) => {
+    setVideoRef(component);
+  };
+
+  const showVideoInFullscreen = async () => {
+    try {
+      if (videoRef) await videoRef.presentFullscreenPlayer();
+    } catch (error) {
+      console.error('fullscreen', error.message);
+    }
+  };
+
   useEffect(() => {
+    unlock();
     fetchAvatar();
     fetchOwner();
-  });
+
+    const orientSub = ScreenOrientation.addOrientationChangeListener((evt) => {
+      console.log('orientation', evt);
+      if (evt.orientationInfo.orientation > 2) {
+        // show video in fullscreen
+        showVideoInFullscreen();
+      }
+    });
+
+    return () => {
+      ScreenOrientation.removeOrientationChangeListener(orientSub);
+      lock();
+    };
+  }, [videoRef]);
 
   return (
     <TouchableOpacity
@@ -104,14 +150,25 @@ const ListItem = ({navigation, singleMedia, isMyFile}) => {
             Login to see userinfo
           </Text>
         )}
-        {/* <Text>file_id: {singleMedia.file_id}</Text>
-        <Text>user_id: {singleMedia.user_id}</Text>
-        <Text>type: {singleMedia.media_type}</Text> */}
-        <Card.Image
-          source={{uri: uploadsUrl + singleMedia.filename}}
-          style={styles.image}
-          PlaceholderContent={<ActivityIndicator />}
-        />
+        {singleMedia.media_type === 'image' ? (
+          <Card.Image
+            source={{uri: uploadsUrl + singleMedia.filename}}
+            style={styles.image}
+            PlaceholderContent={<ActivityIndicator />}
+          />
+        ) : (
+          <Video
+            ref={handleVideoRef}
+            source={{uri: uploadsUrl + singleMedia.filename}}
+            style={styles.image}
+            useNativeControls={true}
+            resizeMode="cover"
+            onError={(err) => {
+              console.error('video', err);
+            }}
+            posterSource={{uri: uploadsUrl + singleMedia.screenshot}}
+          />
+        )}
         <Card.Title h4>{singleMedia.title}</Card.Title>
         <Card.Title>{moment(singleMedia.time_added).format('LL')}</Card.Title>
         <Text style={styles.description}>{singleMedia.description}</Text>
