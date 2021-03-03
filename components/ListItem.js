@@ -28,7 +28,7 @@ const ListItem = ({navigation, singleMedia, isMyFile}) => {
   const {setUpdate, update, isLoggedIn} = useContext(MainContext);
   const [avatar, setAvatar] = useState('http://placekitten.com/100');
   const {getFilesByTag} = useTag();
-  const [owner, setOwner] = useState({username: 'somebody'});
+  const [owner, setOwner] = useState({username: 'Login to see user'});
   const {getUser} = useUser();
   const [videoRef, setVideoRef] = useState(null);
   // const {file} = route.params;
@@ -143,12 +143,15 @@ const ListItem = ({navigation, singleMedia, isMyFile}) => {
             <Text style={styles.userInfoText}>{owner.username}</Text>
           </View>
         ) : (
-          <Text
-            style={styles.loginText}
-            onPress={() => navigation.navigate('Login')}
-          >
-            Login to see userinfo
-          </Text>
+          <View style={styles.userInfo}>
+            <Avatar style={styles.avatarImage} source={{uri: avatar}} />
+            <Text
+              style={styles.userInfoText}
+              onPress={() => navigation.navigate('Login')}
+            >
+              Login to see user
+            </Text>
+          </View>
         )}
         {singleMedia.media_type === 'image' ? (
           <Card.Image
