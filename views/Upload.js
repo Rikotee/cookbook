@@ -107,7 +107,6 @@ const Upload = ({navigation}) => {
     console.log(result);
 
     if (!result.cancelled) {
-      // console.log('pickImage result', result);
       setFiletype(result.type);
       setImage(result.uri);
     }

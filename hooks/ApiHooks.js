@@ -30,7 +30,7 @@ const useLoadMedia = (myFilesOnly, userId) => {
         listJson.map(async (item) => {
           const fileJson = await doFetch(baseUrl + 'media/' + item.file_id);
           return fileJson;
-        })
+        }),
       );
       if (myFilesOnly) {
         media = media.filter((item) => item.user_id === userId);
@@ -96,6 +96,33 @@ const useUser = () => {
     }
   };
 
+  const updateUser = async (token, inputs) => {
+    const options = {
+      method: 'PUT',
+      headers: {
+        'x-access-token': token,
+      },
+      data: inputs,
+      url: baseUrl + 'users',
+    };
+    console.log('apihooks modify', options.data);
+
+    try {
+      await axios(options).then(
+        (res) => {
+          if (res.status === 200) {
+            console.log("ok") // here is the response that is sent back
+          } else console.log('Response was not 200, but: ', res);
+        },
+        (err) => {
+          console.log('Something went wrong deleting comment: ', err);
+        }
+      );
+    } catch (error) {
+      console.log('uploaderror: ', error);
+    }
+  };
+
   const getUser = async (id, token) => {
     try {
       const options = {
@@ -118,7 +145,7 @@ const useUser = () => {
     }
   };
 
-  return {postRegister, checkToken, checkIsUserAvailable, getUser};
+  return {postRegister, checkToken, checkIsUserAvailable, getUser, updateUser};
 };
 
 const useTag = () => {
@@ -131,11 +158,14 @@ const useTag = () => {
     }
   };
   const postTag = async (tag, token) => {
+    console.log('HERE IS THE TAG2 ' + JSON.stringify(tag));
     const options = {
       method: 'POST',
       headers: {'Content-Type': 'application/json', 'x-access-token': token},
       body: JSON.stringify(tag),
     };
+    console.log('HERE IS THE TAG ' + JSON.stringify(tag));
+
     try {
       const result = await doFetch(baseUrl + 'tags', options);
       return result;
@@ -151,16 +181,26 @@ const useMedia = () => {
   const upload = async (fd, token) => {
     const options = {
       method: 'POST',
-      headers: {'x-access-token': token},
+      headers: {
+        'x-access-token': token,
+        'content-type': 'multipart/form-data',
+      },
       data: fd,
       url: baseUrl + 'media',
     };
     console.log('apihooks upload', options);
+
     try {
-      const response = await axios(options);
-      return response.data;
-    } catch (e) {
-      throw new Error(e.message);
+      await axios(options).then((res) => {
+        if (res.status == 201) {
+          console.log('Upload res ok: ', res.data.file_id);
+          return JSON.stringify(res)
+        } else {
+          console.log('err Upload: ', res.status, res.message);
+        }
+      });
+    } catch (error) {
+      console.log('uploaderror: ', error);
     }
   };
 
@@ -194,7 +234,16 @@ const useMedia = () => {
     }
   };
 
-  return {upload, updateFile, deleteFile};
+  const getFile = async (fileId) => {
+    try {
+      const result = await doFetch(baseUrl + 'media/' + fileId);
+      return result;
+    } catch (error) {
+      throw new Error('getFile error: ' + error.message);
+    }
+  };
+
+  return {upload, updateFile, deleteFile, getFile};
 };
 
 export {useLoadMedia, useLogin, useUser, useTag, useMedia};

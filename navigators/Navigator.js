@@ -16,6 +16,7 @@ import {Icon} from 'react-native-elements';
 import Upload from '../views/Upload';
 import MyFiles from '../views/MyFiles';
 import Modify from '../views/Modify';
+import EditProfile from '../views/EditProfile';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -44,6 +45,9 @@ const TabScreen = () => {
       <Tab.Screen name="Home" component={Home} />
       <Tab.Screen name="Profile" component={Profile} />
       <Tab.Screen name="Upload" component={Upload} />
+      <Tab.Screen name="EditProfile" component={EditProfile} />
+
+
     </Tab.Navigator>
   );
 };
@@ -133,6 +137,18 @@ const StackScreen = () => {
             component={Single}
             options={{
               title: 'RECIPE',
+              headerTitleAlign: 'center',
+              headerStyle: {
+                backgroundColor: '#3d9f9f',
+              },
+              headerTintColor: '#FFF',
+            }}
+          />
+          <Stack.Screen
+            name="EditProfile"
+            component={EditProfile}
+            options={{
+              title: 'EditProfile',
               headerTitleAlign: 'center',
               headerStyle: {
                 backgroundColor: '#3d9f9f',
