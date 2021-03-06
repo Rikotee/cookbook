@@ -25,53 +25,16 @@ const Search = ({navigation}) => {
   const {handleInputChange, inputs, searchErrors, reset} = useSearchForm();
 
   const doSearch = async () => {
-     const formData = new FormData();
-     // add text to formData
-     formData.append('title', inputs.title);
-  //   const filename = image.split('/').pop();
-  //   const match = /\.(\w+)$/.exec(filename);
-  //   let type = match ? `${filetype}/${match[1]}` : filetype;
-  //   if (type === 'image/jpg') type = 'image/jpeg';
-  //   formData.append('file', {
-  //     uri: image,
-  //     name: filename,
-  //     type: type,
-  //   });
-    try {
-       setIsSearching(true);
-       const userToken = await AsyncStorage.getItem('userToken');
-       const resp = await search(formData, userToken);
-       console.log('search response', resp);
-       const tagResponse = await postTag(
-         {
-           file_id: resp.file_id,
-           tag: appIdentifier,
-         },
-         userToken
-       );
-       console.log('posting app identifier', tagResponse);
-  //     Alert.alert(
-  //       'Search',
-  //       'File uploaded',
-  //       [
-  //         {
-  //           text: 'Ok',
-  //           onPress: () => {
-  //             setUpdate(update + 1);
-  //             doReset();
-  //             navigation.navigate('Home');
-  //           },
-  //         },
-  //       ],
-  //       {cancelable: false}
-  //     );
-    } catch (error) {
-      Alert.alert('Search', 'Failed');
-      console.error(error);
-    } finally {
-      setIsSearching(false);
-    }
-   };
+      try {
+        const userToken = await AsyncStorage.getItem('userToken');
+        const searchData = await search(userToken, inputs);
+        console.log(searchData);
+        // result(searchData);
+      } catch (error) {
+        console.error(error.message);
+      }
+    };
+
 
    useEffect(() => {
 

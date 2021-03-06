@@ -17,6 +17,7 @@ const Modify = ({navigation, route}) => {
   const [isUploading, setIsUploading] = useState(false);
   const {updateFile} = useMedia();
   const {update, setUpdate} = useContext(MainContext);
+  console.log("file is here: " + file)
 
   const {
     handleInputChange,
