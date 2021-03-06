@@ -218,9 +218,16 @@ const useMedia = () => {
     console.log('apihooks search', searchOptions);
 
     try {
-      const json = await doFetch(baseUrl + 'media/search', searchOptions);
-      console.log('search resp', json);
-      return json;
+      const listJson = await doFetch(baseUrl + 'media/search', searchOptions);
+      console.log('ApiHooks search resp', listJson);
+
+      const media = await Promise.all(
+        listJson.map(async (item) => {
+          const fileJson = await doFetch(baseUrl + 'media/' + item.file_id);
+          return fileJson;
+        }),
+      );
+      return media;
     } catch (e) {
       throw new Error(e.message);
     }

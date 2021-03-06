@@ -5,6 +5,8 @@ import {
   KeyboardAvoidingView,
   Platform,
   ScrollView,
+  StyleSheet,
+  View,
 } from 'react-native';
 import PropTypes from 'prop-types';
 import {Input, Text, Button, Card} from 'react-native-elements';
@@ -13,6 +15,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useMedia, useTag} from '../hooks/ApiHooks';
 import {MainContext} from '../contexts/MainContext';
 import {appIdentifier} from '../utils/variables';
+import SRList from '../components/List';
 
 const Search = ({navigation}) => {
   const [image, setImage] = useState(null);
@@ -25,22 +28,16 @@ const Search = ({navigation}) => {
   const {handleInputChange, inputs, searchErrors, reset} = useSearchForm();
 
   const doSearch = async () => {
-      try {
-        const userToken = await AsyncStorage.getItem('userToken');
-        const searchData = await search(userToken, inputs);
-        console.log(searchData);
-        // result(searchData);
-      } catch (error) {
-        console.error(error.message);
-      }
-    };
+    try {
+      const userToken = await AsyncStorage.getItem('userToken');
+      const searchData = await search(userToken, inputs);
+      console.log('Search resp', searchData);
+    } catch (error) {
+      console.error(error.message);
+    }
+  };
 
-
-   useEffect(() => {
-
-  }, []);
-
-
+  useEffect(() => {}, []);
 
   const doReset = () => {
     setImage(null);
@@ -49,7 +46,7 @@ const Search = ({navigation}) => {
   return (
     <ScrollView>
       <KeyboardAvoidingView behavior="position" enabled>
-        <Card>
+        <View style={styles.post}>
           <Text h4>Search recipe</Text>
           <Input
             placeholder="title"
@@ -61,16 +58,23 @@ const Search = ({navigation}) => {
           <Button
             title="Search recipe"
             onPress={doSearch}
-            disabled={
-              searchErrors.title !== null
-            }
+            disabled={searchErrors.title !== null}
           />
           <Button title="Reset" onPress={doReset} />
-        </Card>
+        </View>
+        {/* <SRList navigation={navigation} myFilesOnly={false} /> */}
       </KeyboardAvoidingView>
     </ScrollView>
   );
 };
+
+const styles = StyleSheet.create({
+  post: {
+    padding: 15,
+    backgroundColor: '#FFF',
+    // marginBottom: 10,
+  },
+});
 
 Search.propTypes = {
   navigation: PropTypes.object,
