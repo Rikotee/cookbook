@@ -7,11 +7,20 @@ import {
   Text,
   ListItem as RNEListItem,
 } from 'react-native-elements';
-import {Button, Alert} from 'react-native';
+import {
+  Button,
+  Alert,
+  TouchableOpacity,
+  StyleSheet,
+  ActivityIndicator,
+  View,
+} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useMedia, useTag, useUser} from '../hooks/ApiHooks';
 import {MainContext} from '../contexts/MainContext';
 import moment from 'moment';
+import {Video} from 'expo-av';
+import * as ScreenOrientation from 'expo-screen-orientation';
 
 const ListItem = ({navigation, singleMedia, isMyFile}) => {
   // console.log(props);
@@ -19,29 +28,34 @@ const ListItem = ({navigation, singleMedia, isMyFile}) => {
   const {setUpdate, update, isLoggedIn} = useContext(MainContext);
   const [avatar, setAvatar] = useState('http://placekitten.com/100');
   const {getFilesByTag} = useTag();
-  const [owner, setOwner] = useState({username: 'somebody'});
+  const [owner, setOwner] = useState({username: 'Login to see user'});
   const {getUser} = useUser();
+  const [videoRef, setVideoRef] = useState(null);
   // const {file} = route.params;
 
-  // const fetchAvatar = async () => {
-  //   try {
-  //     const avatarList = await getFilesByTag('avatar_' + singleMedia.user_id);
-  //     if (avatarList.length > 0) {
-  //       setAvatar(uploadsUrl + avatarList.pop().filename);
-  //     }
-  //   } catch (error) {
-  //     console.error(error.message);
-  //   }
-  // };
-  // const fetchOwner = async () => {
-  //   try {
-  //     const userToken = await AsyncStorage.getItem('userToken');
-  //     const userData = await getUser(singleMedia.user_id, userToken);
-  //     setOwner(userData);
-  //   } catch (error) {
-  //     console.error(error.message);
-  //   }
-  // };
+  const fetchAvatar = async () => {
+    if (isLoggedIn) {
+      try {
+        const avatarList = await getFilesByTag('avatar_' + singleMedia.user_id);
+        if (avatarList.length > 0) {
+          setAvatar(uploadsUrl + avatarList.pop().filename);
+        }
+      } catch (error) {
+        console.error(error.message);
+      }
+    }
+  };
+  const fetchOwner = async () => {
+    if (isLoggedIn) {
+      try {
+        const userToken = await AsyncStorage.getItem('userToken');
+        const userData = await getUser(singleMedia.user_id, userToken);
+        setOwner(userData);
+      } catch (error) {
+        console.error(error.message);
+      }
+    }
+  };
 
   const doDelete = () => {
     Alert.alert(
@@ -67,47 +81,160 @@ const ListItem = ({navigation, singleMedia, isMyFile}) => {
     );
   };
 
-  // useEffect(() => {
-  //   fetchAvatar();
-  //   fetchOwner();
-  // });
+  const unlock = async () => {
+    try {
+      await ScreenOrientation.unlockAsync();
+    } catch (error) {
+      console.error('unlock', error.message);
+    }
+  };
+
+  const lock = async () => {
+    try {
+      await ScreenOrientation.lockAsync(
+        ScreenOrientation.OrientationLock.PORTRAIT_UP
+      );
+    } catch (error) {
+      console.error('lock', error.message);
+    }
+  };
+
+  const handleVideoRef = (component) => {
+    setVideoRef(component);
+  };
+
+  const showVideoInFullscreen = async () => {
+    try {
+      if (videoRef) await videoRef.presentFullscreenPlayer();
+    } catch (error) {
+      console.error('fullscreen', error.message);
+    }
+  };
+
+  useEffect(() => {
+    unlock();
+    fetchAvatar();
+    fetchOwner();
+
+    const orientSub = ScreenOrientation.addOrientationChangeListener((evt) => {
+      console.log('orientation', evt);
+      if (evt.orientationInfo.orientation > 2) {
+        // show video in fullscreen
+        showVideoInFullscreen();
+      }
+    });
+
+    return () => {
+      ScreenOrientation.removeOrientationChangeListener(orientSub);
+      lock();
+    };
+  }, [videoRef]);
 
   return (
-    <RNEListItem
-      bottomDivider
+    <TouchableOpacity
       onPress={() => {
         navigation.navigate('Single', {file: singleMedia});
       }}
     >
-      <Card>
-        {/* <Avatar source={{uri: avatar}} />
-        <Text>{owner.username}</Text> */}
-        {/* <Text>file_id: {singleMedia.file_id}</Text>
-        <Text>user_id: {singleMedia.user_id}</Text>
-        <Text>type: {singleMedia.media_type}</Text> */}
-        <Text>added: {moment(singleMedia.time_added).format('LL')}</Text>
-        <Avatar
-          size="large"
-          square
-          source={{uri: uploadsUrl + singleMedia.thumbnails.w160}}
-        ></Avatar>
+      <View style={styles.post}>
+        {isLoggedIn ? (
+          <View style={styles.userInfo}>
+            <Avatar style={styles.avatarImage} source={{uri: avatar}} />
+            <Text style={styles.userInfoText}>{owner.username}</Text>
+          </View>
+        ) : (
+          <View style={styles.userInfo}>
+            <Avatar style={styles.avatarImage} source={{uri: avatar}} />
+            <Text
+              style={styles.userInfoText}
+              onPress={() => navigation.navigate('Login')}
+            >
+              Login to see user
+            </Text>
+          </View>
+        )}
+        {singleMedia.media_type === 'image' ? (
+          <Card.Image
+            source={{uri: uploadsUrl + singleMedia.filename}}
+            style={styles.image}
+            PlaceholderContent={<ActivityIndicator />}
+          />
+        ) : (
+          <Video
+            ref={handleVideoRef}
+            source={{uri: uploadsUrl + singleMedia.filename}}
+            style={styles.image}
+            useNativeControls={true}
+            resizeMode="cover"
+            onError={(err) => {
+              console.error('video', err);
+            }}
+            posterSource={{uri: uploadsUrl + singleMedia.screenshot}}
+          />
+        )}
+        <Card.Title h4>{singleMedia.title}</Card.Title>
+        <Card.Title>{moment(singleMedia.time_added).format('LL')}</Card.Title>
+        <Text style={styles.description}>{singleMedia.description}</Text>
         <RNEListItem.Content>
-          <RNEListItem.Title h4>{singleMedia.title}</RNEListItem.Title>
-          <RNEListItem.Subtitle>{singleMedia.description}</RNEListItem.Subtitle>
           {isMyFile && isLoggedIn && (
             <>
-              <Button
-                title="Modify"
-                onPress={() => navigation.push('Modify', {file: singleMedia})}
-              ></Button>
-              <Button title="Delete" color="red" onPress={doDelete}></Button>
+              <Card.Divider />
+              <View style={styles.buttons}>
+                <Button
+                  title="Modify"
+                  onPress={() => navigation.push('Modify', {file: singleMedia})}
+                ></Button>
+                <Button title="Delete" color="red" onPress={doDelete}></Button>
+              </View>
             </>
           )}
         </RNEListItem.Content>
-      </Card>
-    </RNEListItem>
+        {/* <Card.Divider /> */}
+      </View>
+    </TouchableOpacity>
   );
 };
+
+const styles = StyleSheet.create({
+  post: {
+    padding: 15,
+    backgroundColor: '#FFF',
+    // marginBottom: 10,
+  },
+  image: {
+    width: '100%',
+    height: undefined,
+    aspectRatio: 1,
+    marginTop: 10,
+    marginBottom: 10,
+    borderRadius: 10,
+  },
+  description: {
+    marginBottom: 10,
+    textAlign: 'center',
+    fontSize: 16,
+  },
+  userInfo: {
+    flex: 1,
+    flexDirection: 'row',
+  },
+  userInfoText: {
+    marginLeft: 10,
+    fontSize: 18,
+    fontWeight: 'bold',
+    textAlignVertical: 'center',
+  },
+  avatarImage: {
+    width: 40,
+    height: 40,
+    borderRadius: 25,
+    overflow: 'hidden',
+  },
+  buttons: {
+    flex: 1,
+    flexDirection: 'row',
+  },
+});
 
 ListItem.propTypes = {
   singleMedia: PropTypes.object,

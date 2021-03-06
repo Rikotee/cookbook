@@ -42,7 +42,7 @@ const Login = ({navigation}) => {
   return (
     <KeyboardAvoidingView
       style={styles.container}
-      behavior={Platform.OS == 'ios' ? 'padding' : 'height'}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       enabled
     >
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -90,11 +90,6 @@ const styles = StyleSheet.create({
   },
   inner: {
     flex: 1,
-  },
-  image: {
-    flex: 1,
-    resizeMode: 'cover',
-    justifyContent: 'center',
   },
   form: {
     flex: 1,
