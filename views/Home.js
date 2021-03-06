@@ -4,20 +4,28 @@ import List from '../components/List';
 import PropTypes from 'prop-types';
 import {MainContext} from '../contexts/MainContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {Avatar, ListItem} from 'react-native-elements';
 
 const Home = ({navigation}) => {
-  const {isLoggedIn, setIsLoggedIn} = useContext(MainContext);
+  const {setUpdate, update, isLoggedIn, setIsLoggedIn} = useContext(
+    MainContext
+  );
 
   const logout = async () => {
     setIsLoggedIn(false);
     await AsyncStorage.clear();
   };
 
+  const updateLogout = () => {
+    logout();
+    // setUpdate(update + 1);
+  };
+
   return (
     <SafeAreaView style={styles.StyleSheet}>
       <View style={styles.loginArea}>
         {isLoggedIn ? (
-          <Text style={styles.loginText} onPress={logout}>
+          <Text style={styles.loginText} onPress={updateLogout}>
             Logout
           </Text>
         ) : (
@@ -29,6 +37,26 @@ const Home = ({navigation}) => {
           </Text>
         )}
       </View>
+
+      {isLoggedIn ? (
+        <ListItem bottomDivider onPress={() => navigation.navigate('Search')}>
+          <Avatar icon={{name: 'construction', color: 'black'}} />
+          <Avatar icon={{name: 'pest-control', color: 'black'}} />
+          <Avatar icon={{name: 'search', color: 'black', size: 30}} />
+          <ListItem.Content>
+            <ListItem.Title>Search</ListItem.Title>
+          </ListItem.Content>
+          <ListItem.Chevron />
+        </ListItem>
+      ) : (
+        <Text
+          style={styles.loginText}
+          onPress={() => navigation.navigate('Login')}
+        >
+          Login to use search
+        </Text>
+      )}
+
       <List navigation={navigation} myFilesOnly={false} />
       <StatusBar style="auto" />
     </SafeAreaView>

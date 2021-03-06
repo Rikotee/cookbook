@@ -11,6 +11,7 @@ import {MainContext} from '../contexts/MainContext';
 import Upload from '../views/Upload';
 import MyFiles from '../views/MyFiles';
 import Modify from '../views/Modify';
+import Search from '../views/Search';
 
 const Stack = createStackNavigator();
 
@@ -92,6 +93,18 @@ const StackScreen = () => {
               headerTintColor: '#FFF',
             }}
           />
+          <Stack.Screen
+            name="Search"
+            component={Search}
+            options={{
+              title: 'SEARCH',
+              headerTitleAlign: 'center',
+              headerStyle: {
+                backgroundColor: '#3d9f9f',
+              },
+              headerTintColor: '#FFF',
+            }}
+          />
         </>
       ) : (
         <>
@@ -124,6 +137,18 @@ const StackScreen = () => {
             component={Single}
             options={{
               title: 'RECIPE',
+              headerTitleAlign: 'center',
+              headerStyle: {
+                backgroundColor: '#3d9f9f',
+              },
+              headerTintColor: '#FFF',
+            }}
+          />
+          <Stack.Screen
+            name="Search"
+            component={Search}
+            options={{
+              title: 'SEARCH',
               headerTitleAlign: 'center',
               headerStyle: {
                 backgroundColor: '#3d9f9f',

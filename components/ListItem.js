@@ -111,6 +111,10 @@ const ListItem = ({navigation, singleMedia, isMyFile}) => {
     }
   };
 
+  // const userProfile = () => {
+  //   navigation.navigate('Profile');
+  // };
+
   useEffect(() => {
     unlock();
     fetchAvatar();
@@ -140,7 +144,13 @@ const ListItem = ({navigation, singleMedia, isMyFile}) => {
         {isLoggedIn ? (
           <View style={styles.userInfo}>
             <Avatar style={styles.avatarImage} source={{uri: avatar}} />
-            <Text style={styles.userInfoText}>{owner.username}</Text>
+            <Text
+              style={styles.userInfoText}
+              onPress={() => navigation.navigate('Profile')}
+              // onPress={userProfile}
+            >
+              {owner.username}
+            </Text>
           </View>
         ) : (
           <View style={styles.userInfo}>

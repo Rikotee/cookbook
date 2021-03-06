@@ -164,6 +164,26 @@ const useMedia = () => {
     }
   };
 
+
+  const search = async (title, token) => {
+    const options = {
+      method: 'POST',
+      headers: {'x-access-token': token},
+      data: title,
+      url: baseUrl + '/media/search',
+    };
+    console.log('apihooks search', options);
+    try {
+      const response = await axios(options);
+      return response.data;
+    } catch (e) {
+      throw new Error(e.message);
+    }
+  };
+
+
+
+
   const updateFile = async (fileId, fileInfo, token) => {
     const options = {
       method: 'PUT',
@@ -194,7 +214,7 @@ const useMedia = () => {
     }
   };
 
-  return {upload, updateFile, deleteFile};
+  return {upload, updateFile, deleteFile, search};
 };
 
 export {useLoadMedia, useLogin, useUser, useTag, useMedia};
