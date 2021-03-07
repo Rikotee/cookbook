@@ -30,7 +30,7 @@ const useLoadMedia = (myFilesOnly, userId) => {
         listJson.map(async (item) => {
           const fileJson = await doFetch(baseUrl + 'media/' + item.file_id);
           return fileJson;
-        }),
+        })
       );
       if (myFilesOnly) {
         media = media.filter((item) => item.user_id === userId);
@@ -111,7 +111,7 @@ const useUser = () => {
       await axios(options).then(
         (res) => {
           if (res.status === 200) {
-            console.log("ok") // here is the response that is sent back
+            console.log('ok'); // here is the response that is sent back
           } else console.log('Response was not 200, but: ', res);
         },
         (err) => {
@@ -178,6 +178,8 @@ const useTag = () => {
 };
 
 const useMedia = () => {
+  const [mediaArray, setMediaArray] = useState([]);
+
   const upload = async (fd, token) => {
     const options = {
       method: 'POST',
@@ -194,7 +196,7 @@ const useMedia = () => {
       await axios(options).then((res) => {
         if (res.status === 201) {
           console.log('Upload res ok: ', res.data.file_id);
-          return JSON.stringify(res)
+          return JSON.stringify(res);
         } else {
           console.log('err Upload: ', res.status, res.message);
         }
@@ -208,6 +210,7 @@ const useMedia = () => {
 
 
 
+
   const search = async (token, inputs) => {
     const searchOptions = {
       method: 'POST',
@@ -215,7 +218,8 @@ const useMedia = () => {
       body: JSON.stringify(inputs),
       url: baseUrl + 'media/search',
     };
-    console.log('apihooks search', searchOptions);
+
+      // console.log('search options', searchOptions);
 
     try {
       const listJson = await doFetch(baseUrl + 'media/search', searchOptions);
@@ -223,15 +227,32 @@ const useMedia = () => {
 
       const media = await Promise.all(
         listJson.map(async (item) => {
+
+
+
+
           const fileJson = await doFetch(baseUrl + 'media/' + item.file_id);
+
+
           return fileJson;
-        }),
+        })
       );
-      return media;
+
+      // const fMedia = media.filter(
+      //   (item) => item.tag === appIdentifier
+      // );
+
+      // console.log('filtered apihooks search', searchOptions);
+
+      setMediaArray(media);
+      return mediaArray;
     } catch (e) {
       throw new Error(e.message);
     }
   };
+
+
+
 
 
 

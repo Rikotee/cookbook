@@ -1,13 +1,11 @@
-import React, {useContext} from 'react';
+import React from 'react';
 import {FlatList} from 'react-native';
-import {useLoadMedia} from '../hooks/ApiHooks';
 import ListItem from './ListItem';
 import PropTypes from 'prop-types';
-import {MainContext} from '../contexts/MainContext';
+import {doSearch} from '../views/Search';
 
-const SRList = ({navigation, myFilesOnly}) => {
-  const {user} = useContext(MainContext);
-  const mediaArray = useLoadMedia(myFilesOnly, user.user_id);
+const SRList = ({navigation}) => {
+  const mediaArray = doSearch;
 
   return (
     <FlatList
@@ -17,7 +15,6 @@ const SRList = ({navigation, myFilesOnly}) => {
         <ListItem
           navigation={navigation}
           singleMedia={item}
-          isMyFile={item.user_id === user.user_id}
         />
       )}
     />

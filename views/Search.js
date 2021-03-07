@@ -1,15 +1,13 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {
   ActivityIndicator,
-  Alert,
   KeyboardAvoidingView,
-  Platform,
   ScrollView,
   StyleSheet,
   View,
 } from 'react-native';
 import PropTypes from 'prop-types';
-import {Input, Text, Button, Card} from 'react-native-elements';
+import {Input, Text, Button} from 'react-native-elements';
 import useSearchForm from '../hooks/SearchHooks';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useMedia, useTag} from '../hooks/ApiHooks';
@@ -32,12 +30,15 @@ const Search = ({navigation}) => {
       const userToken = await AsyncStorage.getItem('userToken');
       const searchData = await search(userToken, inputs);
       console.log('Search resp', searchData);
+
     } catch (error) {
       console.error(error.message);
     }
   };
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    // doSearch()
+  }, []);
 
   const doReset = () => {
     setImage(null);
