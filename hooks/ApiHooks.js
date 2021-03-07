@@ -207,11 +207,6 @@ const useMedia = () => {
     }
   };
 
-
-
-
-
-
   const search = async (token, inputs) => {
     const searchOptions = {
       method: 'POST',
@@ -230,6 +225,7 @@ const useMedia = () => {
       const listJson = await doFetch(baseUrl + 'media/search', searchOptions);
       // compares searches and filter only right tagged searches
       const onlyTags = tagListJson.filter(({file_id:a, title:x}) => listJson.some(({file_id:b, title:y}) => a === b && x === y));
+
       // console.log('filter test', onlyTags);
       // console.log('ApiHooks search resp', listJson);
 
@@ -248,14 +244,6 @@ const useMedia = () => {
       throw new Error(e.message);
     }
   };
-
-
-
-
-
-
-
-
 
   const updateFile = async (fileId, fileInfo, token) => {
     const options = {
