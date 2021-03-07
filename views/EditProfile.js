@@ -82,6 +82,7 @@ const EditProfile = ({navigation}) => {
         bio = fullEmailWithBio[1];
         console.log('bio here: ' + bio);
       }
+      else {bio = ""}
       setFetchBio(bio);
     };
 
