@@ -195,7 +195,7 @@ const useMedia = () => {
 
     try {
       return await axios(options).then((res) => {
-        if (res.status == 201) {
+        if (res.status === 201) {
           console.log('Upload res ok: ', res.data.file_id);
           return res.data.file_id
         } else {
@@ -223,25 +223,22 @@ const useMedia = () => {
       // console.log('search options', searchOptions);
 
     try {
+
+      // this fetch all tagged files
+      const tagListJson = await doFetch(baseUrl + 'tags/' + appIdentifier);
+      // this uses API search with input word
       const listJson = await doFetch(baseUrl + 'media/search', searchOptions);
-      console.log('ApiHooks search resp', listJson);
+      // compares searches and filter only right tagged searches
+      const onlyTags = tagListJson.filter(({file_id:a, title:x}) => listJson.some(({file_id:b, title:y}) => a === b && x === y));
+      // console.log('filter test', onlyTags);
+      // console.log('ApiHooks search resp', listJson);
 
       const media = await Promise.all(
-        listJson.map(async (item) => {
-
-
-
-
+        onlyTags.map(async (item) => {
           const fileJson = await doFetch(baseUrl + 'media/' + item.file_id);
-
-
           return fileJson;
         })
       );
-
-      // const fMedia = media.filter(
-      //   (item) => item.tag === appIdentifier
-      // );
 
       // console.log('filtered apihooks search', searchOptions);
 
