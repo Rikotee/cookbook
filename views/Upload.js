@@ -30,7 +30,13 @@ const Upload = ({navigation}) => {
     const formData = new FormData();
     // add text to formData
     formData.append('title', inputs.title);
-    formData.append('description', inputs.description);
+    const data = inputs.description
+    const data2 = inputs.description2
+    console.log("data 1: " + data)
+    console.log("data 2: " + data2)
+    const combinedData = JSON.stringify([data, data2])
+    console.log("combinedData: " + combinedData)
+    formData.append('description', combinedData);
     // add image to formData
     const filename = image.split('/').pop();
     const match = /\.(\w+)$/.exec(filename);
@@ -48,7 +54,7 @@ const Upload = ({navigation}) => {
       console.log('upload response', resp);
       const tagResponse = await postTag(
         {
-          file_id: resp.file_id,
+          file_id: resp,
           tag: appIdentifier,
         },
         userToken
@@ -148,6 +154,12 @@ const Upload = ({navigation}) => {
             value={inputs.description}
             onChangeText={(txt) => handleInputChange('description', txt)}
             errorMessage={uploadErrors.description}
+          />
+          <Input
+            placeholder="description"
+            value={inputs.description2}
+            onChangeText={(txt) => handleInputChange('description2', txt)}
+            errorMessage={uploadErrors.description2}
           />
           <Button title="Choose from library" onPress={() => pickImage(true)} />
           <Button title="Use camera" onPress={() => pickImage(false)} />

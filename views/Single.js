@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {StyleSheet, ActivityIndicator} from 'react-native';
+import {StyleSheet, ActivityIndicator, View} from 'react-native';
 import PropTypes from 'prop-types';
 import {uploadsUrl} from '../utils/variables';
 import {Avatar, Card, ListItem, Text} from 'react-native-elements';
@@ -11,6 +11,8 @@ import * as ScreenOrientation from 'expo-screen-orientation';
 import {ScrollView} from 'react-native-gesture-handler';
 
 const Single = ({route}) => {
+  const [fetchDescription, setFetchDescription] = useState('')
+  const [fetchIngredients, setFetchIngredients] = useState('')
   const {file} = route.params;
   const [avatar, setAvatar] = useState('http://placekitten.com/100');
   const [owner, setOwner] = useState({username: 'somebody'});
@@ -36,6 +38,24 @@ const Single = ({route}) => {
     } catch (error) {
       console.error(error.message);
     }
+  };
+
+  const fetchFullDesc = async () => {
+    let realDescription;
+    let incridients;
+    const fullDescription = file.description;
+    if (fullDescription.includes(']')) {
+      const fullDescWithIncridients = JSON.parse(fullDescription);
+      realDescription = fullDescWithIncridients[0];
+      incridients = fullDescWithIncridients[1];
+      console.log('real description here: ' + realDescription);
+      console.log('incridients here: ' + incridients);
+    } else {
+      realDescription = file.description;
+      incridients = "this shouldn't be empty"
+    }
+    setFetchDescription(realDescription)
+    setFetchIngredients(incridients)
   };
 
   const unlock = async () => {
@@ -72,6 +92,8 @@ const Single = ({route}) => {
     unlock();
     fetchAvatar();
     fetchOwner();
+    fetchFullDesc()
+
 
     const orientSub = ScreenOrientation.addOrientationChangeListener((evt) => {
       console.log('orientation', evt);
@@ -113,7 +135,18 @@ const Single = ({route}) => {
           />
         )}
         <Card.Divider />
-        <Text style={styles.description}>{file.description}</Text>
+        <Text style={styles.description} h4>
+          Instructions:
+        </Text>
+        <Text style={styles.description}>
+          {fetchDescription}
+        </Text>
+        <Text style={styles.description} h4>
+          Ingredients:
+        </Text>
+        <Text style={styles.description}>
+          {fetchIngredients}
+        </Text>
         <ListItem>
           <Avatar source={{uri: avatar}} />
           <Text>{owner.username}</Text>

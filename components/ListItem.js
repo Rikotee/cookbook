@@ -23,7 +23,7 @@ import {Video} from 'expo-av';
 import * as ScreenOrientation from 'expo-screen-orientation';
 
 const ListItem = ({navigation, singleMedia, isMyFile}) => {
-  // console.log(props);
+
   const {deleteFile} = useMedia();
   const {setUpdate, update, isLoggedIn} = useContext(MainContext);
   const [avatar, setAvatar] = useState('http://placekitten.com/100');
@@ -31,7 +31,8 @@ const ListItem = ({navigation, singleMedia, isMyFile}) => {
   const [owner, setOwner] = useState({username: 'Login to see user'});
   const {getUser} = useUser();
   const [videoRef, setVideoRef] = useState(null);
-  // const {file} = route.params;
+
+
 
   const fetchAvatar = async () => {
     if (isLoggedIn) {
@@ -77,7 +78,7 @@ const ListItem = ({navigation, singleMedia, isMyFile}) => {
           },
         },
       ],
-      {cancelable: false}
+      {cancelable: false},
     );
   };
 
@@ -92,7 +93,7 @@ const ListItem = ({navigation, singleMedia, isMyFile}) => {
   const lock = async () => {
     try {
       await ScreenOrientation.lockAsync(
-        ScreenOrientation.OrientationLock.PORTRAIT_UP
+        ScreenOrientation.OrientationLock.PORTRAIT_UP,
       );
     } catch (error) {
       console.error('lock', error.message);
@@ -115,6 +116,7 @@ const ListItem = ({navigation, singleMedia, isMyFile}) => {
     unlock();
     fetchAvatar();
     fetchOwner();
+
 
     const orientSub = ScreenOrientation.addOrientationChangeListener((evt) => {
       console.log('orientation', evt);
@@ -139,12 +141,12 @@ const ListItem = ({navigation, singleMedia, isMyFile}) => {
       <View style={styles.post}>
         {isLoggedIn ? (
           <View style={styles.userInfo}>
-            <Avatar style={styles.avatarImage} source={{uri: avatar}} />
+            <Avatar style={styles.avatarImage} source={{uri: avatar}}/>
             <Text style={styles.userInfoText}>{owner.username}</Text>
           </View>
         ) : (
           <View style={styles.userInfo}>
-            <Avatar style={styles.avatarImage} source={{uri: avatar}} />
+            <Avatar style={styles.avatarImage} source={{uri: avatar}}/>
             <Text
               style={styles.userInfoText}
               onPress={() => navigation.navigate('Login')}
@@ -157,7 +159,7 @@ const ListItem = ({navigation, singleMedia, isMyFile}) => {
           <Card.Image
             source={{uri: uploadsUrl + singleMedia.filename}}
             style={styles.image}
-            PlaceholderContent={<ActivityIndicator />}
+            PlaceholderContent={<ActivityIndicator/>}
           />
         ) : (
           <Video
@@ -174,11 +176,11 @@ const ListItem = ({navigation, singleMedia, isMyFile}) => {
         )}
         <Card.Title h4>{singleMedia.title}</Card.Title>
         <Card.Title>{moment(singleMedia.time_added).format('LL')}</Card.Title>
-        <Text style={styles.description}>{singleMedia.description}</Text>
+
         <RNEListItem.Content>
           {isMyFile && isLoggedIn && (
             <>
-              <Card.Divider />
+              <Card.Divider/>
               <View style={styles.buttons}>
                 <Button
                   title="Modify"
