@@ -2,14 +2,14 @@ import React from 'react';
 import {FlatList} from 'react-native';
 import ListItem from './ListItem';
 import PropTypes from 'prop-types';
-import {doSearch} from '../views/Search';
+import {Search} from '../views/Search';
 
 const SRList = ({navigation}) => {
-  const mediaArray = doSearch;
+  const mediaArrayS = Search();
 
   return (
     <FlatList
-      data={mediaArray.reverse()}
+      data={mediaArrayS.reverse()}
       keyExtractor={(item, index) => index.toString()}
       renderItem={({item}) => (
         <ListItem

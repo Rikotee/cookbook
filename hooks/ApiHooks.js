@@ -237,9 +237,7 @@ const useMedia = () => {
       );
 
       // console.log('filtered apihooks search', searchOptions);
-
-      setMediaArray(media);
-      return mediaArray;
+      return media;
     } catch (e) {
       throw new Error(e.message);
     }

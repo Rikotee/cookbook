@@ -5,6 +5,7 @@ import {
   ScrollView,
   StyleSheet,
   View,
+  FlatList,
 } from 'react-native';
 import PropTypes from 'prop-types';
 import {Input, Text, Button} from 'react-native-elements';
@@ -14,6 +15,7 @@ import {useMedia, useTag} from '../hooks/ApiHooks';
 import {MainContext} from '../contexts/MainContext';
 import {appIdentifier} from '../utils/variables';
 import SRList from '../components/List';
+// import ListItem from './ListItem';
 
 const Search = ({navigation}) => {
   const [image, setImage] = useState(null);
@@ -25,11 +27,15 @@ const Search = ({navigation}) => {
 
   const {handleInputChange, inputs, searchErrors, reset} = useSearchForm();
 
+
+
+
   const doSearch = async () => {
     try {
       const userToken = await AsyncStorage.getItem('userToken');
       const searchData = await search(userToken, inputs);
       console.log('Search resp', searchData);
+      return searchData
 
     } catch (error) {
       console.error(error.message);
@@ -44,8 +50,10 @@ const Search = ({navigation}) => {
     setImage(null);
     reset();
   };
+
+
   return (
-    <ScrollView>
+    // <ScrollView>
       <KeyboardAvoidingView behavior="position" enabled>
         <View style={styles.post}>
           <Text h4>Search recipe</Text>
@@ -63,9 +71,24 @@ const Search = ({navigation}) => {
           />
           <Button title="Reset" onPress={doReset} />
         </View>
-        {/* <SRList navigation={navigation} myFilesOnly={false} /> */}
+
+        <View>
+          {/* <FlatList
+           style={styles.list}
+            data={listData}
+            keyExtractor={(item) => item.id}
+            renderItem={({item}) => (
+              <Text style={{fontSize: 22}}>
+                {item.id} - {item.text}
+              </Text>
+            )}
+          /> */}
+          <SRList navigation={navigation} myFilesOnly={false} />
+        </View>
       </KeyboardAvoidingView>
-    </ScrollView>
+    // </ScrollView>
+
+
   );
 };
 
@@ -75,6 +98,15 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFF',
     // marginBottom: 10,
   },
+
+  list: {
+    padding: 15,
+    backgroundColor: '#FFF',
+    // marginBottom: 10,
+  },
+  // text: {
+  //   size: 20,
+  // },
 });
 
 Search.propTypes = {
