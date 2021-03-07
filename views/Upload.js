@@ -15,8 +15,13 @@ import {useMedia, useTag} from '../hooks/ApiHooks';
 import {MainContext} from '../contexts/MainContext';
 import {appIdentifier} from '../utils/variables';
 import {Video} from 'expo-av';
+import {Picker} from '@react-native-picker/picker';
 
 const Upload = ({navigation}) => {
+  const [selectedTag, setSelectedTag] = useState();
+  const [selectedTag2, setSelectedTag2] = useState();
+  const [selectedTag3, setSelectedTag3] = useState();
+
   const [image, setImage] = useState(null);
   const [filetype, setFiletype] = useState('');
   const [isUploading, setIsUploading] = useState(false);
@@ -26,16 +31,30 @@ const Upload = ({navigation}) => {
 
   const {handleInputChange, inputs, uploadErrors, reset} = useUploadForm();
 
+  const checkNulls = (item) => {
+    if (item == null || item === 0) {
+      return '';
+    } else return item;
+  };
+
   const doUpload = async () => {
     const formData = new FormData();
     // add text to formData
     formData.append('title', inputs.title);
-    const data = inputs.description
-    const data2 = inputs.description2
-    console.log("data 1: " + data)
-    console.log("data 2: " + data2)
-    const combinedData = JSON.stringify([data, data2])
-    console.log("combinedData: " + combinedData)
+    const data = inputs.description;
+    const data2 = inputs.description2;
+    checkNulls(selectedTag);
+    checkNulls(selectedTag2);
+    checkNulls(selectedTag3);
+    const data3 = [
+      checkNulls(selectedTag),
+      checkNulls(selectedTag2),
+      checkNulls(selectedTag3)];
+    console.log('data 1: ' + data);
+    console.log('data 2: ' + data2);
+    console.log('data 2: ' + data3);
+    const combinedData = JSON.stringify([data, data2]);
+    console.log('combinedData: ' + combinedData);
     formData.append('description', combinedData);
     // add image to formData
     const filename = image.split('/').pop();
@@ -51,13 +70,16 @@ const Upload = ({navigation}) => {
       setIsUploading(true);
       const userToken = await AsyncStorage.getItem('userToken');
       const resp = await upload(formData, userToken);
-      console.log('upload response', resp);
+      console.log('upload response = file id: ', resp);
+      for (let i = 0; i < data3.length; i++) {
+        await addTag(userToken, resp, data3[i]);
+      }
       const tagResponse = await postTag(
         {
           file_id: resp,
           tag: appIdentifier,
         },
-        userToken
+        userToken,
       );
       console.log('posting app identifier', tagResponse);
       Alert.alert(
@@ -73,7 +95,7 @@ const Upload = ({navigation}) => {
             },
           },
         ],
-        {cancelable: false}
+        {cancelable: false},
       );
     } catch (error) {
       Alert.alert('Upload', 'Failed');
@@ -83,13 +105,23 @@ const Upload = ({navigation}) => {
     }
   };
 
+  const addTag = async (userToken, fileId, tag) => {
+    const tagResponse = await postTag(
+      {
+        file_id: fileId,
+        tag: JSON.stringify([appIdentifier, tag]),
+      },
+      userToken,
+    );
+  };
+
   useEffect(() => {
     (async () => {
       if (Platform.OS !== 'web') {
         const {status} = await ImagePicker.requestCameraPermissionsAsync();
         if (status !== 'granted') {
           alert(
-            'Sorry, we need camera roll and camera permissions to make this work!'
+            'Sorry, we need camera roll and camera permissions to make this work!',
           );
         }
       }
@@ -122,6 +154,14 @@ const Upload = ({navigation}) => {
     setImage(null);
     reset();
   };
+
+  const picker = () => {
+    const data3 = [
+      checkNulls(selectedTag),
+      checkNulls(selectedTag2),
+      checkNulls(selectedTag3)];
+    console.log('data 2: ' + JSON.stringify(data3));
+  };
   return (
     <ScrollView>
       <KeyboardAvoidingView behavior="position" enabled>
@@ -143,6 +183,51 @@ const Upload = ({navigation}) => {
               )}
             </>
           )}
+          <Text h4>Time</Text>
+          <Picker
+
+            selectedValue={selectedTag}
+            onValueChange={(itemValue, itemIndex) =>
+              setSelectedTag(itemValue)
+            }>
+            <Picker.Item label="Please pick time..." value="0"/>
+            <Picker.Item label="Under 30 minutes" value="Under 30 minutes"/>
+            <Picker.Item label="30-60 minutes" value="30-60 minutes"/>
+            <Picker.Item label="Over 60 minutes" value="Over 60 minutes"/>
+          </Picker>
+          <Text h4>Type</Text>
+          <Picker
+            selectedValue={selectedTag2}
+            onValueChange={(itemValue, itemIndex) =>
+              setSelectedTag2(itemValue)
+            }>
+            <Picker.Item label="Please pick type..." value="0"/>
+            <Picker.Item label="Pasta & risotto" value="Pasta & risotto"/>
+            <Picker.Item label="Salad" value="Salad"/>
+            <Picker.Item label="Bread & doughs" value="Bread & doughs"/>
+            <Picker.Item label="Vegetable sides" value="Vegetable sides"/>
+            <Picker.Item label="Soup" value="Soup"/>
+            <Picker.Item label="BBQ food" value="BBQ food"/>
+            <Picker.Item label="Stew" value="Stew"/>
+          </Picker>
+          <Text h4>Main ingredient</Text>
+          <Picker
+            selectedValue={selectedTag3}
+            onValueChange={(itemValue, itemIndex) =>
+              setSelectedTag3(itemValue)
+            }>
+            <Picker.Item label="please pick main ingredient..." value="0"/>
+            <Picker.Item label="Vegetables" value="Vegetables"/>
+            <Picker.Item label="Eggs" value="Eggs"/>
+            <Picker.Item label="Chicken" value="Chicken"/>
+            <Picker.Item label="Pasta" value="Pasta"/>
+            <Picker.Item label="Fish" value="Fish"/>
+            <Picker.Item label="Bread" value="Bread"/>
+            <Picker.Item label="Lamb" value="Lamb"/>
+
+          </Picker>
+          <Button title="Select tag" onPress={picker}/>
+
           <Input
             placeholder="title"
             value={inputs.title}
@@ -161,9 +246,9 @@ const Upload = ({navigation}) => {
             onChangeText={(txt) => handleInputChange('description2', txt)}
             errorMessage={uploadErrors.description2}
           />
-          <Button title="Choose from library" onPress={() => pickImage(true)} />
-          <Button title="Use camera" onPress={() => pickImage(false)} />
-          {isUploading && <ActivityIndicator size="large" color="#0000ff" />}
+          <Button title="Choose from library" onPress={() => pickImage(true)}/>
+          <Button title="Use camera" onPress={() => pickImage(false)}/>
+          {isUploading && <ActivityIndicator size="large" color="#0000ff"/>}
           <Button
             title="Upload file"
             onPress={doUpload}
@@ -173,7 +258,7 @@ const Upload = ({navigation}) => {
               image === null
             }
           />
-          <Button title="Reset" onPress={doReset} />
+          <Button title="Reset" onPress={doReset}/>
         </Card>
       </KeyboardAvoidingView>
     </ScrollView>
