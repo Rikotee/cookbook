@@ -13,8 +13,8 @@ import useSearchForm from '../hooks/SearchHooks';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useMedia, useTag} from '../hooks/ApiHooks';
 import {MainContext} from '../contexts/MainContext';
-import SRList from '../components/SRList';
-import ListItem from './ListItem';
+// import SRList from '../components/SRList';
+// import ListItem from './ListItem';
 
 const Search = ({navigation}) => {
   const [image, setImage] = useState(null);
@@ -68,14 +68,14 @@ const Search = ({navigation}) => {
       </View>
 
       <View>
-        <FlatList
+        {/* <FlatList
           data={mediaArray.reverse()}
           keyExtractor={(item, index) => index.toString()}
           renderItem={({item}) => (
             <ListItem navigation={navigation} singleMedia={item} />
           )}
         />
-        <SRList navigation={navigation} myFilesOnly={false} />
+        <SRList navigation={navigation} myFilesOnly={false} /> */}
       </View>
     </KeyboardAvoidingView>
     // </ScrollView>
