@@ -158,15 +158,26 @@ const useTag = () => {
       throw new Error(error.message);
     }
   };
+
+  const getTagsOfFile = async (id) => {
+    try {
+      const options = {
+        method: 'GET',
+      };
+      const tags = await doFetch(baseUrl + 'tags/file/' + id, options);
+      return tags;
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  };
+
   const postTag = async (tag, token) => {
-    console.log('HERE IS THE TAG2 ' + JSON.stringify(tag));
+    console.log('Tag = ' + JSON.stringify(tag));
     const options = {
       method: 'POST',
       headers: {'Content-Type': 'application/json', 'x-access-token': token},
       body: JSON.stringify(tag),
     };
-    console.log('HERE IS THE TAG ' + JSON.stringify(tag));
-
     try {
       const result = await doFetch(baseUrl + 'tags', options);
       return result;
@@ -175,7 +186,7 @@ const useTag = () => {
     }
   };
 
-  return {getFilesByTag, postTag};
+  return {getFilesByTag, postTag, getTagsOfFile};
 };
 
 const useMedia = () => {

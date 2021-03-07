@@ -5,7 +5,7 @@ import ListItem from './ListItem';
 import PropTypes from 'prop-types';
 import {MainContext} from '../contexts/MainContext';
 
-const List = ({navigation, myFilesOnly}) => {
+const List = ({navigation, myFilesOnly},) => {
   const {user} = useContext(MainContext);
   const mediaArray = useLoadMedia(myFilesOnly, user.user_id);
 

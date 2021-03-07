@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {StyleSheet, ActivityIndicator, View} from 'react-native';
 import PropTypes from 'prop-types';
-import {uploadsUrl} from '../utils/variables';
+import {appIdentifier, uploadsUrl} from '../utils/variables';
 import {Avatar, Card, ListItem, Text} from 'react-native-elements';
 import moment from 'moment';
 import {useTag, useUser} from '../hooks/ApiHooks';
@@ -13,10 +13,14 @@ import {ScrollView} from 'react-native-gesture-handler';
 const Single = ({route}) => {
   const [fetchDescription, setFetchDescription] = useState('')
   const [fetchIngredients, setFetchIngredients] = useState('')
+  const [fetchTags, setFetchTags] = useState('')
+  const [fetchTags2, setFetchTags2] = useState('');
+  const [fetchTags3, setFetchTags3] = useState('');
+
   const {file} = route.params;
   const [avatar, setAvatar] = useState('http://placekitten.com/100');
   const [owner, setOwner] = useState({username: 'somebody'});
-  const {getFilesByTag} = useTag();
+  const {getFilesByTag, getTagsOfFile} = useTag();
   const {getUser} = useUser();
   const [videoRef, setVideoRef] = useState(null);
 
@@ -40,22 +44,51 @@ const Single = ({route}) => {
     }
   };
 
+  const getFileTags = async () => {
+    let actualTag;
+    let actuallyActualTag;
+    const actualTags = [];
+    const tags = await getTagsOfFile(file.file_id);
+    for (let i = 0; i < tags.length; i++) {
+      if (tags[i].tag !== appIdentifier) {
+        actualTag = tags[i].tag;
+        actuallyActualTag = JSON.parse(actualTag)[1];
+        actualTags.push(actuallyActualTag);
+      }
+    }
+    if (actualTags[0] !== '') {
+      setFetchTags('Time: ' + actualTags[0]);
+    }
+    if (actualTags[1] !== '') {
+      setFetchTags2('Type: ' + actualTags[1]);
+    }
+    if (actualTags[2] !== '') {
+      setFetchTags3('Main ingredient: ' + actualTags[2]);
+    }
+    ;
+  };
+
   const fetchFullDesc = async () => {
     let realDescription;
     let incridients;
+    let tags;
     const fullDescription = file.description;
     if (fullDescription.includes(']')) {
       const fullDescWithIncridients = JSON.parse(fullDescription);
       realDescription = fullDescWithIncridients[0];
       incridients = fullDescWithIncridients[1];
+      tags = fullDescWithIncridients[2];
       console.log('real description here: ' + realDescription);
       console.log('incridients here: ' + incridients);
+      console.log(file.file_id)
     } else {
       realDescription = file.description;
       incridients = "this shouldn't be empty"
+      tags = "this shouldn't be empty"
     }
     setFetchDescription(realDescription)
     setFetchIngredients(incridients)
+    setFetchTags(tags)
   };
 
   const unlock = async () => {
@@ -93,6 +126,7 @@ const Single = ({route}) => {
     fetchAvatar();
     fetchOwner();
     fetchFullDesc()
+    getFileTags()
 
 
     const orientSub = ScreenOrientation.addOrientationChangeListener((evt) => {
@@ -146,6 +180,18 @@ const Single = ({route}) => {
         </Text>
         <Text style={styles.description}>
           {fetchIngredients}
+        </Text>
+        <Text style={styles.description} h4>
+          Tags:
+        </Text>
+        <Text style={styles.description}>
+          {fetchTags}
+        </Text>
+        <Text style={styles.description}>
+          {fetchTags2}
+        </Text>
+        <Text style={styles.description}>
+          {fetchTags3}
         </Text>
         <ListItem>
           <Avatar source={{uri: avatar}} />
