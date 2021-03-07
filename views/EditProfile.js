@@ -18,11 +18,11 @@ import {Video} from 'expo-av';
 import useSignUpForm from '../hooks/RegisterHooks';
 
 const EditProfile = ({navigation}) => {
-    const [fetchBio, setFetchBio] = useState('')
+    const [fetchBio, setFetchBio] = useState('');
     const [image, setImage] = useState(null);
     const [filetype, setFiletype] = useState('');
     const [isUploading, setIsUploading] = useState(false);
-    const {updateUser} = useUser()
+    const {updateUser, getUser} = useUser();
     const {deleteFile, getFile, upload, updateFile} = useMedia();
     const [avatar, setAvatar] = useState('http://placekitten.com/640'); // Placeholder for accounts without profile picture
     const {
@@ -44,16 +44,21 @@ const EditProfile = ({navigation}) => {
       uploadErrors,
     } = useUploadForm();
 
-
     const settingBio = async () => {
+      let realEmail;
       const userToken = await AsyncStorage.getItem('userToken');
-      console.log("here are inputs: " + JSON.stringify(inputs.username))
-      const fullUsername = JSON.parse(user.username)
-      const realUsername = fullUsername[0]
-
-      const res = await updateUser(userToken, {username: JSON.stringify([realUsername, inputs.username])})
-      // console.log("is this the thing that is undefined? " + res)
-    }
+      console.log('here are inputs: ' + JSON.stringify(inputs.email));
+      const fullEmail = user.email;
+      if (fullEmail.includes(']')) {
+        const fullEmailWithBio = JSON.parse(fullEmail);
+        realEmail = fullEmailWithBio[0];
+        console.log(realEmail);
+      } else {
+        realEmail = user.email;
+      }
+      const res = await updateUser(userToken,
+        {email: JSON.stringify([realEmail, inputs.email])});
+    };
 
     const fetchAvatar = async () => {
       try {
@@ -64,15 +69,30 @@ const EditProfile = ({navigation}) => {
       }
     };
 
-    const getBio = () => {
-      const bio = JSON.parse(user.username)
-      setFetchBio(bio[1])
-      console.log(bio)
-    }
+    const getBio = async () => {
+      let realEmail;
+      let bio;
+      const userToken = await AsyncStorage.getItem('userToken');
+      const userInfo = await getUser(user.user_id, userToken);
+      const fullEmail = userInfo.email;
+      if (fullEmail.includes(']')) {
+        const fullEmailWithBio = JSON.parse(fullEmail);
+        realEmail = fullEmailWithBio[0];
+        console.log('real email here: ' + realEmail);
+        bio = fullEmailWithBio[1];
+        console.log('bio here: ' + bio);
+      }
+      setFetchBio(bio);
+    };
+
+    const combinedFunction = () => {
+      settingBio();
+      getBio();
+    };
 
     useEffect(() => {
-       getBio();
       fetchAvatar();
+      getBio();
     }, []);
 
     const doUpload = async () => {
@@ -92,12 +112,11 @@ const EditProfile = ({navigation}) => {
       });
       try {
         setIsUploading(true);
-        // Fetch
         const resp = await upload(formData, userToken);
-        console.log(resp)
+        console.log('response here: ' + resp);
         const tagResponse = await postTag(
           {
-            file_id: resp.file_id,
+            file_id: resp,
             tag: appIdentifier + user.user_id,
           },
           userToken,
@@ -153,39 +172,41 @@ const EditProfile = ({navigation}) => {
     return (
       <ScrollView>
         <KeyboardAvoidingView behavior="position" enabled>
-          <Image
-            source={{uri: image}}
-            style={styles.image}
-            onPress={pickImage}
-          />
-          <Image
-            source={{uri: avatar}}
-            style={styles.image}
-            onPress={pickImage}
-          />
-          <Text>{fetchBio}</Text>
-          <Text a>Bio</Text>
+          {image === null ? (
+            <Image
+              source={{uri: avatar}}
+              style={styles.image}
+              onPress={pickImage}
+            />
+          ) : (
+            <Image
+              source={{uri: image}}
+              style={styles.image}
+              onPress={pickImage}
+            />
+          )}
           <View style={styles.view}>
             <Input
+              defaultValue={fetchBio}
               autoCapitalize="none"
-              placeholder="bio goes here"
-              onChangeText={(txt) => handleInputChange('username', txt)}
+              placeholder="New bio goes here"
+              onChangeText={(txt) => handleInputChange('email', txt)}
               onEndEditing={(event) =>
-                handleInputEnd('username', event.nativeEvent.text)
+                handleInputEnd('email', event.nativeEvent.text)
               }
-              errorMessage={registerErrors.username}
+              errorMessage={registerErrors.email}
             />
           </View>
           <Button title="Choose from library" onPress={() => pickImage(true)}/>
           <Button title="Use camera" onPress={() => pickImage(false)}/>
           {isUploading && <ActivityIndicator size="large" color="#0000ff"/>}
           <Button
-            title="Change image"
+            title="Save image"
             onPress={doUpload}
           />
           <Button
             title="Save bio change"
-            onPress={settingBio}
+            onPress={combinedFunction}
           />
         </KeyboardAvoidingView>
       </ScrollView>

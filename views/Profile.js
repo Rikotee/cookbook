@@ -53,7 +53,7 @@ const Profile = ({navigation}) => {
 
 
 
-  const settingUsername = async () => {
+  const settingEmail = async () => {
     const userToken = await AsyncStorage.getItem('userToken');
     console.log("here are inputs: " + JSON.stringify(inputs.username))
     const fullUsername = JSON.parse(user.username)
@@ -64,14 +64,15 @@ const Profile = ({navigation}) => {
   }
 
   const getBio = () => {
-    const bio = JSON.parse(user.username)
-    setFetchBio(bio[1])
-    setFetchName(bio[0])
-    console.log(bio)
+    console.log(user.username)
+    // const bio = JSON.parse(user.username)
+     setFetchBio(bio[1])
+    // setFetchName(bio[0])
   }
 
   const fetchAvatar = async () => {
     try {
+      console.log(user.user_id)
       const avatar = await getFilesByTag(appIdentifier + user.user_id);
       setAvatar(uploadsUrl + avatar.pop().filename);
     } catch (error) {
@@ -80,7 +81,7 @@ const Profile = ({navigation}) => {
   };
 
   useEffect(() => {
-    fetchAvatar();
+    // fetchAvatar();
     getBio()
   }, []);
 
