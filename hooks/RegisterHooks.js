@@ -25,9 +25,10 @@ const constraints = {
     equality: 'password',
   },
   email: {
-    presence: {
-      message: 'cannot be empty',
-    },
+    length: {
+      maximum: 100,
+      message: 'max length is 100 characters',
+    }
   },
   full_name: {
     length: {

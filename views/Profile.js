@@ -24,9 +24,9 @@ import useUploadForm from '../hooks/UploadHooks';
 import useSignUpForm from '../hooks/RegisterHooks';
 
 const Profile = ({navigation}) => {
-  const [fetchBio, setFetchBio] = useState('')
-  const [fetchName, setFetchName] = useState('')
-  const {updateUser} = useUser()
+  const [fetchBio, setFetchBio] = useState('');
+  const {updateUser, getUser} = useUser();
+
   const {
     inputs,
     handleInputChange,
@@ -36,9 +36,7 @@ const Profile = ({navigation}) => {
     validateOnSend,
   } = useSignUpForm();
   const [filetype, setFiletype] = useState('');
-  // const [fetchBio, setFetchBio] = useState('');
   const {isLoggedIn, setIsLoggedIn, user} = useContext(MainContext);
-  const {getFile, upload} = useMedia();
   const [avatar, setAvatar] = useState('http://placekitten.com/640'); // Placeholder for accounts without profile picture
   const {getFilesByTag, postTag} = useTag();
   const logout = async () => {
@@ -51,28 +49,38 @@ const Profile = ({navigation}) => {
   };
   // const {handleInputChange, inputs, uploadErrors, reset} = useUploadForm();
 
-
-
   const settingEmail = async () => {
     const userToken = await AsyncStorage.getItem('userToken');
-    console.log("here are inputs: " + JSON.stringify(inputs.username))
-    const fullUsername = JSON.parse(user.username)
-    const realBio = fullUsername[1]
+    console.log('here are inputs: ' + JSON.stringify(inputs.username));
+    const fullUsername = JSON.parse(user.username);
+    const realBio = fullUsername[1];
 
-    const res = await updateUser(userToken, {username: JSON.stringify([inputs.username, realBio])})
+    const res = await updateUser(userToken,
+      {username: JSON.stringify([inputs.username, realBio])});
     // console.log("is this the thing that is undefined? " + res)
-  }
+  };
 
-  const getBio = () => {
-    console.log(user.username)
-    // const bio = JSON.parse(user.username)
-     setFetchBio(bio[1])
-    // setFetchName(bio[0])
-  }
+  const getBio = async () => {
+    let realEmail;
+    let bio;
+    const userToken = await AsyncStorage.getItem('userToken');
+    const userInfo = await getUser(user.user_id, userToken);
+    const fullEmail = userInfo.email;
+    if (fullEmail.includes(']')) {
+      const fullEmailWithBio = JSON.parse(fullEmail);
+      realEmail = fullEmailWithBio[0];
+      console.log('real email here: ' + realEmail);
+      bio = fullEmailWithBio[1];
+      console.log('bio here: ' + bio);
+    } else {
+      bio = '';
+    }
+    setFetchBio(bio);
+  };
 
   const fetchAvatar = async () => {
     try {
-      console.log(user.user_id)
+      console.log(user.user_id);
       const avatar = await getFilesByTag(appIdentifier + user.user_id);
       setAvatar(uploadsUrl + avatar.pop().filename);
     } catch (error) {
@@ -81,8 +89,8 @@ const Profile = ({navigation}) => {
   };
 
   useEffect(() => {
-    // fetchAvatar();
-    getBio()
+    fetchAvatar();
+    getBio();
   }, []);
 
   return (
@@ -109,12 +117,12 @@ const Profile = ({navigation}) => {
         />
       </View>
       <View style={styles.view}>
-        <Text h1>{fetchName}</Text>
+        <Text h1>{user.username}</Text>
       </View>
-      <ListItem>
-        <Avatar icon={{name: 'user', type: 'font-awesome', color: 'black'}}/>
+      <View style={styles.view}>
+        <Text>{"Biography: "}</Text>
         <Text>{fetchBio}</Text>
-      </ListItem>
+      </View>
       <ListItem bottomDivider onPress={() => navigation.push('My Files')}>
         <Avatar icon={{name: 'perm-media', color: 'black'}}/>
         <ListItem.Content>
