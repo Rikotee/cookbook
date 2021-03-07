@@ -111,7 +111,7 @@ const useUser = () => {
       await axios(options).then(
         (res) => {
           if (res.status === 200) {
-            console.log("ok") // here is the response that is sent back
+            console.log("ok") // here is the resonse that is sent back
           } else console.log('Response was not 200, but: ', res);
         },
         (err) => {
@@ -152,6 +152,7 @@ const useTag = () => {
   const getFilesByTag = async (tag) => {
     try {
       const tagList = await doFetch(baseUrl + 'tags/' + tag);
+      console.log("getFilesByTag backend " + tagList)
       return tagList;
     } catch (error) {
       throw new Error(error.message);
@@ -191,14 +192,14 @@ const useMedia = () => {
     console.log('apihooks upload', options);
 
     try {
-      await axios(options).then((res) => {
+      return await axios(options).then((res) => {
         if (res.status == 201) {
           console.log('Upload res ok: ', res.data.file_id);
-          return JSON.stringify(res)
+          return res.data.file_id
         } else {
           console.log('err Upload: ', res.status, res.message);
         }
-      });
+      })
     } catch (error) {
       console.log('uploaderror: ', error);
     }

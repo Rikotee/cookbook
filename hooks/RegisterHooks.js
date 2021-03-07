@@ -28,9 +28,6 @@ const constraints = {
     presence: {
       message: 'cannot be empty',
     },
-    email: {
-      message: 'is not valid',
-    },
   },
   full_name: {
     length: {
