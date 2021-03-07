@@ -111,7 +111,7 @@ const useUser = () => {
       await axios(options).then(
         (res) => {
           if (res.status === 200) {
-            console.log("ok") // here is the resonse that is sent back
+            console.log('ok'); // here is the resonse that is sent back
           } else console.log('Response was not 200, but: ', res);
         },
         (err) => {
@@ -152,7 +152,7 @@ const useTag = () => {
   const getFilesByTag = async (tag) => {
     try {
       const tagList = await doFetch(baseUrl + 'tags/' + tag);
-      console.log("getFilesByTag backend " + tagList)
+      console.log('getFilesByTag backend ' + tagList);
       return tagList;
     } catch (error) {
       throw new Error(error.message);
@@ -197,11 +197,11 @@ const useMedia = () => {
       return await axios(options).then((res) => {
         if (res.status === 201) {
           console.log('Upload res ok: ', res.data.file_id);
-          return res.data.file_id
+          return res.data.file_id;
         } else {
           console.log('err Upload: ', res.status, res.message);
         }
-      })
+      });
     } catch (error) {
       console.log('uploaderror: ', error);
     }
@@ -237,10 +237,11 @@ const useMedia = () => {
       );
 
       // console.log('filtered apihooks search', searchOptions);
-      return media;
+      setMediaArray(media);
     } catch (e) {
       throw new Error(e.message);
     }
+    return mediaArray;
   };
 
   const updateFile = async (fileId, fileInfo, token) => {
@@ -284,5 +285,49 @@ const useMedia = () => {
 
   return {upload, updateFile, deleteFile, getFile, search};
 };
+
+// const useSearch = async () => {
+//   const [mediaArray, setMediaArray] = useState([]);
+//   // const {update} = useContext(MainContext);
+
+//   const search = async (token, inputs) => {
+//     const searchOptions = {
+//       method: 'POST',
+//       headers: {'Content-Type': 'application/json', 'x-access-token': token},
+//       body: JSON.stringify(inputs),
+//       url: baseUrl + 'media/search',
+//     };
+
+//     // console.log('search options', searchOptions);
+
+//     try {
+//       // this fetch all tagged files
+//       const tagListJson = await doFetch(baseUrl + 'tags/' + appIdentifier);
+//       // this uses API search with input word
+//       const listJson = await doFetch(baseUrl + 'media/search', searchOptions);
+//       // compares searches and filter only right tagged searches
+//       const onlyTags = tagListJson.filter(({file_id: a, title: x}) =>
+//         listJson.some(({file_id: b, title: y}) => a === b && x === y)
+//       );
+
+//       // console.log('filter test', onlyTags);
+//       // console.log('ApiHooks search resp', listJson);
+
+//       const media = await Promise.all(
+//         onlyTags.map(async (item) => {
+//           const fileJson = await doFetch(baseUrl + 'media/' + item.file_id);
+//           return fileJson;
+//         })
+//       );
+
+//       // console.log('filtered apihooks search', searchOptions);
+//       setMediaArray(media);
+//     } catch (e) {
+//       throw new Error(e.message);
+//     }
+//     return mediaArray;
+//   };
+//   return {search};
+// };
 
 export {useLoadMedia, useLogin, useUser, useTag, useMedia};

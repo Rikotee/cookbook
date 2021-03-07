@@ -13,37 +13,33 @@ import useSearchForm from '../hooks/SearchHooks';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useMedia, useTag} from '../hooks/ApiHooks';
 import {MainContext} from '../contexts/MainContext';
-import {appIdentifier} from '../utils/variables';
-import SRList from '../components/List';
-// import ListItem from './ListItem';
+import SRList from '../components/SRList';
+import ListItem from './ListItem';
 
 const Search = ({navigation}) => {
   const [image, setImage] = useState(null);
-  const [filetype, setFiletype] = useState('');
   const [isSearching, setIsSearching] = useState(false);
   const {search} = useMedia();
   const {postTag} = useTag();
   const {update, setUpdate} = useContext(MainContext);
-
+  const [mediaArray, setMediaArray] = useState([]);
   const {handleInputChange, inputs, searchErrors, reset} = useSearchForm();
-
-
-
 
   const doSearch = async () => {
     try {
       const userToken = await AsyncStorage.getItem('userToken');
       const searchData = await search(userToken, inputs);
-      console.log('Search resp', searchData);
-      return searchData
-
+      setMediaArray(searchData);
+      // console.log('Search resp', searchData);
     } catch (error) {
       console.error(error.message);
     }
+    console.log('Search resp', mediaArray);
+    return mediaArray;
   };
 
   useEffect(() => {
-    // doSearch()
+    // doSearch();
   }, []);
 
   const doReset = () => {
@@ -51,44 +47,38 @@ const Search = ({navigation}) => {
     reset();
   };
 
-
   return (
     // <ScrollView>
-      <KeyboardAvoidingView behavior="position" enabled>
-        <View style={styles.post}>
-          <Text h4>Search recipe</Text>
-          <Input
-            placeholder="title"
-            value={inputs.title}
-            onChangeText={(txt) => handleInputChange('title', txt)}
-            errorMessage={searchErrors.title}
-          />
-          {isSearching && <ActivityIndicator size="large" color="#0000ff" />}
-          <Button
-            title="Search recipe"
-            onPress={doSearch}
-            disabled={searchErrors.title !== null}
-          />
-          <Button title="Reset" onPress={doReset} />
-        </View>
+    <KeyboardAvoidingView behavior="position" enabled>
+      <View style={styles.post}>
+        <Text h4>Search recipe</Text>
+        <Input
+          placeholder="title"
+          value={inputs.title}
+          onChangeText={(txt) => handleInputChange('title', txt)}
+          errorMessage={searchErrors.title}
+        />
+        {isSearching && <ActivityIndicator size="large" color="#0000ff" />}
+        <Button
+          title="Search recipe"
+          onPress={doSearch}
+          disabled={searchErrors.title !== null}
+        />
+        <Button title="Reset" onPress={doReset} />
+      </View>
 
-        <View>
-          {/* <FlatList
-           style={styles.list}
-            data={listData}
-            keyExtractor={(item) => item.id}
-            renderItem={({item}) => (
-              <Text style={{fontSize: 22}}>
-                {item.id} - {item.text}
-              </Text>
-            )}
-          /> */}
-          <SRList navigation={navigation} myFilesOnly={false} />
-        </View>
-      </KeyboardAvoidingView>
+      <View>
+        <FlatList
+          data={mediaArray.reverse()}
+          keyExtractor={(item, index) => index.toString()}
+          renderItem={({item}) => (
+            <ListItem navigation={navigation} singleMedia={item} />
+          )}
+        />
+        <SRList navigation={navigation} myFilesOnly={false} />
+      </View>
+    </KeyboardAvoidingView>
     // </ScrollView>
-
-
   );
 };
 
@@ -99,11 +89,11 @@ const styles = StyleSheet.create({
     // marginBottom: 10,
   },
 
-  list: {
-    padding: 15,
-    backgroundColor: '#FFF',
-    // marginBottom: 10,
-  },
+  // list: {
+  //   padding: 15,
+  //   backgroundColor: '#FFF',
+  //   // marginBottom: 10,
+  // },
   // text: {
   //   size: 20,
   // },
