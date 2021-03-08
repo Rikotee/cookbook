@@ -38,7 +38,7 @@ const ListItem = ({navigation, singleMedia, isMyFile}) => {
     const fetchAvatar = async () => {
       if (isLoggedIn) {
         try {
-          const avatarList = await getFilesByTag('avatar_' + singleMedia.user_id);
+          const avatarList = await getFilesByTag(appIdentifier + singleMedia.user_id);
           if (avatarList.length > 0) {
             setAvatar(uploadsUrl + avatarList.pop().filename);
           }
@@ -47,6 +47,7 @@ const ListItem = ({navigation, singleMedia, isMyFile}) => {
         }
       }
     };
+
     const fetchOwner = async () => {
       if (isLoggedIn) {
         try {
@@ -136,6 +137,8 @@ const ListItem = ({navigation, singleMedia, isMyFile}) => {
       }
       ;
     };
+
+
 
     useEffect(() => {
       unlock();

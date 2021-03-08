@@ -185,7 +185,6 @@ const Upload = ({navigation}) => {
           )}
           <Text h4>Time</Text>
           <Picker
-
             selectedValue={selectedTag}
             onValueChange={(itemValue, itemIndex) =>
               setSelectedTag(itemValue)
