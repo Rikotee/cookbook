@@ -54,15 +54,17 @@ const AllProfile = ({navigation}) => {
     const userId = await AsyncStorage.getItem('userId');
     const userIdInfo = JSON.parse(userId);
     console.log('AllProfile profile id: ', userIdInfo);
-    console.log('AllProfile user id: ', user);
+    // console.log('AllProfile user id: ', user);
 
-    user.email = userIdInfo.email;
-    user.fullEmail = userIdInfo.fullEmail;
-    user.fullEmailWithBio = userIdInfo.fullEmailWithBio;
-    user.fullUsername = userIdInfo.fullUsername;
-    user.full_name = userIdInfo.full_name;
-    user.user_id = userIdInfo.user_id;
-    user.username = userIdInfo.username;
+    // user.email = userIdInfo.email;
+    // user.fullEmail = userIdInfo.fullEmail;
+    // user.fullEmailWithBio = userIdInfo.fullEmailWithBio;
+    // user.fullUsername = userIdInfo.fullUsername;
+    // user.full_name = userIdInfo.full_name;
+    // user.user_id = userIdInfo.user_id;
+    // user.username = userIdInfo.username;
+
+    await AsyncStorage.removeItem('userId');
   };
   UserIdfromListItem();
 
