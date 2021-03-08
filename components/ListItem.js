@@ -38,7 +38,8 @@ const ListItem = ({navigation, singleMedia, isMyFile}) => {
     const fetchAvatar = async () => {
       if (isLoggedIn) {
         try {
-          const avatarList = await getFilesByTag(appIdentifier + singleMedia.user_id);
+          const avatarList = await getFilesByTag(
+            appIdentifier + singleMedia.user_id);
           if (avatarList.length > 0) {
             setAvatar(uploadsUrl + avatarList.pop().filename);
           }
@@ -138,8 +139,6 @@ const ListItem = ({navigation, singleMedia, isMyFile}) => {
       ;
     };
 
-
-
     useEffect(() => {
       unlock();
       fetchAvatar();
@@ -216,8 +215,8 @@ const ListItem = ({navigation, singleMedia, isMyFile}) => {
                   <Button
                     title="Modify"
                     onPress={() => navigation.push('Modify', {file: singleMedia})}
-                  ></Button>
-                  <Button title="Delete" color="red" onPress={doDelete}></Button>
+                  />
+                  <Button title="Delete" color="red" onPress={doDelete}/>
                 </View>
               </>
             )}

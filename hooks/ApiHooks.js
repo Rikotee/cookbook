@@ -12,7 +12,7 @@ const doFetch = async (url, options = {}) => {
     throw new Error(json.message + ': ' + json.error);
   } else if (!response.ok) {
     // if API response does not contain error message, but there is some other error
-    throw new Error('doFetch failed');
+    throw new Error('doFetch failed: ' + url + '  ' + JSON.stringify(options));
   } else {
     // if all goes well
     return json;
@@ -30,7 +30,7 @@ const useLoadMedia = (myFilesOnly, userId) => {
         listJson.map(async (item) => {
           const fileJson = await doFetch(baseUrl + 'media/' + item.file_id);
           return fileJson;
-        })
+        }),
       );
       if (myFilesOnly) {
         media = media.filter((item) => item.user_id === userId);
@@ -116,7 +116,7 @@ const useUser = () => {
         },
         (err) => {
           console.log('Something went wrong deleting comment: ', err);
-        }
+        },
       );
     } catch (error) {
       console.log('uploaderror: ', error);
@@ -152,7 +152,6 @@ const useTag = () => {
   const getFilesByTag = async (tag) => {
     try {
       const tagList = await doFetch(baseUrl + 'tags/' + tag);
-      console.log('getFilesByTag backend ' + tagList);
       return tagList;
     } catch (error) {
       throw new Error(error.message);
@@ -218,37 +217,72 @@ const useMedia = () => {
     }
   };
 
-  const search = async (token, inputs) => {
-    const searchOptions = {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json', 'x-access-token': token},
-      body: JSON.stringify(inputs),
-      url: baseUrl + 'media/search',
-    };
-
-      // console.log('search options', searchOptions);
-
+  const search = async (token, inputs, tags) => {
     try {
+      const tagParser = (tag) => {
+        const temp = JSON.parse(tag);
+        return temp[1];
+      };
 
-      // this fetch all tagged files
-      const tagListJson = await doFetch(baseUrl + 'tags/' + appIdentifier);
-      // this uses API search with input word
-      const listJson = await doFetch(baseUrl + 'media/search', searchOptions);
-      // compares searches and filter only right tagged searches
-      const onlyTags = tagListJson.filter(({file_id:a, title:x}) => listJson.some(({file_id:b, title:y}) => a === b && x === y));
-
-      // console.log('filter test', onlyTags);
-      // console.log('ApiHooks search resp', listJson);
-
-      const media = await Promise.all(
-        onlyTags.map(async (item) => {
-          const fileJson = await doFetch(baseUrl + 'media/' + item.file_id);
-          return fileJson;
+      // Function to check if string contains words from array
+      const multiSearchAnd = (text, searchWords) => (
+        searchWords.every((el) => {
+          return text.match(new RegExp(el, 'i'));
         })
       );
 
-      // console.log('filtered apihooks search', searchOptions);
-      setMediaArray(media);
+      // gets all the files that match the search tags and compares if they have all required tags to be shown
+      const idsOfFilesOfThisApp = [];
+      for (let i = 0; i < tags.length; i++) {
+        if (tags[i] !== '') {
+          const searchTag = JSON.stringify(
+            [appIdentifier, encodeURIComponent(tags[i])]);
+          // Get all files that have even 1 corresponding tag to search tags
+          const files = await doFetch(baseUrl + 'tags/' + searchTag);
+          for (let j = 0; j < files.length; j++) {
+            const tagsOfFile = await doFetch(
+              baseUrl + 'tags/file/' + files[j].file_id);
+            const tagArray = [
+              tagParser(tagsOfFile[0].tag),
+              tagParser(tagsOfFile[1].tag),
+              tagParser(tagsOfFile[2].tag)];
+            // Compares if the file has all required tags compared to search tags
+            if (multiSearchAnd(JSON.stringify(tagArray), tags) === true) {
+              idsOfFilesOfThisApp.push(files[j].file_id);
+            }
+          }
+        }
+      }
+      if (idsOfFilesOfThisApp.length === 0) {
+        const tagListJson = await doFetch(baseUrl + 'tags/' + appIdentifier);
+        for (let n = 0; n < tagListJson.length; n++) {
+          idsOfFilesOfThisApp.push(tagListJson[n].file_id);
+        }
+      }
+
+      const searchOptions = {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json', 'x-access-token': token},
+        body: JSON.stringify(inputs),
+      };
+
+      // this uses API search with input word
+      const listJson = await doFetch(baseUrl + 'media/search', searchOptions);
+      const actualList = [];
+      for (let k = 0; k < listJson.length; k++) {
+        if (idsOfFilesOfThisApp.includes(listJson[k].file_id)) {
+          actualList.push(listJson[k].file_id);
+        }
+      }
+
+      const filteredFiles = [];
+      for (let l = 0; l < actualList.length; l++) {
+        const fileJson = await doFetch(baseUrl + 'media/' + actualList[l]);
+        filteredFiles.push(fileJson);
+      }
+
+      // Setting filtered tags
+      setMediaArray(filteredFiles);
     } catch (e) {
       throw new Error(e.message);
     }

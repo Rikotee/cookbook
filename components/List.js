@@ -8,11 +8,9 @@ import {MainContext} from '../contexts/MainContext';
 const List = ({navigation, myFilesOnly},) => {
   const {user} = useContext(MainContext);
   const mediaArray = useLoadMedia(myFilesOnly, user.user_id);
-  console.log("Here is media array in Lise.js " + mediaArray)
-
   return (
     <FlatList
-      data={mediaArray.reverse()}
+      data={mediaArray}
       keyExtractor={(item, index) => index.toString()}
       renderItem={({item}) => (
         <ListItem

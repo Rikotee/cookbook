@@ -26,7 +26,7 @@ const Single = ({route}) => {
 
   const fetchAvatar = async () => {
     try {
-      const avatarList = await getFilesByTag('avatar_' + file.user_id);
+      const avatarList = await getFilesByTag(appIdentifier + file.user_id);
       if (avatarList.length > 0) {
         setAvatar(uploadsUrl + avatarList.pop().filename);
       }
@@ -78,9 +78,6 @@ const Single = ({route}) => {
       realDescription = fullDescWithIncridients[0];
       ingredients = fullDescWithIncridients[1];
       tags = fullDescWithIncridients[2];
-      console.log('real description here: ' + realDescription);
-      console.log('incridients here: ' + ingredients);
-      console.log(file.file_id)
     } else {
       realDescription = file.description;
       ingredients = "this shouldn't be empty"
