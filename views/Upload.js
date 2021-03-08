@@ -155,13 +155,6 @@ const Upload = ({navigation}) => {
     reset();
   };
 
-  const picker = () => {
-    const data3 = [
-      checkNulls(selectedTag),
-      checkNulls(selectedTag2),
-      checkNulls(selectedTag3)];
-    console.log('data 2: ' + JSON.stringify(data3));
-  };
   return (
     <ScrollView>
       <KeyboardAvoidingView behavior="position" enabled>
@@ -223,9 +216,7 @@ const Upload = ({navigation}) => {
             <Picker.Item label="Fish" value="Fish"/>
             <Picker.Item label="Bread" value="Bread"/>
             <Picker.Item label="Lamb" value="Lamb"/>
-
           </Picker>
-          <Button title="Select tag" onPress={picker}/>
 
           <Input
             placeholder="title"

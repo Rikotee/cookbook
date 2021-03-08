@@ -40,8 +40,6 @@ const Home = ({navigation}) => {
 
       {isLoggedIn ? (
         <ListItem bottomDivider onPress={() => navigation.navigate('Search')}>
-          <Avatar icon={{name: 'construction', color: 'black'}} />
-          <Avatar icon={{name: 'pest-control', color: 'black'}} />
           <Avatar icon={{name: 'search', color: 'black', size: 30}} />
           <ListItem.Content>
             <ListItem.Title>Search</ListItem.Title>

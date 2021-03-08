@@ -1,27 +1,12 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {
-  StyleSheet,
-  ActivityIndicator,
-  View,
-  SafeAreaView,
-  TextInput,
-} from 'react-native';
+import {StyleSheet, ActivityIndicator, View} from 'react-native';
 import {MainContext} from '../contexts/MainContext';
 import PropTypes from 'prop-types';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {
-  Text,
-  ListItem,
-  Avatar,
-  Image,
-  Button,
-  Input,
-  Card,
-} from 'react-native-elements';
-import {useTag, useMedia, useUser} from '../hooks/ApiHooks';
+import {Text, ListItem, Avatar, Image} from 'react-native-elements';
+import {useTag, useUser} from '../hooks/ApiHooks';
 import {uploadsUrl, appIdentifier} from '../utils/variables';
 import {ScrollView} from 'react-native-gesture-handler';
-import useUploadForm from '../hooks/UploadHooks';
 import useSignUpForm from '../hooks/RegisterHooks';
 
 const AllProfile = ({navigation}) => {
