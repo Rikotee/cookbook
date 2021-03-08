@@ -50,48 +50,52 @@ const AllProfile = ({navigation}) => {
   };
   // const {handleInputChange, inputs, uploadErrors, reset} = useUploadForm();
 
+  const guest = user;
+
   const UserIdfromListItem = async () => {
     const userId = await AsyncStorage.getItem('userId');
     const userIdInfo = JSON.parse(userId);
-    console.log('AllProfile profile id: ', userIdInfo);
-    // console.log('AllProfile user id: ', user);
+    // console.log('AllProfile profile id: ', userIdInfo);
+    // console.log('AllProfile guest id: ', guest);
 
-    // user.email = userIdInfo.email;
-    // user.fullEmail = userIdInfo.fullEmail;
-    // user.fullEmailWithBio = userIdInfo.fullEmailWithBio;
-    // user.fullUsername = userIdInfo.fullUsername;
-    // user.full_name = userIdInfo.full_name;
-    // user.user_id = userIdInfo.user_id;
-    // user.username = userIdInfo.username;
+    guest.email = userIdInfo.email;
+    guest.fullEmail = userIdInfo.fullEmail;
+    guest.fullEmailWithBio = userIdInfo.fullEmailWithBio;
+    guest.fullUsername = userIdInfo.fullUsername;
+    guest.full_name = userIdInfo.full_name;
+    guest.user_id = userIdInfo.user_id;
+    guest.username = userIdInfo.username;
 
-    await AsyncStorage.removeItem('userId');
+    // console.log('AllProfile guest altered id: ', guest);
+
+    // await AsyncStorage.removeItem('userId');
   };
   UserIdfromListItem();
 
   const settingEmail = async () => {
-    const userToken = await AsyncStorage.getItem('userToken');
+    // const userToken = await AsyncStorage.getItem('userToken');
     // console.log('here are inputs: ' + JSON.stringify(inputs.username));
-    const fullUsername = JSON.parse(user.username);
+    const fullUsername = JSON.parse(guest.username);
     const realBio = fullUsername[1];
 
-    const res = await updateUser(userToken, {
-      username: JSON.stringify([inputs.username, realBio]),
-    });
+    // const res = await updateUser(userToken, {
+    //   username: JSON.stringify([inputs.username, realBio]),
+    // });
     // console.log("is this the thing that is undefined? " + res)
   };
 
   const getBio = async () => {
     let realEmail;
     let bio;
-    const userToken = await AsyncStorage.getItem('userToken');
-    const userInfo = await getUser(user.user_id, userToken);
+    // const userToken = await AsyncStorage.getItem('userToken');
+    const userInfo = guest;
     const fullEmail = userInfo.email;
     if (fullEmail.includes(']')) {
       const fullEmailWithBio = JSON.parse(fullEmail);
       realEmail = fullEmailWithBio[0];
-      console.log('real email here: ' + realEmail);
+      // console.log('real email here: ' + realEmail);
       bio = fullEmailWithBio[1];
-      console.log('bio here: ' + bio);
+      // console.log('bio here: ' + bio);
     } else {
       bio = '';
     }
@@ -101,7 +105,7 @@ const AllProfile = ({navigation}) => {
   const fetchAvatar = async () => {
     try {
       // console.log(user.user_id);
-      const avatar = await getFilesByTag(appIdentifier + user.user_id);
+      const avatar = await getFilesByTag(appIdentifier + guest.user_id);
       setAvatar(uploadsUrl + avatar.pop().filename);
     } catch (error) {
       console.error(error.message);
@@ -137,7 +141,7 @@ const AllProfile = ({navigation}) => {
         />
       </View>
       <View style={styles.view}>
-        <Text h1>{user.username}</Text>
+        <Text h1>{guest.username}</Text>
       </View>
       <View style={styles.view}>
         <Text>{'Biography: '}</Text>
