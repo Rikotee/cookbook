@@ -51,10 +51,16 @@ const AllProfile = ({navigation}) => {
     guest.user_id = userIdInfo.user_id;
     guest.username = userIdInfo.username;
 
-    console.log('AllProfile guest altered id: ', guest);
+    console.log('AllProfile guest altered id: ', guest.email);
 
     // await AsyncStorage.removeItem('userId');
   };
+
+  const guestUserId = guest.user_id
+  const guestEmail = guest.email
+  // const guestFullName = guest.full_name;
+  const guestUsername = guest.username;
+
 
   const settingEmail = async () => {
     // const userToken = await AsyncStorage.getItem('userToken');
@@ -71,15 +77,13 @@ const AllProfile = ({navigation}) => {
   const getBio = async () => {
     let realEmail;
     let bio;
-    // const userToken = await AsyncStorage.getItem('userToken');
-    // const userInfo = guest;
-    const fullEmail = guest.email;
+    const fullEmail = guestEmail;
     if (fullEmail.includes(']')) {
       const fullEmailWithBio = JSON.parse(fullEmail);
       realEmail = fullEmailWithBio[0];
-      // console.log('real email here: ' + realEmail);
+      console.log('real email here: ' + realEmail);
       bio = fullEmailWithBio[1];
-      // console.log('bio here: ' + bio);
+      console.log('bio here: ' + bio);
     } else {
       bio = '';
     }
@@ -88,8 +92,8 @@ const AllProfile = ({navigation}) => {
 
   const fetchAvatar = async () => {
     try {
-      // console.log(user.user_id);
-      const avatar = await getFilesByTag(appIdentifier + guest.user_id);
+      const avatar = await getFilesByTag(appIdentifier + guestUserId);
+      // console.log('AllProfile fetchAvatar', guestUserId);
       setAvatar(uploadsUrl + avatar.pop().filename);
     } catch (error) {
       console.error(error.message);
@@ -108,16 +112,18 @@ const AllProfile = ({navigation}) => {
     guest.user_id = userData.user_id;
     guest.username = userData.username;
 
-    console.log('AllProfile Return original id: ', guest);
+    // console.log('AllProfile Return original id: ', guest);
 
     // await AsyncStorage.removeItem('userId');
   };
+
+  console.log('AllProfile Return original id: ', guest);
 
   useEffect(() => {
     UserIdfromListItem();
     fetchAvatar();
     getBio();
-    returnInfo();
+    // returnInfo();
   }, []);
 
   return (
@@ -144,7 +150,7 @@ const AllProfile = ({navigation}) => {
         />
       </View>
       <View style={styles.view}>
-        <Text h1>{guest.username}</Text>
+        <Text h1>{guestUsername}</Text>
       </View>
       <View style={styles.view}>
         <Text>{'Biography: '}</Text>
