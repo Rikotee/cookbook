@@ -23,212 +23,232 @@ import {Video} from 'expo-av';
 import * as ScreenOrientation from 'expo-screen-orientation';
 
 const ListItem = ({navigation, singleMedia, isMyFile}) => {
+  const {deleteFile} = useMedia();
+  const {setUpdate, update, isLoggedIn} = useContext(MainContext);
+  const [avatar, setAvatar] = useState('http://placekitten.com/100');
+  const {getFilesByTag, getTagsOfFile} = useTag();
+  const [owner, setOwner] = useState({username: 'Login to see user'});
+  const {getUser} = useUser();
+  const [videoRef, setVideoRef] = useState(null);
+  const [fetchTags, setFetchTags] = useState('');
+  const [fetchTags2, setFetchTags2] = useState('');
+  const [fetchTags3, setFetchTags3] = useState('');
 
-    const {deleteFile} = useMedia();
-    const {setUpdate, update, isLoggedIn} = useContext(MainContext);
-    const [avatar, setAvatar] = useState('http://placekitten.com/100');
-    const {getFilesByTag, getTagsOfFile} = useTag();
-    const [owner, setOwner] = useState({username: 'Login to see user'});
-    const {getUser} = useUser();
-    const [videoRef, setVideoRef] = useState(null);
-    const [fetchTags, setFetchTags] = useState('');
-    const [fetchTags2, setFetchTags2] = useState('');
-    const [fetchTags3, setFetchTags3] = useState('');
-
-    const fetchAvatar = async () => {
-      if (isLoggedIn) {
-        try {
-          const avatarList = await getFilesByTag(appIdentifier + singleMedia.user_id);
-          if (avatarList.length > 0) {
-            setAvatar(uploadsUrl + avatarList.pop().filename);
-          }
-        } catch (error) {
-          console.error(error.message);
+  const fetchAvatar = async () => {
+    if (isLoggedIn) {
+      try {
+        const avatarList = await getFilesByTag(
+          appIdentifier + singleMedia.user_id
+        );
+        if (avatarList.length > 0) {
+          setAvatar(uploadsUrl + avatarList.pop().filename);
         }
+      } catch (error) {
+        console.error(error.message);
       }
-    };
+    }
+  };
 
-    const fetchOwner = async () => {
+  const fetchOwner = async () => {
+    if (isLoggedIn) {
+      try {
+        const userToken = await AsyncStorage.getItem('userToken');
+        const userData = await getUser(singleMedia.user_id, userToken);
+        setOwner(userData);
+      } catch (error) {
+        console.error(error.message);
+      }
+    }
+  };
+
+  const doDelete = () => {
+    Alert.alert(
+      'Delete',
+      'this file permanently?',
+      [
+        {text: 'Cancel'},
+        {
+          title: 'Ok',
+          onPress: async () => {
+            const userToken = await AsyncStorage.getItem('userToken');
+            try {
+              await deleteFile(singleMedia.file_id, userToken);
+              setUpdate(update + 1);
+            } catch (error) {
+              // notify user here?
+              console.error(error);
+            }
+          },
+        },
+      ],
+      {cancelable: false}
+    );
+  };
+
+  const unlock = async () => {
+    try {
+      await ScreenOrientation.unlockAsync();
+    } catch (error) {
+      console.error('unlock', error.message);
+    }
+  };
+
+  const lock = async () => {
+    try {
+      await ScreenOrientation.lockAsync(
+        ScreenOrientation.OrientationLock.PORTRAIT_UP
+      );
+    } catch (error) {
+      console.error('lock', error.message);
+    }
+  };
+
+  const handleVideoRef = (component) => {
+    setVideoRef(component);
+  };
+
+  const showVideoInFullscreen = async () => {
+    try {
+      if (videoRef) await videoRef.presentFullscreenPlayer();
+    } catch (error) {
+      console.error('fullscreen', error.message);
+    }
+  };
+
+  const getFileTags = async () => {
+    let actualTag;
+    let actuallyActualTag;
+    const actualTags = [];
+    const tags = await getTagsOfFile(singleMedia.file_id);
+    for (let i = 0; i < tags.length; i++) {
+      if (tags[i].tag !== appIdentifier) {
+        actualTag = tags[i].tag;
+        actuallyActualTag = JSON.parse(actualTag)[1];
+        actualTags.push(actuallyActualTag);
+      }
+    }
+    if (actualTags[0] !== '') {
+      setFetchTags('Time: ' + actualTags[0]);
+    }
+    if (actualTags[1] !== '') {
+      setFetchTags2('Type: ' + actualTags[1]);
+    }
+    if (actualTags[2] !== '') {
+      setFetchTags3('Main ingredient: ' + actualTags[2]);
+    }
+  };
+
+  useEffect(() => {
+    unlock();
+    fetchAvatar();
+    fetchOwner();
+    getFileTags();
+
+    const orientSub = ScreenOrientation.addOrientationChangeListener((evt) => {
+      console.log('orientation', evt);
+      if (evt.orientationInfo.orientation > 2) {
+        // show video in fullscreen
+        showVideoInFullscreen();
+      }
+    });
+
+    return () => {
+      ScreenOrientation.removeOrientationChangeListener(orientSub);
+      lock();
+    };
+  }, [videoRef]);
+
+  const goProfile = async () => {
+    const profileInfo = async () => {
       if (isLoggedIn) {
         try {
           const userToken = await AsyncStorage.getItem('userToken');
           const userData = await getUser(singleMedia.user_id, userToken);
-          setOwner(userData);
+          // console.log('ProfileInfo send test: ', userData);
+          await AsyncStorage.setItem('userId', JSON.stringify(userData));
         } catch (error) {
           console.error(error.message);
         }
       }
     };
 
-    const doDelete = () => {
-      Alert.alert(
-        'Delete',
-        'this file permanently?',
-        [
-          {text: 'Cancel'},
-          {
-            title: 'Ok',
-            onPress: async () => {
-              const userToken = await AsyncStorage.getItem('userToken');
-              try {
-                await deleteFile(singleMedia.file_id, userToken);
-                setUpdate(update + 1);
-              } catch (error) {
-                // notify user here?
-                console.error(error);
-              }
-            },
-          },
-        ],
-        {cancelable: false},
-      );
-    };
+    await profileInfo();
+    navigation.navigate('AllProfile');
+  };
 
-    const unlock = async () => {
-      try {
-        await ScreenOrientation.unlockAsync();
-      } catch (error) {
-        console.error('unlock', error.message);
-      }
-    };
-
-    const lock = async () => {
-      try {
-        await ScreenOrientation.lockAsync(
-          ScreenOrientation.OrientationLock.PORTRAIT_UP,
-        );
-      } catch (error) {
-        console.error('lock', error.message);
-      }
-    };
-
-    const handleVideoRef = (component) => {
-      setVideoRef(component);
-    };
-
-    const showVideoInFullscreen = async () => {
-      try {
-        if (videoRef) await videoRef.presentFullscreenPlayer();
-      } catch (error) {
-        console.error('fullscreen', error.message);
-      }
-    };
-
-    const getFileTags = async () => {
-      let actualTag;
-      let actuallyActualTag;
-      const actualTags = [];
-      const tags = await getTagsOfFile(singleMedia.file_id);
-      for (let i = 0; i < tags.length; i++) {
-        if (tags[i].tag !== appIdentifier) {
-          actualTag = tags[i].tag;
-          actuallyActualTag = JSON.parse(actualTag)[1];
-          actualTags.push(actuallyActualTag);
-        }
-      }
-      if (actualTags[0] !== '') {
-        setFetchTags('Time: ' + actualTags[0]);
-      }
-      if (actualTags[1] !== '') {
-        setFetchTags2('Type: ' + actualTags[1]);
-      }
-      if (actualTags[2] !== '') {
-        setFetchTags3('Main ingredient: ' + actualTags[2]);
-      }
-      ;
-    };
-
-
-
-    useEffect(() => {
-      unlock();
-      fetchAvatar();
-      fetchOwner();
-      getFileTags();
-
-      const orientSub = ScreenOrientation.addOrientationChangeListener((evt) => {
-        console.log('orientation', evt);
-        if (evt.orientationInfo.orientation > 2) {
-          // show video in fullscreen
-          showVideoInFullscreen();
-        }
-      });
-
-      return () => {
-        ScreenOrientation.removeOrientationChangeListener(orientSub);
-        lock();
-      };
-    }, [videoRef]);
-
-    return (
-      <TouchableOpacity
-        onPress={() => {
-          navigation.navigate('Single', {file: singleMedia});
-        }}
-      >
-        <View style={styles.post}>
-          {isLoggedIn ? (
-            <View style={styles.userInfo}>
-              <Avatar style={styles.avatarImage} source={{uri: avatar}}/>
-              <Text style={styles.userInfoText}>{owner.username}</Text>
-            </View>
-          ) : (
-            <View style={styles.userInfo}>
-              <Avatar style={styles.avatarImage} source={{uri: avatar}}/>
-              <Text
-                style={styles.userInfoText}
-                onPress={() => navigation.navigate('Login')}
-              >
-                Login to see user
-              </Text>
-            </View>
-          )}
-          {singleMedia.media_type === 'image' ? (
-            <Card.Image
-              source={{uri: uploadsUrl + singleMedia.filename}}
-              style={styles.image}
-              PlaceholderContent={<ActivityIndicator/>}
+  return (
+    <TouchableOpacity
+      onPress={() => {
+        navigation.navigate('Single', {file: singleMedia});
+      }}
+    >
+      <View style={styles.post}>
+        {isLoggedIn ? (
+          <View style={styles.userInfo}>
+            <Avatar
+              style={styles.avatarImage}
+              source={{uri: avatar}}
+              onPress={goProfile}
             />
-          ) : (
-            <Video
-              ref={handleVideoRef}
-              source={{uri: uploadsUrl + singleMedia.filename}}
-              style={styles.image}
-              useNativeControls={true}
-              resizeMode="cover"
-              onError={(err) => {
-                console.error('video', err);
-              }}
-              posterSource={{uri: uploadsUrl + singleMedia.screenshot}}
-            />
+            <Text style={styles.userInfoText} onPress={goProfile}>
+              {owner.username}
+            </Text>
+          </View>
+        ) : (
+          <View style={styles.userInfo}>
+            <Avatar style={styles.avatarImage} source={{uri: avatar}} />
+            <Text
+              style={styles.userInfoText}
+              onPress={() => navigation.navigate('Login')}
+            >
+              Login to see user
+            </Text>
+          </View>
+        )}
+        {singleMedia.media_type === 'image' ? (
+          <Card.Image
+            source={{uri: uploadsUrl + singleMedia.filename}}
+            style={styles.image}
+            PlaceholderContent={<ActivityIndicator />}
+          />
+        ) : (
+          <Video
+            ref={handleVideoRef}
+            source={{uri: uploadsUrl + singleMedia.filename}}
+            style={styles.image}
+            useNativeControls={true}
+            resizeMode="cover"
+            onError={(err) => {
+              console.error('video', err);
+            }}
+            posterSource={{uri: uploadsUrl + singleMedia.screenshot}}
+          />
+        )}
+        <Card.Title h4>{singleMedia.title}</Card.Title>
+        <Text>{fetchTags}</Text>
+        <Text>{fetchTags2}</Text>
+        <Text>{fetchTags3}</Text>
+        <Card.Title>{moment(singleMedia.time_added).format('LL')}</Card.Title>
+
+        <RNEListItem.Content>
+          {isMyFile && isLoggedIn && (
+            <>
+              <Card.Divider />
+              <View style={styles.buttons}>
+                <Button
+                  title="Modify"
+                  onPress={() => navigation.push('Modify', {file: singleMedia})}
+                ></Button>
+                <Button title="Delete" color="red" onPress={doDelete}></Button>
+              </View>
+            </>
           )}
-          <Card.Title h4>{singleMedia.title}</Card.Title>
-          <Text>{fetchTags}</Text>
-          <Text>{fetchTags2}</Text>
-          <Text>{fetchTags3}</Text>
-          <Card.Title>{moment(singleMedia.time_added).format('LL')}</Card.Title>
-
-          <RNEListItem.Content>
-            {isMyFile && isLoggedIn && (
-              <>
-                <Card.Divider/>
-                <View style={styles.buttons}>
-                  <Button
-                    title="Modify"
-                    onPress={() => navigation.push('Modify', {file: singleMedia})}
-                  ></Button>
-                  <Button title="Delete" color="red" onPress={doDelete}></Button>
-                </View>
-              </>
-            )}
-          </RNEListItem.Content>
-          {/* <Card.Divider /> */}
-        </View>
-      </TouchableOpacity>
-    );
-  }
-;
-
+        </RNEListItem.Content>
+        {/* <Card.Divider /> */}
+      </View>
+    </TouchableOpacity>
+  );
+};
 const styles = StyleSheet.create({
   post: {
     padding: 15,
