@@ -25,7 +25,6 @@ import useUploadForm from '../hooks/UploadHooks';
 import useSignUpForm from '../hooks/RegisterHooks';
 
 const AllProfile = ({navigation}) => {
-
   const [fetchBio, setFetchBio] = useState('');
   const {updateUser, getUser} = useUser();
 
@@ -56,7 +55,12 @@ const AllProfile = ({navigation}) => {
     const userIdInfo = JSON.parse(userId);
     console.log('AllProfile profile id: ', userIdInfo);
     console.log('AllProfile user id: ', user);
-    return userIdInfo;
+    user.user_id = userIdInfo.user_id;
+    user.username = userIdInfo.username;
+    user.fullEmail = userIdInfo.fullEmail;
+    user.email = userIdInfo.email;
+    user.fullUsername = userIdInfo.fullUsername;
+    user.fullEmailWithBio = userIdInfo.fullEmailWithBio;
   };
   UserIdfromListItem();
 
