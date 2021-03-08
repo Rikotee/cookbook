@@ -51,7 +51,7 @@ const AllProfile = ({navigation}) => {
     guest.user_id = userIdInfo.user_id;
     guest.username = userIdInfo.username;
 
-    console.log('AllProfile guest altered id: ', guest.email);
+    // console.log('AllProfile guest altered id: ', guest.email);
 
     // await AsyncStorage.removeItem('userId');
   };
@@ -117,13 +117,18 @@ const AllProfile = ({navigation}) => {
     // await AsyncStorage.removeItem('userId');
   };
 
-  console.log('AllProfile Return original id: ', guest);
+  const removeInfo = async () => {
+    await AsyncStorage.removeItem('userId');
+  };
+
+  // console.log('AllProfile Return original id: ', guest);
 
   useEffect(() => {
     UserIdfromListItem();
     fetchAvatar();
     getBio();
     // returnInfo();
+    removeInfo();
   }, []);
 
   return (
