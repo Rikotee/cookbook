@@ -121,7 +121,7 @@ const StackScreen = () => {
             name="AllProfile"
             component={AllProfile}
             options={{
-              title: 'other PROFILE',
+              title: 'PROFILE',
               headerTitleAlign: 'center',
               headerStyle: {
                 backgroundColor: '#3d9f9f',

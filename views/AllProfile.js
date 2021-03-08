@@ -55,12 +55,14 @@ const AllProfile = ({navigation}) => {
     const userIdInfo = JSON.parse(userId);
     console.log('AllProfile profile id: ', userIdInfo);
     console.log('AllProfile user id: ', user);
+
+    user.email = userIdInfo.email;
+    user.fullEmail = userIdInfo.fullEmail;
+    user.fullEmailWithBio = userIdInfo.fullEmailWithBio;
+    user.fullUsername = userIdInfo.fullUsername;
+    user.full_name = userIdInfo.full_name;
     user.user_id = userIdInfo.user_id;
     user.username = userIdInfo.username;
-    user.fullEmail = userIdInfo.fullEmail;
-    user.email = userIdInfo.email;
-    user.fullUsername = userIdInfo.fullUsername;
-    user.fullEmailWithBio = userIdInfo.fullEmailWithBio;
   };
   UserIdfromListItem();
 
