@@ -6,6 +6,7 @@ import {
   StyleSheet,
   View,
   FlatList,
+  SafeAreaView,
 } from 'react-native';
 import PropTypes from 'prop-types';
 import {Input, Text, Button} from 'react-native-elements';
@@ -13,10 +14,10 @@ import useSearchForm from '../hooks/SearchHooks';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useMedia, useTag} from '../hooks/ApiHooks';
 import {MainContext} from '../contexts/MainContext';
-// import SRList from '../components/SRList';
-// import ListItem from './ListItem';
+import SRList from '../components/SRList';
+import ListItem from '../components/ListItem';
 
-const Search = ({navigation}) => {
+const Search = ({navigation, myFilesOnly}) => {
   const [image, setImage] = useState(null);
   const [isSearching, setIsSearching] = useState(false);
   const {search} = useMedia();
@@ -24,6 +25,7 @@ const Search = ({navigation}) => {
   const {update, setUpdate} = useContext(MainContext);
   const [mediaArray, setMediaArray] = useState([]);
   const {handleInputChange, inputs, searchErrors, reset} = useSearchForm();
+  const {user} = useContext(MainContext);
 
   const doSearch = async () => {
     try {
@@ -66,17 +68,19 @@ const Search = ({navigation}) => {
         />
         <Button title="Reset" onPress={doReset} />
       </View>
-
-      <View>
-        {/* <FlatList
+      <SafeAreaView>
+        <FlatList
           data={mediaArray.reverse()}
           keyExtractor={(item, index) => index.toString()}
           renderItem={({item}) => (
-            <ListItem navigation={navigation} singleMedia={item} />
+            <ListItem
+              navigation={navigation}
+              singleMedia={item}
+              isMyFile={item.user_id === user.user_id}
+            />
           )}
         />
-        <SRList navigation={navigation} myFilesOnly={false} /> */}
-      </View>
+      </SafeAreaView>
     </KeyboardAvoidingView>
     // </ScrollView>
   );
@@ -101,6 +105,7 @@ const styles = StyleSheet.create({
 
 Search.propTypes = {
   navigation: PropTypes.object,
+  myFilesOnly: PropTypes.bool,
 };
 
 export default Search;

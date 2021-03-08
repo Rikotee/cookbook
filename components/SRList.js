@@ -1,17 +1,15 @@
 import React, {useContext} from 'react';
 import {FlatList} from 'react-native';
+import {useLoadMedia, useMedia} from '../hooks/ApiHooks';
 import ListItem from './ListItem';
 import PropTypes from 'prop-types';
-// import {Search} from '../views/Search';
-import {useMedia, useLoadMedia} from '../hooks/ApiHooks';
 import {MainContext} from '../contexts/MainContext';
 
-const SRList = ({navigation, myFilesOnly}) => {
-
-  const {search} = useMedia();
+const SRList = ({navigation, myFilesOnly},) => {
   const {user} = useContext(MainContext);
   const mediaArray = useLoadMedia(myFilesOnly, user.user_id);
-  // const mediaArrayS = search();
+
+  // const mediaArrayS = useMedia().search();
 
   // console.log('SRList test', mediaArrayS)
 
