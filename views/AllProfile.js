@@ -35,7 +35,7 @@ const AllProfile = ({navigation}) => {
   };
   // const {handleInputChange, inputs, uploadErrors, reset} = useUploadForm();
 
-  let guest = user;
+  const guest = user;
 
   const UserIdfromListItem = async () => {
     const userId = await AsyncStorage.getItem('userId');
@@ -72,8 +72,8 @@ const AllProfile = ({navigation}) => {
     let realEmail;
     let bio;
     // const userToken = await AsyncStorage.getItem('userToken');
-    const userInfo = guest;
-    const fullEmail = userInfo.email;
+    // const userInfo = guest;
+    const fullEmail = guest.email;
     if (fullEmail.includes(']')) {
       const fullEmailWithBio = JSON.parse(fullEmail);
       realEmail = fullEmailWithBio[0];
