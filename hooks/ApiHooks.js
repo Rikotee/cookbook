@@ -297,48 +297,4 @@ const useMedia = () => {
   return {upload, updateFile, deleteFile, getFile, search};
 };
 
-// const useSearch = async () => {
-//   const [mediaArray, setMediaArray] = useState([]);
-//   // const {update} = useContext(MainContext);
-
-//   const search = async (token, inputs) => {
-//     const searchOptions = {
-//       method: 'POST',
-//       headers: {'Content-Type': 'application/json', 'x-access-token': token},
-//       body: JSON.stringify(inputs),
-//       url: baseUrl + 'media/search',
-//     };
-
-//     // console.log('search options', searchOptions);
-
-//     try {
-//       // this fetch all tagged files
-//       const tagListJson = await doFetch(baseUrl + 'tags/' + appIdentifier);
-//       // this uses API search with input word
-//       const listJson = await doFetch(baseUrl + 'media/search', searchOptions);
-//       // compares searches and filter only right tagged searches
-//       const onlyTags = tagListJson.filter(({file_id: a, title: x}) =>
-//         listJson.some(({file_id: b, title: y}) => a === b && x === y)
-//       );
-
-//       // console.log('filter test', onlyTags);
-//       // console.log('ApiHooks search resp', listJson);
-
-//       const media = await Promise.all(
-//         onlyTags.map(async (item) => {
-//           const fileJson = await doFetch(baseUrl + 'media/' + item.file_id);
-//           return fileJson;
-//         })
-//       );
-
-//       // console.log('filtered apihooks search', searchOptions);
-//       setMediaArray(media);
-//     } catch (e) {
-//       throw new Error(e.message);
-//     }
-//     return mediaArray;
-//   };
-//   return {search};
-// };
-
 export {useLoadMedia, useLogin, useUser, useTag, useMedia};
