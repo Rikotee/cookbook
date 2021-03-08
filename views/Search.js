@@ -11,13 +11,13 @@ import {
 import PropTypes from 'prop-types';
 import {Input, Text, Button} from 'react-native-elements';
 import useSearchForm from '../hooks/SearchHooks';
+import ListItem from '../components/ListItem';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useMedia, useTag} from '../hooks/ApiHooks';
 import {MainContext} from '../contexts/MainContext';
-import SRList from '../components/SRList';
-import ListItem from '../components/ListItem';
 
-const Search = ({navigation, myFilesOnly}) => {
+const Search = ({navigation}) => {
+  const {user} = useContext(MainContext);
   const [image, setImage] = useState(null);
   const [isSearching, setIsSearching] = useState(false);
   const {search} = useMedia();
@@ -25,14 +25,16 @@ const Search = ({navigation, myFilesOnly}) => {
   const {update, setUpdate} = useContext(MainContext);
   const [mediaArray, setMediaArray] = useState([]);
   const {handleInputChange, inputs, searchErrors, reset} = useSearchForm();
-  const {user} = useContext(MainContext);
 
   const doSearch = async () => {
     try {
       const userToken = await AsyncStorage.getItem('userToken');
       const searchData = await search(userToken, inputs);
+      console.log(
+        'here are inputs: ' + JSON.stringify(inputs) + ' and searchData: ' +
+        searchData);
       setMediaArray(searchData);
-      // console.log('Search resp', searchData);
+      console.log('Search resp', searchData);
     } catch (error) {
       console.error(error.message);
     }
@@ -52,6 +54,7 @@ const Search = ({navigation, myFilesOnly}) => {
   return (
     // <ScrollView>
     <KeyboardAvoidingView behavior="position" enabled>
+
       <View style={styles.post}>
         <Text h4>Search recipe</Text>
         <Input
@@ -60,29 +63,27 @@ const Search = ({navigation, myFilesOnly}) => {
           onChangeText={(txt) => handleInputChange('title', txt)}
           errorMessage={searchErrors.title}
         />
-        {isSearching && <ActivityIndicator size="large" color="#0000ff" />}
+        {isSearching && <ActivityIndicator size="large" color="#0000ff"/>}
         <Button
           title="Search recipe"
           onPress={doSearch}
           disabled={searchErrors.title !== null}
         />
-        <Button title="Reset" onPress={doReset} />
+        <Button title="Reset" onPress={doReset}/>
       </View>
-      <SafeAreaView>
-        <FlatList
-          data={mediaArray.reverse()}
-          keyExtractor={(item, index) => index.toString()}
-          renderItem={({item}) => (
-            <ListItem
-              navigation={navigation}
-              singleMedia={item}
-              isMyFile={item.user_id === user.user_id}
-            />
-          )}
-        />
-      </SafeAreaView>
+
+      <FlatList
+        data={mediaArray.reverse()}
+        keyExtractor={(item, index) => index.toString()}
+        renderItem={({item}) => (
+          <ListItem
+            navigation={navigation}
+            singleMedia={item}
+            isMyFile={item.user_id === user.user_id}
+          />
+        )}
+      />
     </KeyboardAvoidingView>
-    // </ScrollView>
   );
 };
 

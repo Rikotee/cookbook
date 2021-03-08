@@ -70,24 +70,24 @@ const Single = ({route}) => {
 
   const fetchFullDesc = async () => {
     let realDescription;
-    let incridients;
+    let ingredients;
     let tags;
     const fullDescription = file.description;
     if (fullDescription.includes(']')) {
       const fullDescWithIncridients = JSON.parse(fullDescription);
       realDescription = fullDescWithIncridients[0];
-      incridients = fullDescWithIncridients[1];
+      ingredients = fullDescWithIncridients[1];
       tags = fullDescWithIncridients[2];
       console.log('real description here: ' + realDescription);
-      console.log('incridients here: ' + incridients);
+      console.log('incridients here: ' + ingredients);
       console.log(file.file_id)
     } else {
       realDescription = file.description;
-      incridients = "this shouldn't be empty"
+      ingredients = "this shouldn't be empty"
       tags = "this shouldn't be empty"
     }
     setFetchDescription(realDescription)
-    setFetchIngredients(incridients)
+    setFetchIngredients(ingredients)
     setFetchTags(tags)
   };
 
