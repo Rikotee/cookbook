@@ -11,7 +11,7 @@ import useSignUpForm from '../hooks/RegisterHooks';
 
 const AllProfile = ({navigation}) => {
   const [fetchBio, setFetchBio] = useState('');
-  const {updateUser, getUser} = useUser();
+  const {updateUser, getUser, checkToken} = useUser();
 
   const {
     inputs,
@@ -35,7 +35,7 @@ const AllProfile = ({navigation}) => {
   };
   // const {handleInputChange, inputs, uploadErrors, reset} = useUploadForm();
 
-  const guest = user;
+  let guest = user;
 
   const UserIdfromListItem = async () => {
     const userId = await AsyncStorage.getItem('userId');
@@ -44,18 +44,17 @@ const AllProfile = ({navigation}) => {
     // console.log('AllProfile guest id: ', guest);
 
     guest.email = userIdInfo.email;
-    guest.fullEmail = userIdInfo.fullEmail;
-    guest.fullEmailWithBio = userIdInfo.fullEmailWithBio;
-    guest.fullUsername = userIdInfo.fullUsername;
+    // guest.fullEmail = userIdInfo.fullEmail;
+    // guest.fullEmailWithBio = userIdInfo.fullEmailWithBio;
+    // guest.fullUsername = userIdInfo.fullUsername;
     guest.full_name = userIdInfo.full_name;
     guest.user_id = userIdInfo.user_id;
     guest.username = userIdInfo.username;
 
-    // console.log('AllProfile guest altered id: ', guest);
+    console.log('AllProfile guest altered id: ', guest);
 
     // await AsyncStorage.removeItem('userId');
   };
-  UserIdfromListItem();
 
   const settingEmail = async () => {
     // const userToken = await AsyncStorage.getItem('userToken');
@@ -97,9 +96,28 @@ const AllProfile = ({navigation}) => {
     }
   };
 
+  const returnInfo = async () => {
+    const userToken = await AsyncStorage.getItem('userToken');
+    const userData = await checkToken(userToken);
+
+    guest.email = userData.email;
+    // guest.fullEmail = userIdInfo.fullEmail;
+    // guest.fullEmailWithBio = userIdInfo.fullEmailWithBio;
+    // guest.fullUsername = userIdInfo.fullUsername;
+    guest.full_name = userData.full_name;
+    guest.user_id = userData.user_id;
+    guest.username = userData.username;
+
+    console.log('AllProfile Return original id: ', guest);
+
+    // await AsyncStorage.removeItem('userId');
+  };
+
   useEffect(() => {
+    UserIdfromListItem();
     fetchAvatar();
     getBio();
+    returnInfo();
   }, []);
 
   return (
