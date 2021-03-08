@@ -6,7 +6,6 @@ import {
   StyleSheet,
   View,
   FlatList,
-  SafeAreaView,
 } from 'react-native';
 import PropTypes from 'prop-types';
 import {Input, Text, Button} from 'react-native-elements';
@@ -144,7 +143,6 @@ const styles = StyleSheet.create({
 
 Search.propTypes = {
   navigation: PropTypes.object,
-  myFilesOnly: PropTypes.bool,
 };
 
 export default Search;
