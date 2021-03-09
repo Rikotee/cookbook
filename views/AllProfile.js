@@ -25,6 +25,7 @@ const AllProfile = ({navigation}) => {
   const {isLoggedIn, setIsLoggedIn, user} = useContext(MainContext);
   const [avatar, setAvatar] = useState('http://placekitten.com/640'); // Placeholder for accounts without profile picture
   const {getFilesByTag, postTag} = useTag();
+  const [loading, setLoading] = useState(false);
   const logout = async () => {
     setIsLoggedIn(false);
     await AsyncStorage.clear();
@@ -38,29 +39,23 @@ const AllProfile = ({navigation}) => {
   const guest = user;
 
   const UserIdfromListItem = async () => {
-    const userId = await AsyncStorage.getItem('userId');
-    const userIdInfo = JSON.parse(userId);
-    // console.log('AllProfile profile id: ', userIdInfo);
-    // console.log('AllProfile guest id: ', guest);
-
-    guest.email = userIdInfo.email;
-    // guest.fullEmail = userIdInfo.fullEmail;
-    // guest.fullEmailWithBio = userIdInfo.fullEmailWithBio;
-    // guest.fullUsername = userIdInfo.fullUsername;
-    guest.full_name = userIdInfo.full_name;
-    guest.user_id = userIdInfo.user_id;
-    guest.username = userIdInfo.username;
-
+    setLoading(true);
+    try {
+      const userId = await AsyncStorage.getItem('userId');
+      const userIdInfo = JSON.parse(userId);
+      // guest.email = userIdInfo.email;
+      // guest.full_name = userIdInfo.full_name;
+      // guest.user_id = userIdInfo.user_id;
+      guest.username = userIdInfo.username;
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+      console.error('user info error', error.message);
+    }
     // console.log('AllProfile guest altered id: ', guest.email);
-
-    // await AsyncStorage.removeItem('userId');
   };
 
-  const guestUserId = guest.user_id
-  const guestEmail = guest.email
-  // const guestFullName = guest.full_name;
   const guestUsername = guest.username;
-
 
   const settingEmail = async () => {
     // const userToken = await AsyncStorage.getItem('userToken');
@@ -77,22 +72,30 @@ const AllProfile = ({navigation}) => {
   const getBio = async () => {
     let realEmail;
     let bio;
-    const fullEmail = guestEmail;
-    if (fullEmail.includes(']')) {
-      const fullEmailWithBio = JSON.parse(fullEmail);
-      realEmail = fullEmailWithBio[0];
-      console.log('real email here: ' + realEmail);
-      bio = fullEmailWithBio[1];
-      console.log('bio here: ' + bio);
-    } else {
-      bio = '';
+    try {
+      const userId = await AsyncStorage.getItem('userId');
+      const userIdInfo = JSON.parse(userId);
+      const fullEmail = userIdInfo.email;
+      if (fullEmail.includes(']')) {
+        const fullEmailWithBio = JSON.parse(fullEmail);
+        realEmail = fullEmailWithBio[0];
+        console.log('real email here: ' + realEmail);
+        bio = fullEmailWithBio[1];
+        console.log('bio here: ' + bio);
+      } else {
+        bio = '';
+      }
+    } catch (error) {
+      console.error(error.message);
     }
     setFetchBio(bio);
   };
 
   const fetchAvatar = async () => {
     try {
-      const avatar = await getFilesByTag(appIdentifier + guestUserId);
+      const userId = await AsyncStorage.getItem('userId');
+      const userIdInfo = JSON.parse(userId);
+      const avatar = await getFilesByTag(appIdentifier + userIdInfo.user_id);
       // console.log('AllProfile fetchAvatar', guestUserId);
       setAvatar(uploadsUrl + avatar.pop().filename);
     } catch (error) {
