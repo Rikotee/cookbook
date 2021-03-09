@@ -23,8 +23,8 @@ import {Video} from 'expo-av';
 import * as ScreenOrientation from 'expo-screen-orientation';
 
 const ListItem = ({navigation, singleMedia, isMyFile}) => {
-  const {deleteFile} = useMedia();
   const {setUpdate, update, isLoggedIn, guest, setGuest} = useContext(MainContext);
+  const {deleteFile, getRating} = useMedia();
   const [avatar, setAvatar] = useState('http://placekitten.com/100');
   const {getFilesByTag, getTagsOfFile} = useTag();
   const [owner, setOwner] = useState({username: 'Login to see user'});
@@ -33,6 +33,7 @@ const ListItem = ({navigation, singleMedia, isMyFile}) => {
   const [fetchTags, setFetchTags] = useState('');
   const [fetchTags2, setFetchTags2] = useState('');
   const [fetchTags3, setFetchTags3] = useState('');
+  const [fetchRating, setFetchRating] = useState('');
 
   const fetchAvatar = async () => {
     if (isLoggedIn) {
@@ -46,6 +47,22 @@ const ListItem = ({navigation, singleMedia, isMyFile}) => {
       } catch (error) {
         console.error(error.message);
       }
+    }
+  };
+
+  const fetchRatings = async () => {
+    const rating = await getRating(singleMedia.file_id);
+    if (rating.length === 0){
+      setFetchRating("No ratings yet")
+    }
+    else {
+      const rateAmount = rating.length
+      let combinedRating = 0
+      for (let i = 0; i < rateAmount; i++){
+        combinedRating += rating[i].rating
+      }
+      const realRating = combinedRating / rateAmount
+      setFetchRating(realRating.toFixed(1));
     }
   };
 
@@ -137,6 +154,8 @@ const ListItem = ({navigation, singleMedia, isMyFile}) => {
       setFetchTags3('Main ingredient: ' + actualTags[2]);
     }
   };
+  fetchRatings()
+
 
   useEffect(() => {
     unlock();
@@ -225,6 +244,7 @@ const ListItem = ({navigation, singleMedia, isMyFile}) => {
             posterSource={{uri: uploadsUrl + singleMedia.screenshot}}
           />
         )}
+        <Text>Rating: {fetchRating}</Text>
         <Card.Title h4>{singleMedia.title}</Card.Title>
         <Text>{fetchTags}</Text>
         <Text>{fetchTags2}</Text>

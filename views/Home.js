@@ -11,14 +11,10 @@ const Home = ({navigation}) => {
     MainContext
   );
 
-  const logout = async () => {
+  const updateLogout = async () => {
     setIsLoggedIn(false);
-    await AsyncStorage.clear();
-  };
-
-  const updateLogout = () => {
-    logout();
-    // setUpdate(update + 1);
+    AsyncStorage.clear();
+    console.log("user token here: " + AsyncStorage.getItem('userToken'))
   };
 
   return (
