@@ -47,19 +47,19 @@ const AllProfile = ({navigation}) => {
 
   // console.log('AllProfile guest TEST user: ', guest);
 
-  const UserIdfromListItem = async () => {
-    setLoading(true);
-    try {
-      const userId = await AsyncStorage.getItem('userId');
-      const userIdInfo = JSON.parse(userId);
-      setGuest(userIdInfo);
-      setLoading(false);
-    } catch (error) {
-      setLoading(false);
-      console.error('user info error', error.message);
-    }
-    // console.log('AllProfile guest altered id: ', guest.email);
-  };
+  // const UserIdfromListItem = async () => {
+  //   setLoading(true);
+  //   try {
+  //     const userId = await AsyncStorage.getItem('userId');
+  //     const userIdInfo = JSON.parse(userId);
+  //     setGuest(userIdInfo);
+  //     setLoading(false);
+  //   } catch (error) {
+  //     setLoading(false);
+  //     console.error('user info error', error.message);
+  //   }
+  //   // console.log('AllProfile guest altered id: ', guest.email);
+  // };
 
   const settingEmail = async () => {
     // const userToken = await AsyncStorage.getItem('userToken');
@@ -76,9 +76,8 @@ const AllProfile = ({navigation}) => {
   const getBio = async () => {
     let realEmail;
     let bio;
-    const userId = await AsyncStorage.getItem('userId');
-    const userIdInfo = JSON.parse(userId);
-    const fullEmail = userIdInfo.email;
+
+    const fullEmail = guest.email;
     if (fullEmail.includes(']')) {
       const fullEmailWithBio = JSON.parse(fullEmail);
       realEmail = fullEmailWithBio[0];
@@ -93,9 +92,8 @@ const AllProfile = ({navigation}) => {
 
   const fetchAvatar = async () => {
     try {
-      const userId = await AsyncStorage.getItem('userId');
-      const userIdInfo = JSON.parse(userId);
-      const avatar = await getFilesByTag(appIdentifier + userIdInfo.user_id);
+
+      const avatar = await getFilesByTag(appIdentifier + guest.user_id);
       // console.log('AllProfile fetchAvatar', guestUserId);
       setAvatar(uploadsUrl + avatar.pop().filename);
     } catch (error) {
@@ -103,26 +101,26 @@ const AllProfile = ({navigation}) => {
     }
   };
 
-  const returnInfo = async () => {
-    const userToken = await AsyncStorage.getItem('userToken');
-    const userData = await checkToken(userToken);
+  // const returnInfo = async () => {
+  //   const userToken = await AsyncStorage.getItem('userToken');
+  //   const userData = await checkToken(userToken);
 
-    guest.username = userData.username;
+  //   guest.username = userData.username;
 
     // console.log('AllProfile Return original id: ', guest);
-  };
+  // };
 
-  const removeInfo = async () => {
-    await AsyncStorage.removeItem('userId');
+  // const removeInfo = async () => {
+  //   await AsyncStorage.removeItem('userId');
 
-  };
+  // };
 
   useEffect(() => {
-    UserIdfromListItem();
+    // UserIdfromListItem();
     fetchAvatar();
     getBio();
-    returnInfo();
-    removeInfo();
+    // returnInfo();
+    // removeInfo();
   }, []);
 
   return (

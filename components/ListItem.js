@@ -24,7 +24,7 @@ import * as ScreenOrientation from 'expo-screen-orientation';
 
 const ListItem = ({navigation, singleMedia, isMyFile}) => {
   const {deleteFile} = useMedia();
-  const {setUpdate, update, isLoggedIn} = useContext(MainContext);
+  const {setUpdate, update, isLoggedIn, guest, setGuest} = useContext(MainContext);
   const [avatar, setAvatar] = useState('http://placekitten.com/100');
   const {getFilesByTag, getTagsOfFile} = useTag();
   const [owner, setOwner] = useState({username: 'Login to see user'});
@@ -165,7 +165,8 @@ const ListItem = ({navigation, singleMedia, isMyFile}) => {
           const userToken = await AsyncStorage.getItem('userToken');
           const userData = await getUser(singleMedia.user_id, userToken);
           // console.log('ProfileInfo send test: ', userData);
-          await AsyncStorage.setItem('userId', JSON.stringify(userData));
+          // await AsyncStorage.setItem('userId', JSON.stringify(userData));
+          setGuest(userData);
         } catch (error) {
           console.error(error.message);
         }
