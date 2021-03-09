@@ -22,7 +22,7 @@ const AllProfile = ({navigation}) => {
     validateOnSend,
   } = useSignUpForm();
   const [filetype, setFiletype] = useState('');
-  const {isLoggedIn, setIsLoggedIn, user, guest, setGuest} = useContext(MainContext);
+  const {isLoggedIn, setIsLoggedIn, guest, setGuest} = useContext(MainContext);
   const [avatar, setAvatar] = useState('http://placekitten.com/640'); // Placeholder for accounts without profile picture
   const {getFilesByTag, postTag} = useTag();
   const [loading, setLoading] = useState(false);
