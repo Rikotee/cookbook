@@ -76,7 +76,9 @@ const AllProfile = ({navigation}) => {
   const getBio = async () => {
     let realEmail;
     let bio;
-    const fullEmail = guest.email;
+    const userId = await AsyncStorage.getItem('userId');
+    const userIdInfo = JSON.parse(userId);
+    const fullEmail = userIdInfo.email;
     if (fullEmail.includes(']')) {
       const fullEmailWithBio = JSON.parse(fullEmail);
       realEmail = fullEmailWithBio[0];
@@ -91,7 +93,9 @@ const AllProfile = ({navigation}) => {
 
   const fetchAvatar = async () => {
     try {
-      const avatar = await getFilesByTag(appIdentifier + guest.user_id);
+      const userId = await AsyncStorage.getItem('userId');
+      const userIdInfo = JSON.parse(userId);
+      const avatar = await getFilesByTag(appIdentifier + userIdInfo.user_id);
       // console.log('AllProfile fetchAvatar', guestUserId);
       setAvatar(uploadsUrl + avatar.pop().filename);
     } catch (error) {
@@ -118,7 +122,7 @@ const AllProfile = ({navigation}) => {
     fetchAvatar();
     getBio();
     returnInfo();
-    // removeInfo();
+    removeInfo();
   }, []);
 
   return (
