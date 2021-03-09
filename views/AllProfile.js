@@ -36,7 +36,18 @@ const AllProfile = ({navigation}) => {
   };
   // const {handleInputChange, inputs, uploadErrors, reset} = useUploadForm();
 
+  // let guest = {
+  //   email: '["guest@email","bio text"]',
+  //   full_name: 'Guest',
+  //   user_id: 0,
+  //   username: 'guest',
+  // };
+
+  // console.log('AllProfile guest TEST my: ', guest);
+
   const guest = user;
+
+  // console.log('AllProfile guest TEST user: ', guest);
 
   const UserIdfromListItem = async () => {
     setLoading(true);
@@ -103,17 +114,15 @@ const AllProfile = ({navigation}) => {
     const userToken = await AsyncStorage.getItem('userToken');
     const userData = await checkToken(userToken);
 
-    guest.email = userData.email;
+    // guest.email = userData.email;
     // guest.fullEmail = userIdInfo.fullEmail;
     // guest.fullEmailWithBio = userIdInfo.fullEmailWithBio;
     // guest.fullUsername = userIdInfo.fullUsername;
-    guest.full_name = userData.full_name;
-    guest.user_id = userData.user_id;
+    // guest.full_name = userData.full_name;
+    // guest.user_id = userData.user_id;
     guest.username = userData.username;
 
     // console.log('AllProfile Return original id: ', guest);
-
-    // await AsyncStorage.removeItem('userId');
   };
 
   const removeInfo = async () => {
@@ -126,7 +135,7 @@ const AllProfile = ({navigation}) => {
     UserIdfromListItem();
     fetchAvatar();
     getBio();
-    // returnInfo();
+    returnInfo();
     removeInfo();
   }, []);
 
