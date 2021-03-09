@@ -11,9 +11,9 @@ import * as ScreenOrientation from 'expo-screen-orientation';
 import {ScrollView} from 'react-native-gesture-handler';
 
 const Single = ({route}) => {
-  const [fetchDescription, setFetchDescription] = useState('')
-  const [fetchIngredients, setFetchIngredients] = useState('')
-  const [fetchTags, setFetchTags] = useState('')
+  const [fetchDescription, setFetchDescription] = useState('');
+  const [fetchIngredients, setFetchIngredients] = useState('');
+  const [fetchTags, setFetchTags] = useState('');
   const [fetchTags2, setFetchTags2] = useState('');
   const [fetchTags3, setFetchTags3] = useState('');
 
@@ -65,7 +65,6 @@ const Single = ({route}) => {
     if (actualTags[2] !== '') {
       setFetchTags3('Main ingredient: ' + actualTags[2]);
     }
-    ;
   };
 
   const fetchFullDesc = async () => {
@@ -80,12 +79,12 @@ const Single = ({route}) => {
       tags = fullDescWithIncridients[2];
     } else {
       realDescription = file.description;
-      ingredients = "this shouldn't be empty"
-      tags = "this shouldn't be empty"
+      ingredients = 'this shouldn\'t be empty';
+      tags = 'this shouldn\'t be empty';
     }
-    setFetchDescription(realDescription)
-    setFetchIngredients(ingredients)
-    setFetchTags(tags)
+    setFetchDescription(realDescription);
+    setFetchIngredients(ingredients);
+    setFetchTags(tags);
   };
 
   const unlock = async () => {
@@ -99,7 +98,7 @@ const Single = ({route}) => {
   const lock = async () => {
     try {
       await ScreenOrientation.lockAsync(
-        ScreenOrientation.OrientationLock.PORTRAIT_UP
+        ScreenOrientation.OrientationLock.PORTRAIT_UP,
       );
     } catch (error) {
       console.error('lock', error.message);
@@ -122,9 +121,8 @@ const Single = ({route}) => {
     unlock();
     fetchAvatar();
     fetchOwner();
-    fetchFullDesc()
-    getFileTags()
-
+    fetchFullDesc();
+    getFileTags();
 
     const orientSub = ScreenOrientation.addOrientationChangeListener((evt) => {
       console.log('orientation', evt);
@@ -145,12 +143,12 @@ const Single = ({route}) => {
       <Card>
         <Card.Title h4>{file.title}</Card.Title>
         <Card.Title>{moment(file.time_added).format('LLL')}</Card.Title>
-        <Card.Divider />
+        <Card.Divider/>
         {file.media_type === 'image' ? (
           <Card.Image
             source={{uri: uploadsUrl + file.filename}}
             style={styles.image}
-            PlaceholderContent={<ActivityIndicator />}
+            PlaceholderContent={<ActivityIndicator/>}
           />
         ) : (
           <Video
@@ -165,7 +163,7 @@ const Single = ({route}) => {
             posterSource={{uri: uploadsUrl + file.screenshot}}
           />
         )}
-        <Card.Divider />
+        <Card.Divider/>
         <Text style={styles.description} h4>
           Instructions:
         </Text>
@@ -191,7 +189,7 @@ const Single = ({route}) => {
           {fetchTags3}
         </Text>
         <ListItem>
-          <Avatar source={{uri: avatar}} />
+          <Avatar source={{uri: avatar}}/>
           <Text>{owner.username}</Text>
         </ListItem>
       </Card>

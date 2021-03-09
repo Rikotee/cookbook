@@ -218,6 +218,7 @@ const useMedia = () => {
   };
 
   const search = async (token, inputs, tags) => {
+    console.log("searching with these tags: " + tags)
     try {
       const tagParser = (tag) => {
         const temp = JSON.parse(tag);
@@ -275,6 +276,7 @@ const useMedia = () => {
         }
       }
 
+      // actually
       const filteredFiles = [];
       for (let l = 0; l < actualList.length; l++) {
         const fileJson = await doFetch(baseUrl + 'media/' + actualList[l]);
