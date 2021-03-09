@@ -18,6 +18,7 @@ import MyFiles from '../views/MyFiles';
 import Modify from '../views/Modify';
 import EditProfile from '../views/EditProfile';
 import Search from '../views/Search';
+import AllProfile from '../views/AllProfile';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -109,6 +110,18 @@ const StackScreen = () => {
             component={Search}
             options={{
               title: 'SEARCH',
+              headerTitleAlign: 'center',
+              headerStyle: {
+                backgroundColor: '#3d9f9f',
+              },
+              headerTintColor: '#FFF',
+            }}
+          />
+          <Stack.Screen
+            name="AllProfile"
+            component={AllProfile}
+            options={{
+              title: 'USER PROFILE',
               headerTitleAlign: 'center',
               headerStyle: {
                 backgroundColor: '#3d9f9f',
