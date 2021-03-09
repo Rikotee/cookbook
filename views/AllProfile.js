@@ -72,21 +72,17 @@ const AllProfile = ({navigation}) => {
   const getBio = async () => {
     let realEmail;
     let bio;
-    try {
-      const userId = await AsyncStorage.getItem('userId');
-      const userIdInfo = JSON.parse(userId);
-      const fullEmail = userIdInfo.email;
-      if (fullEmail.includes(']')) {
-        const fullEmailWithBio = JSON.parse(fullEmail);
-        realEmail = fullEmailWithBio[0];
-        console.log('real email here: ' + realEmail);
-        bio = fullEmailWithBio[1];
-        console.log('bio here: ' + bio);
-      } else {
-        bio = '';
-      }
-    } catch (error) {
-      console.error(error.message);
+    const userId = await AsyncStorage.getItem('userId');
+    const userIdInfo = JSON.parse(userId);
+    const fullEmail = userIdInfo.email;
+    if (fullEmail.includes(']')) {
+      const fullEmailWithBio = JSON.parse(fullEmail);
+      realEmail = fullEmailWithBio[0];
+      console.log('real email here: ' + realEmail);
+      bio = fullEmailWithBio[1];
+      console.log('bio here: ' + bio);
+    } else {
+      bio = '';
     }
     setFetchBio(bio);
   };
