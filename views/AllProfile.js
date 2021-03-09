@@ -22,7 +22,7 @@ const AllProfile = ({navigation}) => {
     validateOnSend,
   } = useSignUpForm();
   const [filetype, setFiletype] = useState('');
-  const {isLoggedIn, setIsLoggedIn, user} = useContext(MainContext);
+  const {isLoggedIn, setIsLoggedIn, user, guest, setGuest} = useContext(MainContext);
   const [avatar, setAvatar] = useState('http://placekitten.com/640'); // Placeholder for accounts without profile picture
   const {getFilesByTag, postTag} = useTag();
   const [loading, setLoading] = useState(false);
@@ -45,8 +45,6 @@ const AllProfile = ({navigation}) => {
 
   // console.log('AllProfile guest TEST my: ', guest);
 
-  const guest = user;
-
   // console.log('AllProfile guest TEST user: ', guest);
 
   const UserIdfromListItem = async () => {
@@ -54,10 +52,7 @@ const AllProfile = ({navigation}) => {
     try {
       const userId = await AsyncStorage.getItem('userId');
       const userIdInfo = JSON.parse(userId);
-      // guest.email = userIdInfo.email;
-      // guest.full_name = userIdInfo.full_name;
-      // guest.user_id = userIdInfo.user_id;
-      guest.username = userIdInfo.username;
+      setGuest(userIdInfo);
       setLoading(false);
     } catch (error) {
       setLoading(false);
@@ -65,8 +60,6 @@ const AllProfile = ({navigation}) => {
     }
     // console.log('AllProfile guest altered id: ', guest.email);
   };
-
-  const guestUsername = guest.username;
 
   const settingEmail = async () => {
     // const userToken = await AsyncStorage.getItem('userToken');
@@ -83,15 +76,13 @@ const AllProfile = ({navigation}) => {
   const getBio = async () => {
     let realEmail;
     let bio;
-    const userId = await AsyncStorage.getItem('userId');
-    const userIdInfo = JSON.parse(userId);
-    const fullEmail = userIdInfo.email;
+    const fullEmail = guest.email;
     if (fullEmail.includes(']')) {
       const fullEmailWithBio = JSON.parse(fullEmail);
       realEmail = fullEmailWithBio[0];
-      console.log('real email here: ' + realEmail);
+      // console.log('real email here: ' + realEmail);
       bio = fullEmailWithBio[1];
-      console.log('bio here: ' + bio);
+      // console.log('bio here: ' + bio);
     } else {
       bio = '';
     }
@@ -100,9 +91,7 @@ const AllProfile = ({navigation}) => {
 
   const fetchAvatar = async () => {
     try {
-      const userId = await AsyncStorage.getItem('userId');
-      const userIdInfo = JSON.parse(userId);
-      const avatar = await getFilesByTag(appIdentifier + userIdInfo.user_id);
+      const avatar = await getFilesByTag(appIdentifier + guest.user_id);
       // console.log('AllProfile fetchAvatar', guestUserId);
       setAvatar(uploadsUrl + avatar.pop().filename);
     } catch (error) {
@@ -114,12 +103,6 @@ const AllProfile = ({navigation}) => {
     const userToken = await AsyncStorage.getItem('userToken');
     const userData = await checkToken(userToken);
 
-    // guest.email = userData.email;
-    // guest.fullEmail = userIdInfo.fullEmail;
-    // guest.fullEmailWithBio = userIdInfo.fullEmailWithBio;
-    // guest.fullUsername = userIdInfo.fullUsername;
-    // guest.full_name = userData.full_name;
-    // guest.user_id = userData.user_id;
     guest.username = userData.username;
 
     // console.log('AllProfile Return original id: ', guest);
@@ -127,16 +110,15 @@ const AllProfile = ({navigation}) => {
 
   const removeInfo = async () => {
     await AsyncStorage.removeItem('userId');
-  };
 
-  // console.log('AllProfile Return original id: ', guest);
+  };
 
   useEffect(() => {
     UserIdfromListItem();
     fetchAvatar();
     getBio();
     returnInfo();
-    removeInfo();
+    // removeInfo();
   }, []);
 
   return (
@@ -163,16 +145,16 @@ const AllProfile = ({navigation}) => {
         />
       </View>
       <View style={styles.view}>
-        <Text h1>{guestUsername}</Text>
+        <Text h1>{guest.username}</Text>
       </View>
       <View style={styles.view}>
         <Text>{'Biography: '}</Text>
         <Text>{fetchBio}</Text>
       </View>
-      <ListItem bottomDivider onPress={() => navigation.push('My Files')}>
+      <ListItem bottomDivider onPress={() => navigation.push('GuestFiles')}>
         <Avatar icon={{name: 'perm-media', color: 'black'}} />
         <ListItem.Content>
-          <ListItem.Title>My Files</ListItem.Title>
+          <ListItem.Title>All users recipes</ListItem.Title>
         </ListItem.Content>
         <ListItem.Chevron />
       </ListItem>

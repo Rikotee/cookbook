@@ -19,6 +19,7 @@ import Modify from '../views/Modify';
 import EditProfile from '../views/EditProfile';
 import Search from '../views/Search';
 import AllProfile from '../views/AllProfile';
+import GuestFiles from '../views/GuestFiles';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -122,6 +123,18 @@ const StackScreen = () => {
             component={AllProfile}
             options={{
               title: 'USER PROFILE',
+              headerTitleAlign: 'center',
+              headerStyle: {
+                backgroundColor: '#3d9f9f',
+              },
+              headerTintColor: '#FFF',
+            }}
+          />
+          <Stack.Screen
+            name="GuestFiles"
+            component={GuestFiles}
+            options={{
+              title: 'ALL RECIPES',
               headerTitleAlign: 'center',
               headerStyle: {
                 backgroundColor: '#3d9f9f',

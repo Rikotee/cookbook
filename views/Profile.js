@@ -69,9 +69,9 @@ const Profile = ({navigation}) => {
     if (fullEmail.includes(']')) {
       const fullEmailWithBio = JSON.parse(fullEmail);
       realEmail = fullEmailWithBio[0];
-      console.log('real email here: ' + realEmail);
+      // console.log('real email here: ' + realEmail);
       bio = fullEmailWithBio[1];
-      console.log('bio here: ' + bio);
+      // console.log('bio here: ' + bio);
     } else {
       bio = '';
     }
@@ -80,7 +80,7 @@ const Profile = ({navigation}) => {
 
   const fetchAvatar = async () => {
     try {
-      console.log(user.user_id);
+      // console.log(user.user_id);
       const avatar = await getFilesByTag(appIdentifier + user.user_id);
       setAvatar(uploadsUrl + avatar.pop().filename);
     } catch (error) {

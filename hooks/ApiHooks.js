@@ -46,6 +46,33 @@ const useLoadMedia = (myFilesOnly, userId) => {
   return mediaArray;
 };
 
+const useLoadGuestMedia = (guestFilesOnly, userId) => {
+  const [mediaArray, setMediaArray] = useState([]);
+  const {update} = useContext(MainContext);
+
+  const loadMedia = async () => {
+    try {
+      const listJson = await doFetch(baseUrl + 'tags/' + appIdentifier);
+      let media = await Promise.all(
+        listJson.map(async (item) => {
+          const fileJson = await doFetch(baseUrl + 'media/' + item.file_id);
+          return fileJson;
+        }),
+      );
+      if (guestFilesOnly) {
+        media = media.filter((item) => item.user_id === userId);
+      }
+      setMediaArray(media);
+    } catch (error) {
+      console.error('loadMedia error', error.message);
+    }
+  };
+  useEffect(() => {
+    loadMedia();
+  }, [update]);
+  return mediaArray;
+};
+
 const useLogin = () => {
   const postLogin = async (userCredentials) => {
     const options = {
@@ -331,4 +358,4 @@ const useMedia = () => {
   return {upload, updateFile, deleteFile, getFile, search};
 };
 
-export {useLoadMedia, useLogin, useUser, useTag, useMedia};
+export {useLoadMedia, useLoadGuestMedia, useLogin, useUser, useTag, useMedia};
