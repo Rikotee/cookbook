@@ -50,9 +50,6 @@ const Upload = ({navigation}) => {
       checkNulls(selectedTag),
       checkNulls(selectedTag2),
       checkNulls(selectedTag3)];
-    console.log('data 1: ' + data);
-    console.log('data 2: ' + data2);
-    console.log('data 2: ' + data3);
     const combinedData = JSON.stringify([data, data2]);
     console.log('combinedData: ' + combinedData);
     formData.append('description', combinedData);

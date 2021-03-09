@@ -1,28 +1,36 @@
-import React, {useEffect, useState} from 'react';
-import {StyleSheet, ActivityIndicator, View} from 'react-native';
+import React, {useContext, useEffect, useState} from 'react';
+import {StyleSheet, ActivityIndicator, View, Alert} from 'react-native';
 import PropTypes from 'prop-types';
 import {appIdentifier, uploadsUrl} from '../utils/variables';
-import {Avatar, Card, ListItem, Text} from 'react-native-elements';
+import {Avatar, Button, Card, ListItem, Text} from 'react-native-elements';
 import moment from 'moment';
-import {useTag, useUser} from '../hooks/ApiHooks';
+import {useMedia, useTag, useUser} from '../hooks/ApiHooks';
 import {Video} from 'expo-av';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as ScreenOrientation from 'expo-screen-orientation';
 import {ScrollView} from 'react-native-gesture-handler';
+import {Picker} from '@react-native-picker/picker';
+import {MainContext} from '../contexts/MainContext';
 
 const Single = ({route}) => {
   const [fetchDescription, setFetchDescription] = useState('');
   const [fetchIngredients, setFetchIngredients] = useState('');
+  // const [fetchRating, setFetchRating] = useState('');
   const [fetchTags, setFetchTags] = useState('');
   const [fetchTags2, setFetchTags2] = useState('');
   const [fetchTags3, setFetchTags3] = useState('');
+  const {user} = useContext(MainContext)
 
   const {file} = route.params;
   const [avatar, setAvatar] = useState('http://placekitten.com/100');
   const [owner, setOwner] = useState({username: 'somebody'});
   const {getFilesByTag, getTagsOfFile} = useTag();
+  const {rate, getRating, deleteRating} = useMedia();
   const {getUser} = useUser();
   const [videoRef, setVideoRef] = useState(null);
+  const [selectedRating, setSelectedRating] = useState('');
+  const [fetchRating, setFetchRating] = useState('');
+  const [fetchHaveRated, setFetchHaveRated] = useState('')
 
   const fetchAvatar = async () => {
     try {
@@ -37,8 +45,10 @@ const Single = ({route}) => {
   const fetchOwner = async () => {
     try {
       const userToken = await AsyncStorage.getItem('userToken');
-      const userData = await getUser(file.user_id, userToken);
-      setOwner(userData);
+      if (userToken !== null){
+        const userData = await getUser(file.user_id, userToken);
+        setOwner(userData);
+      }
     } catch (error) {
       console.error(error.message);
     }
@@ -73,10 +83,10 @@ const Single = ({route}) => {
     let tags;
     const fullDescription = file.description;
     if (fullDescription.includes(']')) {
-      const fullDescWithIncridients = JSON.parse(fullDescription);
-      realDescription = fullDescWithIncridients[0];
-      ingredients = fullDescWithIncridients[1];
-      tags = fullDescWithIncridients[2];
+      const fullDescWithIngredients = JSON.parse(fullDescription);
+      realDescription = fullDescWithIngredients[0];
+      ingredients = fullDescWithIngredients[1];
+      tags = fullDescWithIngredients[2];
     } else {
       realDescription = file.description;
       ingredients = 'this shouldn\'t be empty';
@@ -85,6 +95,57 @@ const Single = ({route}) => {
     setFetchDescription(realDescription);
     setFetchIngredients(ingredients);
     setFetchTags(tags);
+  };
+
+  const fetchRatings = async () => {
+
+    const rating = await getRating(file.file_id);
+
+    if (rating.length === 0){
+      setFetchRating("No ratings yet")
+    }
+    else {
+
+      const rateAmount = rating.length
+      let combinedRating = 0
+      for (let i = 0; i < rateAmount; i++){
+        if (user.user_id !== undefined){
+          if (rating[i].user_id === user.user_id){
+            setFetchHaveRated("true")
+          }
+        }
+
+        combinedRating += rating[i].rating
+      }
+      const realRating = combinedRating / rateAmount
+
+      setFetchRating(realRating.toFixed(1));
+
+    }
+  };
+
+
+  const addRating = async () => {
+    const userToken = await AsyncStorage.getItem('userToken');
+    const fileId = file.file_id;
+    const rating = selectedRating;
+    console.log("user id here: " + user.user_id)
+    if (rating === undefined || rating === "0") {
+      alert('pick rating first');
+    } else {
+      if (fetchHaveRated === "true"){
+        const deleteResult = await deleteRating(fileId, userToken);
+      }
+      const rateResponse = await rate(
+        {
+          file_id: fileId,
+          rating: parseInt(rating),
+        },
+        userToken,
+      );
+      console.log('rateResponse: ' + JSON.stringify(rateResponse));
+    }
+    await fetchRatings()
   };
 
   const unlock = async () => {
@@ -117,20 +178,23 @@ const Single = ({route}) => {
     }
   };
 
+
   useEffect(() => {
     unlock();
     fetchAvatar();
     fetchOwner();
     fetchFullDesc();
     getFileTags();
+    fetchRatings();
 
-    const orientSub = ScreenOrientation.addOrientationChangeListener((evt) => {
-      console.log('orientation', evt);
-      if (evt.orientationInfo.orientation > 2) {
-        // show video in fullscreen
-        showVideoInFullscreen();
-      }
-    });
+    const orientSub = ScreenOrientation.addOrientationChangeListener(
+      (evt) => {
+        console.log('orientation', evt);
+        if (evt.orientationInfo.orientation > 2) {
+          // show video in fullscreen
+          showVideoInFullscreen();
+        }
+      });
 
     return () => {
       ScreenOrientation.removeOrientationChangeListener(orientSub);
@@ -142,6 +206,27 @@ const Single = ({route}) => {
     <ScrollView>
       <Card>
         <Card.Title h4>{file.title}</Card.Title>
+        <Text>Rating: {fetchRating}</Text>
+
+        {user.user_id !== undefined &&
+          <View>
+            <Picker
+              selectedValue={selectedRating}
+              onValueChange={(itemValue, itemIndex) =>
+                setSelectedRating(itemValue)
+              }>
+              <Picker.Item label="pick rating..." value="0"/>
+              <Picker.Item label="1" value="1"/>
+              <Picker.Item label="2" value="2"/>
+              <Picker.Item label="3" value="3"/>
+              <Picker.Item label="4" value="4"/>
+              <Picker.Item label="5" value="5"/>
+            </Picker>
+            <Button title="Rate" onPress={addRating}/>
+          </View>
+        }
+
+
         <Card.Title>{moment(file.time_added).format('LLL')}</Card.Title>
         <Card.Divider/>
         {file.media_type === 'image' ? (

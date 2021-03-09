@@ -170,12 +170,12 @@ const useTag = () => {
     }
   };
 
-  const postTag = async (tag, token) => {
-    console.log('Tag = ' + JSON.stringify(tag));
+  const postTag = async (tagAndFileId, token) => {
+    console.log('Tag = ' + JSON.stringify(tagAndFileId));
     const options = {
       method: 'POST',
       headers: {'Content-Type': 'application/json', 'x-access-token': token},
-      body: JSON.stringify(tag),
+      body: JSON.stringify(tagAndFileId),
     };
     try {
       const result = await doFetch(baseUrl + 'tags', options);
@@ -189,6 +189,47 @@ const useTag = () => {
 };
 
 const useMedia = () => {
+  const rate = async (ratingAndFileId, token) => {
+    console.log('Who called me??? ' + JSON.stringify(ratingAndFileId));
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-access-token': token,
+      },
+      body: JSON.stringify(ratingAndFileId),
+    };
+    try {
+      const result = await doFetch(baseUrl + 'ratings', options);
+      return result;
+    } catch (error) {
+      throw new Error('rating error: ' + error.message);
+    }
+  };
+
+  const getRating = async (fileId) => {
+    try {
+      const result = await doFetch(baseUrl + 'ratings/file/' + fileId);
+      return result;
+    } catch (error) {
+      throw new Error('getFile error: ' + error.message);
+    }
+  }
+
+  const deleteRating = async (fileId, token) => {
+    const options = {
+      method: 'DELETE',
+      headers: {'x-access-token': token},
+    };
+    try {
+      const result = await doFetch(baseUrl + 'ratings/file/' + fileId, options);
+      console.log("rating delete: " + JSON.stringify(result))
+      return result;
+    } catch (error) {
+      throw new Error('deleteFile error: ' + error.message);
+    }
+  };
+
   const [mediaArray, setMediaArray] = useState([]);
 
   const upload = async (fd, token) => {
@@ -218,7 +259,8 @@ const useMedia = () => {
   };
 
   const search = async (token, inputs, tags) => {
-    console.log("searching with these tags: " + tags)
+    console.log(
+      'searching with these tags: ' + tags + ' and this search word: ' + inputs);
     try {
       const tagParser = (tag) => {
         const temp = JSON.parse(tag);
@@ -330,7 +372,7 @@ const useMedia = () => {
     }
   };
 
-  return {upload, updateFile, deleteFile, getFile, search};
+  return {upload, updateFile, deleteFile, getFile, search, rate, getRating, deleteRating};
 };
 
 export {useLoadMedia, useLogin, useUser, useTag, useMedia};
