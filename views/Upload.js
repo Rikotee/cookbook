@@ -5,6 +5,8 @@ import {
   KeyboardAvoidingView,
   Platform,
   ScrollView,
+  StyleSheet,
+  View,
 } from 'react-native';
 import PropTypes from 'prop-types';
 import {Input, Text, Image, Button, Card} from 'react-native-elements';
@@ -49,7 +51,8 @@ const Upload = ({navigation}) => {
     const data3 = [
       checkNulls(selectedTag),
       checkNulls(selectedTag2),
-      checkNulls(selectedTag3)];
+      checkNulls(selectedTag3),
+    ];
     const combinedData = JSON.stringify([data, data2]);
     console.log('combinedData: ' + combinedData);
     formData.append('description', combinedData);
@@ -76,7 +79,7 @@ const Upload = ({navigation}) => {
           file_id: resp,
           tag: appIdentifier,
         },
-        userToken,
+        userToken
       );
       console.log('posting app identifier', tagResponse);
       Alert.alert(
@@ -92,7 +95,7 @@ const Upload = ({navigation}) => {
             },
           },
         ],
-        {cancelable: false},
+        {cancelable: false}
       );
     } catch (error) {
       Alert.alert('Upload', 'Failed');
@@ -108,7 +111,7 @@ const Upload = ({navigation}) => {
         file_id: fileId,
         tag: JSON.stringify([appIdentifier, tag]),
       },
-      userToken,
+      userToken
     );
   };
 
@@ -118,7 +121,7 @@ const Upload = ({navigation}) => {
         const {status} = await ImagePicker.requestCameraPermissionsAsync();
         if (status !== 'granted') {
           alert(
-            'Sorry, we need camera roll and camera permissions to make this work!',
+            'Sorry, we need camera roll and camera permissions to make this work!'
           );
         }
       }
@@ -155,7 +158,7 @@ const Upload = ({navigation}) => {
   return (
     <ScrollView>
       <KeyboardAvoidingView behavior="position" enabled>
-        <Card>
+        <View style={styles.post}>
           <Text h4>Upload media file</Text>
           {image && (
             <>
@@ -176,43 +179,40 @@ const Upload = ({navigation}) => {
           <Text h4>Time</Text>
           <Picker
             selectedValue={selectedTag}
-            onValueChange={(itemValue, itemIndex) =>
-              setSelectedTag(itemValue)
-            }>
-            <Picker.Item label="Please pick time..." value="0"/>
-            <Picker.Item label="Under 30 minutes" value="Under 30 minutes"/>
-            <Picker.Item label="30-60 minutes" value="30-60 minutes"/>
-            <Picker.Item label="Over 60 minutes" value="Over 60 minutes"/>
+            onValueChange={(itemValue, itemIndex) => setSelectedTag(itemValue)}
+          >
+            <Picker.Item label="Please pick time..." value="0" />
+            <Picker.Item label="Under 30 minutes" value="Under 30 minutes" />
+            <Picker.Item label="30-60 minutes" value="30-60 minutes" />
+            <Picker.Item label="Over 60 minutes" value="Over 60 minutes" />
           </Picker>
           <Text h4>Type</Text>
           <Picker
             selectedValue={selectedTag2}
-            onValueChange={(itemValue, itemIndex) =>
-              setSelectedTag2(itemValue)
-            }>
-            <Picker.Item label="Please pick type..." value="0"/>
-            <Picker.Item label="Pasta & risotto" value="Pasta & risotto"/>
-            <Picker.Item label="Salad" value="Salad"/>
-            <Picker.Item label="Bread & doughs" value="Bread & doughs"/>
-            <Picker.Item label="Vegetable sides" value="Vegetable sides"/>
-            <Picker.Item label="Soup" value="Soup"/>
-            <Picker.Item label="BBQ food" value="BBQ food"/>
-            <Picker.Item label="Stew" value="Stew"/>
+            onValueChange={(itemValue, itemIndex) => setSelectedTag2(itemValue)}
+          >
+            <Picker.Item label="Please pick type..." value="0" />
+            <Picker.Item label="Pasta & risotto" value="Pasta & risotto" />
+            <Picker.Item label="Salad" value="Salad" />
+            <Picker.Item label="Bread & doughs" value="Bread & doughs" />
+            <Picker.Item label="Vegetable sides" value="Vegetable sides" />
+            <Picker.Item label="Soup" value="Soup" />
+            <Picker.Item label="BBQ food" value="BBQ food" />
+            <Picker.Item label="Stew" value="Stew" />
           </Picker>
           <Text h4>Main ingredient</Text>
           <Picker
             selectedValue={selectedTag3}
-            onValueChange={(itemValue, itemIndex) =>
-              setSelectedTag3(itemValue)
-            }>
-            <Picker.Item label="please pick main ingredient..." value="0"/>
-            <Picker.Item label="Vegetables" value="Vegetables"/>
-            <Picker.Item label="Eggs" value="Eggs"/>
-            <Picker.Item label="Chicken" value="Chicken"/>
-            <Picker.Item label="Pasta" value="Pasta"/>
-            <Picker.Item label="Fish" value="Fish"/>
-            <Picker.Item label="Bread" value="Bread"/>
-            <Picker.Item label="Lamb" value="Lamb"/>
+            onValueChange={(itemValue, itemIndex) => setSelectedTag3(itemValue)}
+          >
+            <Picker.Item label="please pick main ingredient..." value="0" />
+            <Picker.Item label="Vegetables" value="Vegetables" />
+            <Picker.Item label="Eggs" value="Eggs" />
+            <Picker.Item label="Chicken" value="Chicken" />
+            <Picker.Item label="Pasta" value="Pasta" />
+            <Picker.Item label="Fish" value="Fish" />
+            <Picker.Item label="Bread" value="Bread" />
+            <Picker.Item label="Lamb" value="Lamb" />
           </Picker>
 
           <Input
@@ -233,9 +233,9 @@ const Upload = ({navigation}) => {
             onChangeText={(txt) => handleInputChange('description2', txt)}
             errorMessage={uploadErrors.description2}
           />
-          <Button title="Choose from library" onPress={() => pickImage(true)}/>
-          <Button title="Use camera" onPress={() => pickImage(false)}/>
-          {isUploading && <ActivityIndicator size="large" color="#0000ff"/>}
+          <Button title="Choose from library" onPress={() => pickImage(true)} />
+          <Button title="Use camera" onPress={() => pickImage(false)} />
+          {isUploading && <ActivityIndicator size="large" color="#0000ff" />}
           <Button
             title="Upload file"
             onPress={doUpload}
@@ -245,12 +245,20 @@ const Upload = ({navigation}) => {
               image === null
             }
           />
-          <Button title="Reset" onPress={doReset}/>
-        </Card>
+          <Button title="Reset" onPress={doReset} />
+        </View>
       </KeyboardAvoidingView>
     </ScrollView>
   );
 };
+
+const styles = StyleSheet.create({
+  post: {
+    padding: 15,
+    backgroundColor: '#FFF',
+    // marginBottom: 10,
+  },
+});
 
 Upload.propTypes = {
   navigation: PropTypes.object,

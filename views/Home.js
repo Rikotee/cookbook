@@ -64,6 +64,9 @@ const styles = StyleSheet.create({
     height: 30,
     backgroundColor: '#97caca',
   },
+  // infoArea: {
+
+  // },
   loginText: {
     color: '#000',
     textAlign: 'right',
