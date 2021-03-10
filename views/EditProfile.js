@@ -62,8 +62,10 @@ const EditProfile = ({navigation}) => {
 
   const fetchAvatar = async () => {
     try {
-      const avatar = await getFilesByTag(appIdentifier + user.user_id);
-      setAvatar(uploadsUrl + avatar.pop().filename);
+      const avatarList = await getFilesByTag(appIdentifier + user.user_id);
+      if (avatarList.length > 0) {
+        setAvatar(uploadsUrl + avatarList.pop().filename);
+      }
     } catch (error) {
       console.error(error.message);
     }
