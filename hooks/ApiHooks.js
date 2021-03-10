@@ -30,40 +30,13 @@ const useLoadMedia = (myFilesOnly, userId, guestFilesOnly, guestId) => {
         listJson.map(async (item) => {
           const fileJson = await doFetch(baseUrl + 'media/' + item.file_id);
           return fileJson;
-        }),
+        })
       );
       if (myFilesOnly) {
         media = media.filter((item) => item.user_id === userId);
       }
       if (guestFilesOnly) {
         media = media.filter((item) => item.user_id === guestId);
-      }
-      setMediaArray(media);
-    } catch (error) {
-      console.error('loadMedia error', error.message);
-    }
-  };
-  useEffect(() => {
-    loadMedia();
-  }, [update]);
-  return mediaArray;
-};
-
-const useLoadGuestMedia = (guestFilesOnly, userId) => {
-  const [mediaArray, setMediaArray] = useState([]);
-  const {update} = useContext(MainContext);
-
-  const loadMedia = async () => {
-    try {
-      const listJson = await doFetch(baseUrl + 'tags/' + appIdentifier);
-      let media = await Promise.all(
-        listJson.map(async (item) => {
-          const fileJson = await doFetch(baseUrl + 'media/' + item.file_id);
-          return fileJson;
-        }),
-      );
-      if (guestFilesOnly) {
-        media = media.filter((item) => item.user_id === userId);
       }
       setMediaArray(media);
     } catch (error) {
@@ -146,7 +119,7 @@ const useUser = () => {
         },
         (err) => {
           console.log('Something went wrong deleting comment: ', err);
-        },
+        }
       );
     } catch (error) {
       console.log('uploaderror: ', error);
@@ -244,7 +217,7 @@ const useMedia = () => {
     } catch (error) {
       throw new Error('getFile error: ' + error.message);
     }
-  }
+  };
 
   const deleteRating = async (fileId, token) => {
     const options = {
@@ -253,7 +226,7 @@ const useMedia = () => {
     };
     try {
       const result = await doFetch(baseUrl + 'ratings/file/' + fileId, options);
-      console.log("rating delete: " + JSON.stringify(result))
+      console.log('rating delete: ' + JSON.stringify(result));
       return result;
     } catch (error) {
       throw new Error('deleteFile error: ' + error.message);
@@ -290,7 +263,8 @@ const useMedia = () => {
 
   const search = async (token, inputs, tags) => {
     console.log(
-      'searching with these tags: ' + tags + ' and this search word: ' + inputs);
+      'searching with these tags: ' + tags + ' and this search word: ' + inputs
+    );
     try {
       const tagParser = (tag) => {
         const temp = JSON.parse(tag);
@@ -298,27 +272,30 @@ const useMedia = () => {
       };
 
       // Function to check if string contains words from array
-      const multiSearchAnd = (text, searchWords) => (
+      const multiSearchAnd = (text, searchWords) =>
         searchWords.every((el) => {
           return text.match(new RegExp(el, 'i'));
-        })
-      );
+        });
 
       // gets all the files that match the search tags and compares if they have all required tags to be shown
       const idsOfFilesOfThisApp = [];
       for (let i = 0; i < tags.length; i++) {
         if (tags[i] !== '') {
-          const searchTag = JSON.stringify(
-            [appIdentifier, encodeURIComponent(tags[i])]);
+          const searchTag = JSON.stringify([
+            appIdentifier,
+            encodeURIComponent(tags[i]),
+          ]);
           // Get all files that have even 1 corresponding tag to search tags
           const files = await doFetch(baseUrl + 'tags/' + searchTag);
           for (let j = 0; j < files.length; j++) {
             const tagsOfFile = await doFetch(
-              baseUrl + 'tags/file/' + files[j].file_id);
+              baseUrl + 'tags/file/' + files[j].file_id
+            );
             const tagArray = [
               tagParser(tagsOfFile[0].tag),
               tagParser(tagsOfFile[1].tag),
-              tagParser(tagsOfFile[2].tag)];
+              tagParser(tagsOfFile[2].tag),
+            ];
             // Compares if the file has all required tags compared to search tags
             if (multiSearchAnd(JSON.stringify(tagArray), tags) === true) {
               idsOfFilesOfThisApp.push(files[j].file_id);
@@ -402,7 +379,16 @@ const useMedia = () => {
     }
   };
 
-  return {upload, updateFile, deleteFile, getFile, search, rate, getRating, deleteRating};
+  return {
+    upload,
+    updateFile,
+    deleteFile,
+    getFile,
+    search,
+    rate,
+    getRating,
+    deleteRating,
+  };
 };
 
-export {useLoadMedia, useLoadGuestMedia, useLogin, useUser, useTag, useMedia};
+export {useLoadMedia, useLogin, useUser, useTag, useMedia};
