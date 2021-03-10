@@ -4,7 +4,7 @@ import List from '../components/List';
 import PropTypes from 'prop-types';
 import {MainContext} from '../contexts/MainContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {Avatar, ListItem} from 'react-native-elements';
+import {Avatar, ListItem, Button} from 'react-native-elements';
 
 const Home = ({navigation}) => {
   const {setUpdate, update, isLoggedIn, setIsLoggedIn, user} = useContext(
@@ -21,7 +21,25 @@ const Home = ({navigation}) => {
       <View style={styles.loginArea}>
         {isLoggedIn ? (
           <View>
-            {/* <Text style={styles.userText}>{user.username}</Text> */}
+            <Text
+              style={styles.loginText}
+              onPress={() => navigation.navigate('Profile')}
+            >
+              {user.username + ' profile'}
+            </Text>
+          </View>
+        ) : (
+          <Text
+            style={styles.loginText}
+            onPress={() => navigation.navigate('Login')}
+          >
+            Login/Register
+          </Text>
+        )}
+      </View>
+      <View style={styles.loginArea}>
+        {isLoggedIn ? (
+          <View>
             <Text style={styles.loginText} onPress={updateLogout}>
               Logout
             </Text>
@@ -35,7 +53,6 @@ const Home = ({navigation}) => {
           </Text>
         )}
       </View>
-
       {isLoggedIn ? (
         <ListItem bottomDivider onPress={() => navigation.navigate('Search')}>
           <Avatar icon={{name: 'search', color: 'black', size: 30}} />
@@ -52,24 +69,6 @@ const Home = ({navigation}) => {
           Login to use search
         </Text>
       )}
-
-      {isLoggedIn ? (
-        <ListItem bottomDivider onPress={() => navigation.navigate('Profile')}>
-          <Avatar icon={{name: 'construction', color: 'black', size: 30}} />
-          <ListItem.Content>
-            <ListItem.Title>Profile</ListItem.Title>
-          </ListItem.Content>
-          <ListItem.Chevron />
-        </ListItem>
-      ) : (
-        <Text
-          style={styles.loginText}
-          onPress={() => navigation.navigate('Login')}
-        >
-          Login to use search
-        </Text>
-      )}
-
       <List navigation={navigation} myFilesOnly={false} />
       <StatusBar style="auto" />
     </SafeAreaView>
