@@ -19,7 +19,7 @@ const Single = ({route}) => {
   const [fetchTags, setFetchTags] = useState('');
   const [fetchTags2, setFetchTags2] = useState('');
   const [fetchTags3, setFetchTags3] = useState('');
-  const {user} = useContext(MainContext);
+  const {user, getRatings, setGetRatings} = useContext(MainContext);
 
   const {file} = route.params;
   const [avatar, setAvatar] = useState('http://placekitten.com/100');
@@ -115,7 +115,6 @@ const Single = ({route}) => {
         combinedRating += rating[i].rating;
       }
       const realRating = combinedRating / rateAmount;
-
       setFetchRating(realRating.toFixed(1));
     }
   };
@@ -141,6 +140,7 @@ const Single = ({route}) => {
       console.log('rateResponse: ' + JSON.stringify(rateResponse));
     }
     await fetchRatings();
+    setGetRatings(!getRatings);
   };
 
   const unlock = async () => {
@@ -214,24 +214,24 @@ const Single = ({route}) => {
 
         <Text>Rating: {fetchRating}</Text>
 
-        {user.user_id !== undefined && (
-          <View>
-            <Picker
-              selectedValue={selectedRating}
-              onValueChange={(itemValue, itemIndex) =>
-                setSelectedRating(itemValue)
-              }
-            >
-              <Picker.Item label="pick rating..." value="0" />
-              <Picker.Item label="1" value="1" />
-              <Picker.Item label="2" value="2" />
-              <Picker.Item label="3" value="3" />
-              <Picker.Item label="4" value="4" />
-              <Picker.Item label="5" value="5" />
-            </Picker>
-            <Button title="Rate" onPress={addRating} />
-          </View>
-        )}
+        {user.user_id !== undefined &&
+        <View>
+          <Picker
+            selectedValue={selectedRating}
+            onValueChange={(itemValue, itemIndex) =>
+              setSelectedRating(itemValue)
+            }>
+            <Picker.Item label="pick rating..." value="0"/>
+            <Picker.Item label="1" value="1"/>
+            <Picker.Item label="2" value="2"/>
+            <Picker.Item label="3" value="3"/>
+            <Picker.Item label="4" value="4"/>
+            <Picker.Item label="5" value="5"/>
+          </Picker>
+          <Button title="Rate" onPress={addRating}/>
+        </View>
+        }
+
 
         {file.media_type === 'image' ? (
           <Card.Image

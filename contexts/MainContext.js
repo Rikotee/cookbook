@@ -8,10 +8,28 @@ const MainProvider = ({children}) => {
   const [user, setUser] = useState({});
   const [update, setUpdate] = useState(0);
   const [guest, setGuest] = useState({});
+  const [getRatings, setGetRatings] = useState(true);
+  const [getPicture, setGetPicture] = useState(true);
+  const [getBioChange, setGetBioChange] = useState(true)
 
   return (
     <MainContext.Provider
-      value={{isLoggedIn, setIsLoggedIn, user, setUser, update, setUpdate, guest, setGuest}}
+      value={{
+        isLoggedIn,
+        setIsLoggedIn,
+        user,
+        setUser,
+        update,
+        setUpdate,
+        guest,
+        setGuest,
+        setGetRatings,
+        getRatings,
+        getPicture,
+        setGetPicture,
+        getBioChange,
+        setGetBioChange
+      }}
     >
       {children}
     </MainContext.Provider>

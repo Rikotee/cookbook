@@ -37,7 +37,8 @@ const Profile = ({navigation}) => {
     validateOnSend,
   } = useSignUpForm();
   const [filetype, setFiletype] = useState('');
-  const {isLoggedIn, setIsLoggedIn, user} = useContext(MainContext);
+  const {isLoggedIn, setIsLoggedIn, user, getPicture, getBioChange} = useContext(
+    MainContext);
   const [avatar, setAvatar] = useState('http://placekitten.com/640'); // Placeholder for accounts without profile picture
   const {getFilesByTag, postTag} = useTag();
   const logout = async () => {
@@ -91,9 +92,14 @@ const Profile = ({navigation}) => {
   };
 
   useEffect(() => {
-    fetchAvatar();
-    getBio();
-  }, []);
+      fetchAvatar();
+    }, [getPicture],
+  );
+
+  useEffect(() => {
+      getBio();
+    }, [getBioChange],
+  );
 
   return (
     <ScrollView>

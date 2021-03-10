@@ -222,13 +222,13 @@ const Upload = ({navigation}) => {
             errorMessage={uploadErrors.title}
           />
           <Input
-            placeholder="description"
+            placeholder="Instructions"
             value={inputs.description}
             onChangeText={(txt) => handleInputChange('description', txt)}
             errorMessage={uploadErrors.description}
           />
           <Input
-            placeholder="description"
+            placeholder="Ingredients"
             value={inputs.description2}
             onChangeText={(txt) => handleInputChange('description2', txt)}
             errorMessage={uploadErrors.description2}
