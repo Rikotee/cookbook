@@ -27,7 +27,6 @@ import useSignUpForm from '../hooks/RegisterHooks';
 const Profile = ({navigation}) => {
   const [fetchBio, setFetchBio] = useState('');
   const {updateUser, getUser} = useUser();
-
   const {
     inputs,
     handleInputChange,
@@ -37,8 +36,13 @@ const Profile = ({navigation}) => {
     validateOnSend,
   } = useSignUpForm();
   const [filetype, setFiletype] = useState('');
-  const {isLoggedIn, setIsLoggedIn, user, getPicture, getBioChange} = useContext(
-    MainContext);
+  const {
+    isLoggedIn,
+    setIsLoggedIn,
+    user,
+    getPicture,
+    getBioChange,
+  } = useContext(MainContext);
   const [avatar, setAvatar] = useState('http://placekitten.com/640'); // Placeholder for accounts without profile picture
   const {getFilesByTag, postTag} = useTag();
   const logout = async () => {
@@ -83,23 +87,22 @@ const Profile = ({navigation}) => {
 
   const fetchAvatar = async () => {
     try {
-      // console.log(user.user_id);
-      const avatar = await getFilesByTag(appIdentifier + user.user_id);
-      setAvatar(uploadsUrl + avatar.pop().filename);
+      const avatarList = await getFilesByTag(appIdentifier + user.user_id);
+      if (avatarList.length > 0) {
+        setAvatar(uploadsUrl + avatarList.pop().filename);
+      }
     } catch (error) {
       console.error(error.message);
     }
   };
 
   useEffect(() => {
-      fetchAvatar();
-    }, [getPicture],
-  );
+    fetchAvatar();
+  }, [getPicture]);
 
   useEffect(() => {
-      getBio();
-    }, [getBioChange],
-  );
+    getBio();
+  }, [getBioChange]);
 
   return (
     <ScrollView>
