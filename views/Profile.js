@@ -15,7 +15,8 @@ import {
   Avatar,
   Image,
   Button,
-  Input, Card,
+  Input,
+  Card,
 } from 'react-native-elements';
 import {useTag, useMedia, useUser} from '../hooks/ApiHooks';
 import {uploadsUrl, appIdentifier} from '../utils/variables';
@@ -55,8 +56,9 @@ const Profile = ({navigation}) => {
     const fullUsername = JSON.parse(user.username);
     const realBio = fullUsername[1];
 
-    const res = await updateUser(userToken,
-      {username: JSON.stringify([inputs.username, realBio])});
+    const res = await updateUser(userToken, {
+      username: JSON.stringify([inputs.username, realBio]),
+    });
     // console.log("is this the thing that is undefined? " + res)
   };
 
@@ -113,22 +115,32 @@ const Profile = ({navigation}) => {
         <Image
           source={{uri: avatar}}
           style={styles.image}
-          PlaceholderContent={<ActivityIndicator/>}
+          PlaceholderContent={<ActivityIndicator />}
         />
       </View>
       <View style={styles.view}>
         <Text h1>{user.username}</Text>
       </View>
       <View style={styles.view}>
-        <Text>{"Biography: "}</Text>
+        <Text>{'Biography: '}</Text>
         <Text>{fetchBio}</Text>
       </View>
       <ListItem bottomDivider onPress={() => navigation.push('My Files')}>
-        <Avatar icon={{name: 'perm-media', color: 'black'}}/>
+        <Avatar icon={{name: 'perm-media', color: 'black'}} />
         <ListItem.Content>
           <ListItem.Title>My Files</ListItem.Title>
         </ListItem.Content>
-        <ListItem.Chevron/>
+        <ListItem.Chevron />
+      </ListItem>
+      <ListItem
+        bottomDivider
+        onPress={() => navigation.navigate('EditProfile')}
+      >
+        <Avatar icon={{name: 'construction', color: 'black'}} />
+        <ListItem.Content>
+          <ListItem.Title>Edit profile</ListItem.Title>
+        </ListItem.Content>
+        <ListItem.Chevron />
       </ListItem>
     </ScrollView>
   );

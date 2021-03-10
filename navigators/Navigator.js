@@ -48,7 +48,6 @@ const TabScreen = () => {
       <Tab.Screen name="Home" component={Home} />
       <Tab.Screen name="Profile" component={Profile} />
       <Tab.Screen name="Upload" component={Upload} />
-      <Tab.Screen name="EditProfile" component={EditProfile} />
     </Tab.Navigator>
   );
 };
