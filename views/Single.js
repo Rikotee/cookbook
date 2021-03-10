@@ -211,7 +211,7 @@ const Single = ({route}) => {
             {owner.username}
           </Text>
         </View>
-        <Card.Title h4>{file.title}</Card.Title>
+
         <Text>Rating: {fetchRating}</Text>
 
         {user.user_id !== undefined && (
@@ -233,7 +233,6 @@ const Single = ({route}) => {
           </View>
         )}
 
-        <Card.Title>{moment(file.time_added).format('LLL')}</Card.Title>
         {file.media_type === 'image' ? (
           <Card.Image
             source={{uri: uploadsUrl + file.filename}}
@@ -253,6 +252,8 @@ const Single = ({route}) => {
             posterSource={{uri: uploadsUrl + file.screenshot}}
           />
         )}
+        <Card.Title h4>{file.title}</Card.Title>
+
         <Text style={styles.description} h4>
           Instructions:
         </Text>
@@ -267,6 +268,7 @@ const Single = ({route}) => {
         <Text style={styles.description}>{fetchTags}</Text>
         <Text style={styles.description}>{fetchTags2}</Text>
         <Text style={styles.description}>{fetchTags3}</Text>
+        <Card.Title>{moment(file.time_added).format('LL')}</Card.Title>
       </View>
     </ScrollView>
   );
