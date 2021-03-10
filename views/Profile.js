@@ -138,6 +138,13 @@ const Profile = ({navigation}) => {
         </ListItem.Content>
         <ListItem.Chevron />
       </ListItem>
+      <ListItem bottomDivider onPress={() => navigation.push('Upload')}>
+        <Avatar icon={{name: 'perm-media', color: 'black'}} />
+        <ListItem.Content>
+          <ListItem.Title>Upload recipe</ListItem.Title>
+        </ListItem.Content>
+        <ListItem.Chevron />
+      </ListItem>
       <ListItem
         bottomDivider
         onPress={() => navigation.navigate('EditProfile')}

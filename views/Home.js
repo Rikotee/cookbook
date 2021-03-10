@@ -53,6 +53,23 @@ const Home = ({navigation}) => {
         </Text>
       )}
 
+      {isLoggedIn ? (
+        <ListItem bottomDivider onPress={() => navigation.navigate('Profile')}>
+          <Avatar icon={{name: 'construction', color: 'black', size: 30}} />
+          <ListItem.Content>
+            <ListItem.Title>Profile</ListItem.Title>
+          </ListItem.Content>
+          <ListItem.Chevron />
+        </ListItem>
+      ) : (
+        <Text
+          style={styles.loginText}
+          onPress={() => navigation.navigate('Login')}
+        >
+          Login to use search
+        </Text>
+      )}
+
       <List navigation={navigation} myFilesOnly={false} />
       <StatusBar style="auto" />
     </SafeAreaView>
