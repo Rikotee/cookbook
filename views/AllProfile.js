@@ -4,28 +4,15 @@ import {MainContext} from '../contexts/MainContext';
 import PropTypes from 'prop-types';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {Text, ListItem, Avatar, Image} from 'react-native-elements';
-import {useTag, useUser} from '../hooks/ApiHooks';
+import {useTag} from '../hooks/ApiHooks';
 import {uploadsUrl, appIdentifier} from '../utils/variables';
 import {ScrollView} from 'react-native-gesture-handler';
-import useSignUpForm from '../hooks/RegisterHooks';
 
 const AllProfile = ({navigation}) => {
   const [fetchBio, setFetchBio] = useState('');
-  const {updateUser, getUser, checkToken} = useUser();
-
-  const {
-    inputs,
-    handleInputChange,
-    handleInputEnd,
-    checkUserAvailable,
-    registerErrors,
-    validateOnSend,
-  } = useSignUpForm();
-  const [filetype, setFiletype] = useState('');
-  const {isLoggedIn, setIsLoggedIn, guest, setGuest} = useContext(MainContext);
+  const {isLoggedIn, setIsLoggedIn, guest} = useContext(MainContext);
   const [avatar, setAvatar] = useState('http://placekitten.com/640'); // Placeholder for accounts without profile picture
   const {getFilesByTag, postTag} = useTag();
-  const [loading, setLoading] = useState(false);
   const logout = async () => {
     setIsLoggedIn(false);
     await AsyncStorage.clear();
@@ -35,31 +22,6 @@ const AllProfile = ({navigation}) => {
     }
   };
   // const {handleInputChange, inputs, uploadErrors, reset} = useUploadForm();
-
-  // let guest = {
-  //   email: '["guest@email","bio text"]',
-  //   full_name: 'Guest',
-  //   user_id: 0,
-  //   username: 'guest',
-  // };
-
-  // console.log('AllProfile guest TEST my: ', guest);
-
-  // console.log('AllProfile guest TEST user: ', guest);
-
-  // const UserIdfromListItem = async () => {
-  //   setLoading(true);
-  //   try {
-  //     const userId = await AsyncStorage.getItem('userId');
-  //     const userIdInfo = JSON.parse(userId);
-  //     setGuest(userIdInfo);
-  //     setLoading(false);
-  //   } catch (error) {
-  //     setLoading(false);
-  //     console.error('user info error', error.message);
-  //   }
-  //   // console.log('AllProfile guest altered id: ', guest.email);
-  // };
 
   const settingEmail = async () => {
     // const userToken = await AsyncStorage.getItem('userToken');
@@ -101,26 +63,9 @@ const AllProfile = ({navigation}) => {
     }
   };
 
-  // const returnInfo = async () => {
-  //   const userToken = await AsyncStorage.getItem('userToken');
-  //   const userData = await checkToken(userToken);
-
-  //   guest.username = userData.username;
-
-    // console.log('AllProfile Return original id: ', guest);
-  // };
-
-  // const removeInfo = async () => {
-  //   await AsyncStorage.removeItem('userId');
-
-  // };
-
   useEffect(() => {
-    // UserIdfromListItem();
     fetchAvatar();
     getBio();
-    // returnInfo();
-    // removeInfo();
   }, []);
 
   return (
