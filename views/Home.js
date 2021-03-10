@@ -7,23 +7,25 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {Avatar, ListItem} from 'react-native-elements';
 
 const Home = ({navigation}) => {
-  const {setUpdate, update, isLoggedIn, setIsLoggedIn} = useContext(
+  const {setUpdate, update, isLoggedIn, setIsLoggedIn, user} = useContext(
     MainContext
   );
-
   const updateLogout = async () => {
     setIsLoggedIn(false);
     AsyncStorage.clear();
-    console.log("user token here: " + AsyncStorage.getItem('userToken'))
+    console.log('user token here: ' + AsyncStorage.getItem('userToken'));
   };
 
   return (
     <SafeAreaView style={styles.StyleSheet}>
       <View style={styles.loginArea}>
         {isLoggedIn ? (
-          <Text style={styles.loginText} onPress={updateLogout}>
-            Logout
-          </Text>
+          <View>
+            {/* <Text style={styles.userText}>{user.username}</Text> */}
+            <Text style={styles.loginText} onPress={updateLogout}>
+              Logout
+            </Text>
+          </View>
         ) : (
           <Text
             style={styles.loginText}
@@ -69,6 +71,13 @@ const styles = StyleSheet.create({
     paddingBottom: 5,
     paddingTop: 5,
   },
+  // userText: {
+  //   color: '#000',
+  //   textAlign: 'left',
+  //   paddingLeft: 15,
+  //   paddingBottom: 5,
+  //   paddingTop: 5,
+  // },
 });
 
 Home.propTypes = {

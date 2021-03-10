@@ -19,7 +19,7 @@ const Single = ({route}) => {
   const [fetchTags, setFetchTags] = useState('');
   const [fetchTags2, setFetchTags2] = useState('');
   const [fetchTags3, setFetchTags3] = useState('');
-  const {user} = useContext(MainContext)
+  const {user} = useContext(MainContext);
 
   const {file} = route.params;
   const [avatar, setAvatar] = useState('http://placekitten.com/100');
@@ -30,7 +30,7 @@ const Single = ({route}) => {
   const [videoRef, setVideoRef] = useState(null);
   const [selectedRating, setSelectedRating] = useState('');
   const [fetchRating, setFetchRating] = useState('');
-  const [fetchHaveRated, setFetchHaveRated] = useState('')
+  const [fetchHaveRated, setFetchHaveRated] = useState('');
 
   const fetchAvatar = async () => {
     try {
@@ -45,7 +45,7 @@ const Single = ({route}) => {
   const fetchOwner = async () => {
     try {
       const userToken = await AsyncStorage.getItem('userToken');
-      if (userToken !== null){
+      if (userToken !== null) {
         const userData = await getUser(file.user_id, userToken);
         setOwner(userData);
       }
@@ -89,8 +89,8 @@ const Single = ({route}) => {
       tags = fullDescWithIngredients[2];
     } else {
       realDescription = file.description;
-      ingredients = 'this shouldn\'t be empty';
-      tags = 'this shouldn\'t be empty';
+      ingredients = "this shouldn't be empty";
+      tags = "this shouldn't be empty";
     }
     setFetchDescription(realDescription);
     setFetchIngredients(ingredients);
@@ -98,42 +98,37 @@ const Single = ({route}) => {
   };
 
   const fetchRatings = async () => {
-
     const rating = await getRating(file.file_id);
 
-    if (rating.length === 0){
-      setFetchRating("No ratings yet")
-    }
-    else {
-
-      const rateAmount = rating.length
-      let combinedRating = 0
-      for (let i = 0; i < rateAmount; i++){
-        if (user.user_id !== undefined){
-          if (rating[i].user_id === user.user_id){
-            setFetchHaveRated("true")
+    if (rating.length === 0) {
+      setFetchRating('No ratings yet');
+    } else {
+      const rateAmount = rating.length;
+      let combinedRating = 0;
+      for (let i = 0; i < rateAmount; i++) {
+        if (user.user_id !== undefined) {
+          if (rating[i].user_id === user.user_id) {
+            setFetchHaveRated('true');
           }
         }
 
-        combinedRating += rating[i].rating
+        combinedRating += rating[i].rating;
       }
-      const realRating = combinedRating / rateAmount
+      const realRating = combinedRating / rateAmount;
 
       setFetchRating(realRating.toFixed(1));
-
     }
   };
-
 
   const addRating = async () => {
     const userToken = await AsyncStorage.getItem('userToken');
     const fileId = file.file_id;
     const rating = selectedRating;
-    console.log("user id here: " + user.user_id)
-    if (rating === undefined || rating === "0") {
+    console.log('user id here: ' + user.user_id);
+    if (rating === undefined || rating === '0') {
       alert('pick rating first');
     } else {
-      if (fetchHaveRated === "true"){
+      if (fetchHaveRated === 'true') {
         const deleteResult = await deleteRating(fileId, userToken);
       }
       const rateResponse = await rate(
@@ -141,11 +136,11 @@ const Single = ({route}) => {
           file_id: fileId,
           rating: parseInt(rating),
         },
-        userToken,
+        userToken
       );
       console.log('rateResponse: ' + JSON.stringify(rateResponse));
     }
-    await fetchRatings()
+    await fetchRatings();
   };
 
   const unlock = async () => {
@@ -159,7 +154,7 @@ const Single = ({route}) => {
   const lock = async () => {
     try {
       await ScreenOrientation.lockAsync(
-        ScreenOrientation.OrientationLock.PORTRAIT_UP,
+        ScreenOrientation.OrientationLock.PORTRAIT_UP
       );
     } catch (error) {
       console.error('lock', error.message);
@@ -178,7 +173,6 @@ const Single = ({route}) => {
     }
   };
 
-
   useEffect(() => {
     unlock();
     fetchAvatar();
@@ -187,14 +181,13 @@ const Single = ({route}) => {
     getFileTags();
     fetchRatings();
 
-    const orientSub = ScreenOrientation.addOrientationChangeListener(
-      (evt) => {
-        console.log('orientation', evt);
-        if (evt.orientationInfo.orientation > 2) {
-          // show video in fullscreen
-          showVideoInFullscreen();
-        }
-      });
+    const orientSub = ScreenOrientation.addOrientationChangeListener((evt) => {
+      console.log('orientation', evt);
+      if (evt.orientationInfo.orientation > 2) {
+        // show video in fullscreen
+        showVideoInFullscreen();
+      }
+    });
 
     return () => {
       ScreenOrientation.removeOrientationChangeListener(orientSub);
@@ -204,36 +197,48 @@ const Single = ({route}) => {
 
   return (
     <ScrollView>
-      <Card>
+      <View style={styles.post}>
+        <View style={styles.userInfo}>
+          <Avatar
+            style={styles.avatarImage}
+            source={{uri: avatar}}
+            // onPress={goProfile}
+          />
+          <Text
+            style={styles.userInfoText}
+            // onPress={goProfile}
+          >
+            {owner.username}
+          </Text>
+        </View>
         <Card.Title h4>{file.title}</Card.Title>
         <Text>Rating: {fetchRating}</Text>
 
-        {user.user_id !== undefined &&
+        {user.user_id !== undefined && (
           <View>
             <Picker
               selectedValue={selectedRating}
               onValueChange={(itemValue, itemIndex) =>
                 setSelectedRating(itemValue)
-              }>
-              <Picker.Item label="pick rating..." value="0"/>
-              <Picker.Item label="1" value="1"/>
-              <Picker.Item label="2" value="2"/>
-              <Picker.Item label="3" value="3"/>
-              <Picker.Item label="4" value="4"/>
-              <Picker.Item label="5" value="5"/>
+              }
+            >
+              <Picker.Item label="pick rating..." value="0" />
+              <Picker.Item label="1" value="1" />
+              <Picker.Item label="2" value="2" />
+              <Picker.Item label="3" value="3" />
+              <Picker.Item label="4" value="4" />
+              <Picker.Item label="5" value="5" />
             </Picker>
-            <Button title="Rate" onPress={addRating}/>
+            <Button title="Rate" onPress={addRating} />
           </View>
-        }
-
+        )}
 
         <Card.Title>{moment(file.time_added).format('LLL')}</Card.Title>
-        <Card.Divider/>
         {file.media_type === 'image' ? (
           <Card.Image
             source={{uri: uploadsUrl + file.filename}}
             style={styles.image}
-            PlaceholderContent={<ActivityIndicator/>}
+            PlaceholderContent={<ActivityIndicator />}
           />
         ) : (
           <Video
@@ -248,48 +253,57 @@ const Single = ({route}) => {
             posterSource={{uri: uploadsUrl + file.screenshot}}
           />
         )}
-        <Card.Divider/>
         <Text style={styles.description} h4>
           Instructions:
         </Text>
-        <Text style={styles.description}>
-          {fetchDescription}
-        </Text>
+        <Text style={styles.description}>{fetchDescription}</Text>
         <Text style={styles.description} h4>
           Ingredients:
         </Text>
-        <Text style={styles.description}>
-          {fetchIngredients}
-        </Text>
+        <Text style={styles.description}>{fetchIngredients}</Text>
         <Text style={styles.description} h4>
           Tags:
         </Text>
-        <Text style={styles.description}>
-          {fetchTags}
-        </Text>
-        <Text style={styles.description}>
-          {fetchTags2}
-        </Text>
-        <Text style={styles.description}>
-          {fetchTags3}
-        </Text>
-        <ListItem>
-          <Avatar source={{uri: avatar}}/>
-          <Text>{owner.username}</Text>
-        </ListItem>
-      </Card>
+        <Text style={styles.description}>{fetchTags}</Text>
+        <Text style={styles.description}>{fetchTags2}</Text>
+        <Text style={styles.description}>{fetchTags3}</Text>
+      </View>
     </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
+  description: {
+    marginBottom: 10,
+  },
+  post: {
+    padding: 15,
+    backgroundColor: '#FFF',
+    // marginBottom: 10,
+  },
   image: {
     width: '100%',
     height: undefined,
     aspectRatio: 1,
-  },
-  description: {
+    marginTop: 10,
     marginBottom: 10,
+    borderRadius: 10,
+  },
+  userInfoText: {
+    marginLeft: 10,
+    fontSize: 18,
+    fontWeight: 'bold',
+    textAlignVertical: 'center',
+  },
+  avatarImage: {
+    width: 40,
+    height: 40,
+    borderRadius: 25,
+    overflow: 'hidden',
+  },
+  userInfo: {
+    flex: 1,
+    flexDirection: 'row',
   },
 });
 
