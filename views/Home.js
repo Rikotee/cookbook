@@ -18,7 +18,7 @@ const Home = ({navigation}) => {
 
   return (
     <SafeAreaView style={styles.StyleSheet}>
-      <View style={styles.loginArea}>
+      {/* <View style={styles.loginArea}>
         {isLoggedIn ? (
           <View>
             <Text
@@ -36,7 +36,7 @@ const Home = ({navigation}) => {
             Login/Register
           </Text>
         )}
-      </View>
+      </View> */}
       <View style={styles.loginArea}>
         {isLoggedIn ? (
           <View>
