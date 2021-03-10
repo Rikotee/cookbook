@@ -10,7 +10,8 @@ const List = ({navigation, myFilesOnly},) => {
   const mediaArray = useLoadMedia(myFilesOnly, user.user_id);
   return (
     <FlatList
-      data={mediaArray}
+      contentContainerStyle={{paddingBottom: 60}}
+      data={mediaArray.reverse()}
       keyExtractor={(item, index) => index.toString()}
       renderItem={({item}) => (
         <ListItem
@@ -22,6 +23,8 @@ const List = ({navigation, myFilesOnly},) => {
     />
   );
 };
+
+
 
 List.propTypes = {
   navigation: PropTypes.object,

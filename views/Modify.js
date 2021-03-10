@@ -3,7 +3,7 @@ import {
   ActivityIndicator,
   Alert,
   KeyboardAvoidingView,
-  ScrollView,
+  ScrollView, StyleSheet, View,
 } from 'react-native';
 import PropTypes from 'prop-types';
 import {Input, Text, Button, Card} from 'react-native-elements';
@@ -17,7 +17,6 @@ const Modify = ({navigation, route}) => {
   const [isUploading, setIsUploading] = useState(false);
   const {updateFile} = useMedia();
   const {update, setUpdate} = useContext(MainContext);
-  console.log("file is here: " + file)
 
   const {
     handleInputChange,
@@ -43,11 +42,21 @@ const Modify = ({navigation, route}) => {
     }
   };
 
-  useEffect(() => {
+  const settingInputs = () => {
+    console.log(file.description);
+    const fullDesc = JSON.parse(file.description);
+    console.log(JSON.stringify(fullDesc));
+    const instructions = fullDesc[0];
+    const ingredients = fullDesc[1];
     setInputs({
       title: file.title,
-      description: file.description,
+      description: instructions,
+      description2: ingredients,
     });
+  };
+
+  useEffect(() => {
+    settingInputs();
   }, []);
 
   const doReset = () => {
@@ -56,22 +65,30 @@ const Modify = ({navigation, route}) => {
   return (
     <ScrollView>
       <KeyboardAvoidingView behavior="position" enabled>
-        <Card>
+        <View style={styles.post}>
           <Text h4>Update file info</Text>
-          {/* TODO: add similar media view than Single.js */}
+          <Text>Title: </Text>
           <Input
             placeholder="title"
             value={inputs.title}
             onChangeText={(txt) => handleInputChange('title', txt)}
             errorMessage={uploadErrors.title}
           />
+          <Text>Instructions: </Text>
           <Input
-            placeholder="description"
+            placeholder="Instructions"
             value={inputs.description}
             onChangeText={(txt) => handleInputChange('description', txt)}
             errorMessage={uploadErrors.description}
           />
-          {isUploading && <ActivityIndicator size="large" color="#0000ff" />}
+          <Text>Ingredients: </Text>
+          <Input
+            placeholder="Ingredients"
+            value={inputs.description2}
+            onChangeText={(txt) => handleInputChange('description2', txt)}
+            errorMessage={uploadErrors.description2}
+          />
+          {isUploading && <ActivityIndicator size="large" color="#0000ff"/>}
           <Button
             title="Update"
             onPress={doUpdate}
@@ -79,12 +96,53 @@ const Modify = ({navigation, route}) => {
             //   uploadErrors.title !== null || uploadErrors.description !== null
             // }
           />
-          <Button title="Reset" onPress={doReset} />
-        </Card>
+          <Button title="Reset" onPress={doReset}/>
+        </View>
       </KeyboardAvoidingView>
     </ScrollView>
   );
 };
+
+const styles = StyleSheet.create({
+  post: {
+    padding: 15,
+    backgroundColor: '#FFF',
+    // marginBottom: 10,
+  },
+  image: {
+    width: '100%',
+    height: undefined,
+    aspectRatio: 1,
+    marginTop: 10,
+    marginBottom: 10,
+    borderRadius: 10,
+  },
+  // description: {
+  //   marginBottom: 10,
+  //   textAlign: 'center',
+  //   fontSize: 16,
+  // },
+  userInfo: {
+    flex: 1,
+    flexDirection: 'row',
+  },
+  userInfoText: {
+    marginLeft: 10,
+    fontSize: 18,
+    fontWeight: 'bold',
+    textAlignVertical: 'center',
+  },
+  avatarImage: {
+    width: 40,
+    height: 40,
+    borderRadius: 25,
+    overflow: 'hidden',
+  },
+  buttons: {
+    flex: 1,
+    flexDirection: 'row',
+  },
+});
 
 Modify.propTypes = {
   navigation: PropTypes.object,

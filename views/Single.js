@@ -19,7 +19,7 @@ const Single = ({route}) => {
   const [fetchTags, setFetchTags] = useState('');
   const [fetchTags2, setFetchTags2] = useState('');
   const [fetchTags3, setFetchTags3] = useState('');
-  const {user} = useContext(MainContext)
+  const {user, getRatings, setGetRatings} = useContext(MainContext);
 
   const {file} = route.params;
   const [avatar, setAvatar] = useState('http://placekitten.com/100');
@@ -30,7 +30,7 @@ const Single = ({route}) => {
   const [videoRef, setVideoRef] = useState(null);
   const [selectedRating, setSelectedRating] = useState('');
   const [fetchRating, setFetchRating] = useState('');
-  const [fetchHaveRated, setFetchHaveRated] = useState('')
+  const [fetchHaveRated, setFetchHaveRated] = useState('');
 
   const fetchAvatar = async () => {
     try {
@@ -45,7 +45,7 @@ const Single = ({route}) => {
   const fetchOwner = async () => {
     try {
       const userToken = await AsyncStorage.getItem('userToken');
-      if (userToken !== null){
+      if (userToken !== null) {
         const userData = await getUser(file.user_id, userToken);
         setOwner(userData);
       }
@@ -101,39 +101,35 @@ const Single = ({route}) => {
 
     const rating = await getRating(file.file_id);
 
-    if (rating.length === 0){
-      setFetchRating("No ratings yet")
-    }
-    else {
+    if (rating.length === 0) {
+      setFetchRating('No ratings yet');
+    } else {
 
-      const rateAmount = rating.length
-      let combinedRating = 0
-      for (let i = 0; i < rateAmount; i++){
-        if (user.user_id !== undefined){
-          if (rating[i].user_id === user.user_id){
-            setFetchHaveRated("true")
+      const rateAmount = rating.length;
+      let combinedRating = 0;
+      for (let i = 0; i < rateAmount; i++) {
+        if (user.user_id !== undefined) {
+          if (rating[i].user_id === user.user_id) {
+            setFetchHaveRated('true');
           }
         }
 
-        combinedRating += rating[i].rating
+        combinedRating += rating[i].rating;
       }
-      const realRating = combinedRating / rateAmount
-
+      const realRating = combinedRating / rateAmount;
       setFetchRating(realRating.toFixed(1));
-
     }
   };
-
 
   const addRating = async () => {
     const userToken = await AsyncStorage.getItem('userToken');
     const fileId = file.file_id;
     const rating = selectedRating;
-    console.log("user id here: " + user.user_id)
-    if (rating === undefined || rating === "0") {
+    console.log('user id here: ' + user.user_id);
+    if (rating === undefined || rating === '0') {
       alert('pick rating first');
     } else {
-      if (fetchHaveRated === "true"){
+      if (fetchHaveRated === 'true') {
         const deleteResult = await deleteRating(fileId, userToken);
       }
       const rateResponse = await rate(
@@ -145,7 +141,8 @@ const Single = ({route}) => {
       );
       console.log('rateResponse: ' + JSON.stringify(rateResponse));
     }
-    await fetchRatings()
+    await fetchRatings();
+    setGetRatings(!getRatings);
   };
 
   const unlock = async () => {
@@ -178,7 +175,6 @@ const Single = ({route}) => {
     }
   };
 
-
   useEffect(() => {
     unlock();
     fetchAvatar();
@@ -209,21 +205,21 @@ const Single = ({route}) => {
         <Text>Rating: {fetchRating}</Text>
 
         {user.user_id !== undefined &&
-          <View>
-            <Picker
-              selectedValue={selectedRating}
-              onValueChange={(itemValue, itemIndex) =>
-                setSelectedRating(itemValue)
-              }>
-              <Picker.Item label="pick rating..." value="0"/>
-              <Picker.Item label="1" value="1"/>
-              <Picker.Item label="2" value="2"/>
-              <Picker.Item label="3" value="3"/>
-              <Picker.Item label="4" value="4"/>
-              <Picker.Item label="5" value="5"/>
-            </Picker>
-            <Button title="Rate" onPress={addRating}/>
-          </View>
+        <View>
+          <Picker
+            selectedValue={selectedRating}
+            onValueChange={(itemValue, itemIndex) =>
+              setSelectedRating(itemValue)
+            }>
+            <Picker.Item label="pick rating..." value="0"/>
+            <Picker.Item label="1" value="1"/>
+            <Picker.Item label="2" value="2"/>
+            <Picker.Item label="3" value="3"/>
+            <Picker.Item label="4" value="4"/>
+            <Picker.Item label="5" value="5"/>
+          </Picker>
+          <Button title="Rate" onPress={addRating}/>
+        </View>
         }
 
 

@@ -35,7 +35,7 @@ const EditProfile = ({navigation}) => {
     } = useSignUpForm();
 
     const {postTag} = useTag();
-    const {update, setUpdate, user} = useContext(MainContext);
+    const {update, setUpdate, user, getPicture, setGetPicture, setGetBioChange, getBioChange} = useContext(MainContext);
     const {isLoggedIn, setIsLoggedIn} = useContext(MainContext);
     const {getFilesByTag} = useTag();
 
@@ -58,6 +58,7 @@ const EditProfile = ({navigation}) => {
       }
       const res = await updateUser(userToken,
         {email: JSON.stringify([realEmail, inputs.email])});
+      console.log(res)
     };
 
     const fetchAvatar = async () => {
@@ -81,20 +82,24 @@ const EditProfile = ({navigation}) => {
         console.log('real email here: ' + realEmail);
         bio = fullEmailWithBio[1];
         console.log('bio here: ' + bio);
+      } else {
+        bio = '';
       }
-      else {bio = ""}
       setFetchBio(bio);
+      setGetBioChange(!getBioChange);
     };
 
-    const combinedFunction = () => {
-      settingBio();
-      getBio();
+    const combinedFunction = async () => {
+      await settingBio();
+      await getBio();
+      console.log("Here we should have something")
     };
 
     useEffect(() => {
-      fetchAvatar();
       getBio();
+      fetchAvatar()
     }, []);
+
 
     const doUpload = async () => {
       const userToken = await AsyncStorage.getItem('userToken');
@@ -143,7 +148,7 @@ const EditProfile = ({navigation}) => {
       } finally {
         setIsUploading(false);
       }
-
+      setGetPicture(!getPicture);
     };
 
     const pickImage = async (library) => {
@@ -203,11 +208,15 @@ const EditProfile = ({navigation}) => {
           {isUploading && <ActivityIndicator size="large" color="#0000ff"/>}
           <Button
             title="Save image"
-            onPress={doUpload}
+            onPress={() => {
+              doUpload()
+            }}
           />
           <Button
             title="Save bio change"
-            onPress={combinedFunction}
+            onPress={() => {
+              combinedFunction();
+            }}
           />
         </KeyboardAvoidingView>
       </ScrollView>
