@@ -9,7 +9,7 @@ import {
   View,
 } from 'react-native';
 import PropTypes from 'prop-types';
-import {Input, Text, Image, Button, Card} from 'react-native-elements';
+import {Input, Text, Image, Button} from 'react-native-elements';
 import useUploadForm from '../hooks/UploadHooks';
 import * as ImagePicker from 'expo-image-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';

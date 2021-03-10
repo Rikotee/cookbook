@@ -5,9 +5,9 @@ import ListItem from './ListItem';
 import PropTypes from 'prop-types';
 import {MainContext} from '../contexts/MainContext';
 
-const List = ({navigation, myFilesOnly},) => {
-  const {user} = useContext(MainContext);
-  const mediaArray = useLoadMedia(myFilesOnly, user.user_id);
+const List = ({navigation, myFilesOnly, guestFilesOnly}) => {
+  const {user, guest} = useContext(MainContext);
+  const mediaArray = useLoadMedia(myFilesOnly, user.user_id, guestFilesOnly, guest.user_id);
   return (
     <FlatList
       contentContainerStyle={{paddingBottom: 60}}
@@ -29,6 +29,7 @@ const List = ({navigation, myFilesOnly},) => {
 List.propTypes = {
   navigation: PropTypes.object,
   myFilesOnly: PropTypes.bool,
+  guestFilesOnly: PropTypes.bool,
 };
 
 export default List;

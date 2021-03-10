@@ -19,7 +19,7 @@ const doFetch = async (url, options = {}) => {
   }
 };
 
-const useLoadMedia = (myFilesOnly, userId) => {
+const useLoadMedia = (myFilesOnly, userId, guestFilesOnly, guestId) => {
   const [mediaArray, setMediaArray] = useState([]);
   const {update} = useContext(MainContext);
 
@@ -34,6 +34,9 @@ const useLoadMedia = (myFilesOnly, userId) => {
       );
       if (myFilesOnly) {
         media = media.filter((item) => item.user_id === userId);
+      }
+      if (guestFilesOnly) {
+        media = media.filter((item) => item.user_id === guestId);
       }
       setMediaArray(media);
     } catch (error) {
