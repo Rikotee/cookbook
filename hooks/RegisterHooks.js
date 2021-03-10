@@ -26,6 +26,7 @@ const constraints = {
   },
   email: {
     length: {
+
       maximum: 100,
       message: 'max length is 100 characters',
     }

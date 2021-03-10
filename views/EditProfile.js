@@ -90,7 +90,7 @@ const EditProfile = ({navigation}) => {
   const combinedFunction = () => {
     settingBio();
     getBio();
-  };
+  }
 
   useEffect(() => {
     fetchAvatar();

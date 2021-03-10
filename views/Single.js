@@ -99,7 +99,6 @@ const Single = ({route}) => {
 
   const fetchRatings = async () => {
     const rating = await getRating(file.file_id);
-
     if (rating.length === 0) {
       setFetchRating('No ratings yet');
     } else {
@@ -124,7 +123,8 @@ const Single = ({route}) => {
     const fileId = file.file_id;
     const rating = selectedRating;
     console.log('user id here: ' + user.user_id);
-    if (rating === undefined || rating === '0') {
+    console.log("rating here" + rating)
+    if (rating == null || rating === '0' || rating === undefined || rating === "") {
       alert('pick rating first');
     } else {
       if (fetchHaveRated === 'true') {
@@ -137,7 +137,7 @@ const Single = ({route}) => {
         },
         userToken
       );
-      console.log('rateResponse: ' + JSON.stringify(rateResponse));
+      Alert.alert('Rating', 'Rating succeeded');
     }
     await fetchRatings();
     setGetRatings(!getRatings);
