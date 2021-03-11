@@ -5,6 +5,7 @@ import ListItem from './ListItem';
 import PropTypes from 'prop-types';
 import {MainContext} from '../contexts/MainContext';
 
+// guest is used to show list of other users posts.
 const List = ({navigation, myFilesOnly, guestFilesOnly}) => {
   const {user, guest} = useContext(MainContext);
   const mediaArray = useLoadMedia(
