@@ -3,10 +3,13 @@ import {
   ActivityIndicator,
   Alert,
   KeyboardAvoidingView,
-  ScrollView, StyleSheet, View,
+  ScrollView,
+  StyleSheet,
+  View,
+  Button,
 } from 'react-native';
 import PropTypes from 'prop-types';
-import {Input, Text, Button} from 'react-native-elements';
+import {Input, Text} from 'react-native-elements';
 import useUploadForm from '../hooks/UploadHooks';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useMedia} from '../hooks/ApiHooks';
@@ -32,9 +35,9 @@ const Modify = ({navigation, route}) => {
       const data2 = inputs.description2;
       setIsUploading(true);
       const userToken = await AsyncStorage.getItem('userToken');
-      const combinedData = JSON.stringify([data, data2])
-      const actualData = {"description": combinedData}
-      console.log("combined data: " + actualData)
+      const combinedData = JSON.stringify([data, data2]);
+      const actualData = {description: combinedData};
+      console.log('combined data: ' + actualData);
       const resp = await updateFile(file.file_id, actualData, userToken);
       console.log('update response', JSON.stringify(resp));
       setUpdate(update + 1);
@@ -95,15 +98,16 @@ const Modify = ({navigation, route}) => {
             onChangeText={(txt) => handleInputChange('description2', txt)}
             errorMessage={uploadErrors.description2}
           />
-          {isUploading && <ActivityIndicator size="large" color="#0000ff"/>}
+          {isUploading && <ActivityIndicator size="large" color="#0000ff" />}
           <Button
             title="Update"
+            color="#3d9f9f"
             onPress={doUpdate}
             // disabled={
             //   uploadErrors.title !== null || uploadErrors.description !== null
             // }
           />
-          <Button title="Reset" onPress={doReset}/>
+          <Button title="Reset" color="#3d9f9f" onPress={doReset} />
         </View>
       </KeyboardAvoidingView>
     </ScrollView>
