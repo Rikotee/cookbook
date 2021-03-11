@@ -111,6 +111,7 @@ const Profile = ({navigation}) => {
         <Text>{'Biography: '}</Text>
         <Text>{fetchBio}</Text>
       </View>
+      <View style={styles.container}></View>
       <ListItem bottomDivider onPress={() => navigation.push('My Files')}>
         <Avatar icon={{name: 'perm-media', color: 'black'}} />
         <ListItem.Content>
@@ -133,6 +134,9 @@ const Profile = ({navigation}) => {
 };
 
 const styles = StyleSheet.create({
+  container: {
+    height: 50,
+  },
   image: {
     marginTop: 16,
     width: '40%',

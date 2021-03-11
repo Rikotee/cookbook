@@ -72,6 +72,7 @@ const AllProfile = ({navigation}) => {
           </Text>
         )}
       </View>
+
       <View style={styles.view}>
         <Image
           source={{uri: avatar}}
@@ -86,6 +87,8 @@ const AllProfile = ({navigation}) => {
         <Text>{'Biography: '}</Text>
         <Text>{fetchBio}</Text>
       </View>
+      <View style={styles.container}></View>
+
       <ListItem bottomDivider onPress={() => navigation.push('GuestFiles')}>
         <Avatar icon={{name: 'perm-media', color: 'black'}} />
         <ListItem.Content>
@@ -98,6 +101,9 @@ const AllProfile = ({navigation}) => {
 };
 
 const styles = StyleSheet.create({
+  container: {
+    height: 50,
+  },
   image: {
     marginTop: 16,
     width: '40%',
