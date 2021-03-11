@@ -7,7 +7,13 @@ import {MainContext} from '../contexts/MainContext';
 
 const List = ({navigation, myFilesOnly, guestFilesOnly}) => {
   const {user, guest} = useContext(MainContext);
-  const mediaArray = useLoadMedia(myFilesOnly, user.user_id, guestFilesOnly, guest.user_id);
+  const mediaArray = useLoadMedia(
+    myFilesOnly,
+    user.user_id,
+    guestFilesOnly,
+    guest.user_id
+  );
+
   return (
     <FlatList
       contentContainerStyle={{paddingBottom: 30}}
@@ -23,8 +29,6 @@ const List = ({navigation, myFilesOnly, guestFilesOnly}) => {
     />
   );
 };
-
-
 
 List.propTypes = {
   navigation: PropTypes.object,
