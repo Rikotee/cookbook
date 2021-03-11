@@ -23,7 +23,14 @@ import {Video} from 'expo-av';
 import * as ScreenOrientation from 'expo-screen-orientation';
 
 const ListItem = ({navigation, singleMedia, isMyFile}) => {
-  const {setUpdate, update, isLoggedIn, guest, setGuest, getRatings} = useContext(MainContext);
+  const {
+    setUpdate,
+    update,
+    isLoggedIn,
+    guest,
+    setGuest,
+    getRatings,
+  } = useContext(MainContext);
   const {deleteFile, getRating} = useMedia();
   const [avatar, setAvatar] = useState('http://placekitten.com/100');
   const {getFilesByTag, getTagsOfFile} = useTag();
@@ -52,16 +59,15 @@ const ListItem = ({navigation, singleMedia, isMyFile}) => {
 
   const fetchRatings = async () => {
     const rating = await getRating(singleMedia.file_id);
-    if (rating.length === 0){
-      setFetchRating("No ratings yet")
-    }
-    else {
-      const rateAmount = rating.length
-      let combinedRating = 0
-      for (let i = 0; i < rateAmount; i++){
-        combinedRating += rating[i].rating
+    if (rating.length === 0) {
+      setFetchRating('No ratings yet');
+    } else {
+      const rateAmount = rating.length;
+      let combinedRating = 0;
+      for (let i = 0; i < rateAmount; i++) {
+        combinedRating += rating[i].rating;
       }
-      const realRating = combinedRating / rateAmount
+      const realRating = combinedRating / rateAmount;
       setFetchRating(realRating.toFixed(1));
     }
   };
@@ -155,12 +161,9 @@ const ListItem = ({navigation, singleMedia, isMyFile}) => {
     }
   };
 
-
   useEffect(() => {
-      fetchRatings()
-    }, [getRatings]
-  )
-
+    fetchRatings();
+  }, [getRatings]);
 
   useEffect(() => {
     unlock();
@@ -263,9 +266,14 @@ const ListItem = ({navigation, singleMedia, isMyFile}) => {
               <View style={styles.buttons}>
                 <Button
                   title="Modify"
+                  color="#97caca"
                   onPress={() => navigation.push('Modify', {file: singleMedia})}
                 ></Button>
-                <Button title="Delete" color="red" onPress={doDelete}></Button>
+                <Button
+                  title="Delete"
+                  color="#3d9f9f"
+                  onPress={doDelete}
+                ></Button>
               </View>
             </>
           )}
