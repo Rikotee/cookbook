@@ -43,12 +43,12 @@ const EditProfile = ({navigation}) => {
   const settingBio = async () => {
     let realEmail;
     const userToken = await AsyncStorage.getItem('userToken');
-    console.log('here are inputs: ' + JSON.stringify(inputs.email));
+    // console.log('here are inputs: ' + JSON.stringify(inputs.email));
     const fullEmail = user.email;
     if (fullEmail.includes(']')) {
       const fullEmailWithBio = JSON.parse(fullEmail);
       realEmail = fullEmailWithBio[0];
-      console.log(realEmail);
+      // console.log(realEmail);
     } else {
       realEmail = user.email;
     }
@@ -77,9 +77,9 @@ const EditProfile = ({navigation}) => {
     if (fullEmail.includes(']')) {
       const fullEmailWithBio = JSON.parse(fullEmail);
       realEmail = fullEmailWithBio[0];
-      console.log('real email here: ' + realEmail);
+      // console.log('real email here: ' + realEmail);
       bio = fullEmailWithBio[1];
-      console.log('bio here: ' + bio);
+      // console.log('bio here: ' + bio);
     } else {
       bio = '';
     }
@@ -114,7 +114,7 @@ const EditProfile = ({navigation}) => {
     try {
       setIsUploading(true);
       const resp = await upload(formData, userToken);
-      console.log('response here: ' + resp);
+      // console.log('response here: ' + resp);
       const tagResponse = await postTag(
         {
           file_id: resp,

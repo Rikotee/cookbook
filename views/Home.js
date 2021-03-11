@@ -10,7 +10,7 @@ const Home = ({navigation}) => {
   const updateLogout = async () => {
     setIsLoggedIn(false);
     AsyncStorage.clear();
-    console.log('user token here: ' + AsyncStorage.getItem('userToken'));
+    // console.log('user token here: ' + AsyncStorage.getItem('userToken'));
   };
 
   return (

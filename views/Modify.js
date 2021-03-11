@@ -37,9 +37,9 @@ const Modify = ({navigation, route}) => {
       const userToken = await AsyncStorage.getItem('userToken');
       const combinedData = JSON.stringify([data, data2]);
       const actualData = {description: combinedData};
-      console.log('combined data: ' + actualData);
+      // console.log('combined data: ' + actualData);
       const resp = await updateFile(file.file_id, actualData, userToken);
-      console.log('update response', JSON.stringify(resp));
+      // console.log('update response', JSON.stringify(resp));
       setUpdate(update + 1);
       navigation.pop();
     } catch (error) {
@@ -51,9 +51,9 @@ const Modify = ({navigation, route}) => {
   };
 
   const settingInputs = () => {
-    console.log(file.description);
+    // console.log(file.description);
     const fullDesc = JSON.parse(file.description);
-    console.log(JSON.stringify(fullDesc));
+    // console.log(JSON.stringify(fullDesc));
     const instructions = fullDesc[0];
     const ingredients = fullDesc[1];
     setInputs({
@@ -120,39 +120,39 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFF',
     // marginBottom: 10,
   },
-  image: {
-    width: '100%',
-    height: undefined,
-    aspectRatio: 1,
-    marginTop: 10,
-    marginBottom: 10,
-    borderRadius: 10,
-  },
+  // image: {
+  //   width: '100%',
+  //   height: undefined,
+  //   aspectRatio: 1,
+  //   marginTop: 10,
+  //   marginBottom: 10,
+  //   borderRadius: 10,
+  // },
   // description: {
   //   marginBottom: 10,
   //   textAlign: 'center',
   //   fontSize: 16,
   // },
-  userInfo: {
-    flex: 1,
-    flexDirection: 'row',
-  },
-  userInfoText: {
-    marginLeft: 10,
-    fontSize: 18,
-    fontWeight: 'bold',
-    textAlignVertical: 'center',
-  },
-  avatarImage: {
-    width: 40,
-    height: 40,
-    borderRadius: 25,
-    overflow: 'hidden',
-  },
-  buttons: {
-    flex: 1,
-    flexDirection: 'row',
-  },
+  // userInfo: {
+  //   flex: 1,
+  //   flexDirection: 'row',
+  // },
+  // userInfoText: {
+  //   marginLeft: 10,
+  //   fontSize: 18,
+  //   fontWeight: 'bold',
+  //   textAlignVertical: 'center',
+  // },
+  // avatarImage: {
+  //   width: 40,
+  //   height: 40,
+  //   borderRadius: 25,
+  //   overflow: 'hidden',
+  // },
+  // buttons: {
+  //   flex: 1,
+  //   flexDirection: 'row',
+  // },
 });
 
 Modify.propTypes = {

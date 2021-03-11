@@ -34,7 +34,7 @@ const Profile = ({navigation}) => {
 
   const settingEmail = async () => {
     const userToken = await AsyncStorage.getItem('userToken');
-    console.log('here are inputs: ' + JSON.stringify(inputs.username));
+    // console.log('here are inputs: ' + JSON.stringify(inputs.username));
     const fullUsername = JSON.parse(user.username);
     const realBio = fullUsername[1];
 
@@ -154,7 +154,6 @@ const styles = StyleSheet.create({
     paddingBottom: 5,
     paddingTop: 5,
   },
-
   view: {
     alignItems: 'center',
     flex: 1,
