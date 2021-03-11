@@ -50,6 +50,7 @@ const ListItem = ({navigation, singleMedia, isMyFile}) => {
         console.error(error.message);
       }
     }
+    setUpdate(update + 1);
   };
 
   const fetchRatings = async () => {
@@ -77,6 +78,8 @@ const ListItem = ({navigation, singleMedia, isMyFile}) => {
         console.error(error.message);
       }
     }
+    setUpdate(update + 1);
+    console.log('testing fetchOwner')
   };
 
   const doDelete = () => {
