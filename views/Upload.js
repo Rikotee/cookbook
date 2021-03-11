@@ -55,7 +55,7 @@ const Upload = ({navigation}) => {
       checkNulls(selectedTag3),
     ];
     const combinedData = JSON.stringify([data, data2]);
-    console.log('combinedData: ' + combinedData);
+    // console.log('combinedData: ' + combinedData);
     formData.append('description', combinedData);
     // add image to formData
     const filename = image.split('/').pop();
@@ -71,7 +71,7 @@ const Upload = ({navigation}) => {
       setIsUploading(true);
       const userToken = await AsyncStorage.getItem('userToken');
       const resp = await upload(formData, userToken);
-      console.log('upload response = file id: ', resp);
+      // console.log('upload response = file id: ', resp);
       for (let i = 0; i < data3.length; i++) {
         await addTag(userToken, resp, data3[i]);
       }
@@ -82,7 +82,7 @@ const Upload = ({navigation}) => {
         },
         userToken
       );
-      console.log('posting app identifier', tagResponse);
+      // console.log('posting app identifier', tagResponse);
       Alert.alert(
         'Upload',
         'File uploaded',
@@ -143,7 +143,7 @@ const Upload = ({navigation}) => {
       result = await ImagePicker.launchCameraAsync(options);
     }
 
-    console.log(result);
+    // console.log(result);
 
     if (!result.cancelled) {
       setFiletype(result.type);
