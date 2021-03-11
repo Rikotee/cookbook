@@ -194,7 +194,6 @@ const ListItem = ({navigation, singleMedia, isMyFile}) => {
         }
       }
     };
-
     await profileInfo();
     navigation.navigate('AllProfile');
   };

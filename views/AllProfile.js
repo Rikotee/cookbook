@@ -8,7 +8,7 @@ import {useTag} from '../hooks/ApiHooks';
 import {uploadsUrl, appIdentifier} from '../utils/variables';
 import {ScrollView} from 'react-native-gesture-handler';
 
-// AllProfiles is used to show other users profiles. It uses "guest" instead of "user"
+// AllProfiles is used to show other users profiles. It uses "guest" instead of "user" when fetching data
 const AllProfile = ({navigation}) => {
   const [fetchBio, setFetchBio] = useState('');
   const {isLoggedIn, setIsLoggedIn, guest} = useContext(MainContext);
@@ -26,7 +26,6 @@ const AllProfile = ({navigation}) => {
   const getBio = async () => {
     let realEmail;
     let bio;
-
     const fullEmail = guest.email;
     if (fullEmail.includes(']')) {
       const fullEmailWithBio = JSON.parse(fullEmail);
@@ -125,7 +124,6 @@ const styles = StyleSheet.create({
     paddingBottom: 5,
     paddingTop: 5,
   },
-
   view: {
     alignItems: 'center',
     flex: 1,
