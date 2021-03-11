@@ -31,16 +31,16 @@ const TabScreen = () => {
         tabBarIcon: ({focused, color, size}) => {
           let iconName;
           switch (route.name) {
-            case 'Home':
+            case 'COOKBOOK':
               iconName = 'home';
               break;
-            case 'Profile':
+            case 'PROFILE':
               iconName = 'account-box';
               break;
-            case 'Upload':
+            case 'UPLOAD':
               iconName = 'cloud-upload';
               break;
-            case 'Search':
+            case 'SEARCH':
               iconName = 'search';
               break;
           }
@@ -48,10 +48,10 @@ const TabScreen = () => {
         },
       })}
     >
-      <Tab.Screen name="Home" component={Home} />
-      <Tab.Screen name="Profile" component={Profile} />
-      <Tab.Screen name="Upload" component={Upload} />
-      <Tab.Screen name="Search" component={Search} />
+      <Tab.Screen name="COOKBOOK" component={Home} />
+      <Tab.Screen name="PROFILE" component={Profile} />
+      <Tab.Screen name="UPLOAD" component={Upload} />
+      <Tab.Screen name="SEARCH" component={Search} />
     </Tab.Navigator>
   );
 };
