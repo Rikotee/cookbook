@@ -6,10 +6,9 @@ import {
   StyleSheet,
   View,
   FlatList,
-  Button,
 } from 'react-native';
 import PropTypes from 'prop-types';
-import {Input, Text} from 'react-native-elements';
+import {Input, Text, Button, ThemeProvider} from 'react-native-elements';
 import useSearchForm from '../hooks/SearchHooks';
 import ListItem from '../components/ListItem';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -47,6 +46,13 @@ const Search = ({navigation}) => {
     if (item == null || item === 0) {
       return '';
     } else return item;
+  };
+
+  const theme = {
+    colors: {
+      primary: `#3d9f9f`,
+      secondary: `#97caca`,
+    },
   };
 
   return (
@@ -106,12 +112,13 @@ const Search = ({navigation}) => {
               <Picker.Item label="Bread" value="Bread" />
               <Picker.Item label="Lamb" value="Lamb" />
             </Picker>
-            <Button
-              title="Search recipe"
-              color="#3d9f9f"
-              onPress={doSearch}
-              disabled={searchErrors.title !== null}
-            />
+            <ThemeProvider theme={theme}>
+              <Button
+                title="Search recipe"
+                onPress={doSearch}
+                disabled={searchErrors.title !== null}
+              />
+            </ThemeProvider>
           </View>
         }
         data={mediaArray}

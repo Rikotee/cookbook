@@ -1,6 +1,6 @@
 import React, {useContext, useState} from 'react';
-import {View, Alert, Button} from 'react-native';
-import {Input} from 'react-native-elements';
+import {View, Alert} from 'react-native';
+import {Input, Button, ThemeProvider} from 'react-native-elements';
 import PropTypes from 'prop-types';
 import {MainContext} from '../contexts/MainContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -28,6 +28,13 @@ const LoginForm = ({navigation}) => {
     }
   };
 
+  const theme = {
+    colors: {
+      primary: `#3d9f9f`,
+      secondary: `#97caca`,
+    },
+  };
+
   return (
     <View>
       <Input
@@ -41,7 +48,9 @@ const LoginForm = ({navigation}) => {
         onChangeText={(txt) => handleInputChange('password', txt)}
         secureTextEntry={true}
       />
-      <Button title="Login" color="#3d9f9f" onPress={doLogin} loading={loading} />
+      <ThemeProvider theme={theme}>
+        <Button title="Login" onPress={doLogin} loading={loading} />
+      </ThemeProvider>
     </View>
   );
 };

@@ -7,10 +7,9 @@ import {
   ScrollView,
   StyleSheet,
   View,
-  Button,
 } from 'react-native';
 import PropTypes from 'prop-types';
-import {Input, Text, Image} from 'react-native-elements';
+import {Input, Text, Image, ThemeProvider, Button} from 'react-native-elements';
 import useUploadForm from '../hooks/UploadHooks';
 import * as ImagePicker from 'expo-image-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -156,6 +155,13 @@ const Upload = ({navigation}) => {
     reset();
   };
 
+  const theme = {
+    colors: {
+      primary: `#3d9f9f`,
+      secondary: `#97caca`,
+    },
+  };
+
   return (
     <ScrollView>
       <KeyboardAvoidingView behavior="position" enabled>
@@ -233,28 +239,26 @@ const Upload = ({navigation}) => {
             onChangeText={(txt) => handleInputChange('description2', txt)}
             errorMessage={uploadErrors.description2}
           />
-          <Button
-            title="Choose from library"
-            color="#3d9f9f"
-            onPress={() => pickImage(true)}
-          />
-          <Button
-            title="Use camera"
-            color="#3d9f9f"
-            onPress={() => pickImage(false)}
-          />
-          {isUploading && <ActivityIndicator size="large" color="#0000ff" />}
-          <Button
-            title="Upload file"
-            color="#3d9f9f"
-            onPress={doUpload}
-            disabled={
-              uploadErrors.title !== null ||
-              uploadErrors.description !== null ||
-              image === null
-            }
-          />
-          <Button title="Reset" color="#3d9f9f" onPress={doReset} />
+
+          <ThemeProvider theme={theme}>
+            <Button
+              title="Choose from library"
+              onPress={() => pickImage(true)}
+            />
+            <Button title="Use camera" onPress={() => pickImage(false)} />
+            {isUploading && <ActivityIndicator size="large" color="#0000ff" />}
+
+            <Button
+              title="Upload file"
+              onPress={doUpload}
+              disabled={
+                uploadErrors.title !== null ||
+                uploadErrors.description !== null ||
+                image === null
+              }
+            />
+            <Button title="Reset" color="#3d9f9f" onPress={doReset} />
+          </ThemeProvider>
         </View>
       </KeyboardAvoidingView>
     </ScrollView>

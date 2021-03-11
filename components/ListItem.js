@@ -23,14 +23,9 @@ import {Video} from 'expo-av';
 import * as ScreenOrientation from 'expo-screen-orientation';
 
 const ListItem = ({navigation, singleMedia, isMyFile}) => {
-  const {
-    setUpdate,
-    update,
-    isLoggedIn,
-    guest,
-    setGuest,
-    getRatings,
-  } = useContext(MainContext);
+  const {setUpdate, update, isLoggedIn, setGuest, getRatings} = useContext(
+    MainContext
+  );
   const {deleteFile, getRating} = useMedia();
   const [avatar, setAvatar] = useState('http://placekitten.com/100');
   const {getFilesByTag, getTagsOfFile} = useTag();

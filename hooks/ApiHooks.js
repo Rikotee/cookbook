@@ -350,7 +350,7 @@ const useMedia = () => {
       },
       body: JSON.stringify(fileInfo),
     };
-    console.log(options.body)
+    // console.log(options.body)
     try {
       const result = await doFetch(baseUrl + 'media/' + fileId, options);
       return result;
