@@ -24,6 +24,8 @@ const List = ({navigation, myFilesOnly, guestFilesOnly}) => {
   );
 };
 
+
+
 List.propTypes = {
   navigation: PropTypes.object,
   myFilesOnly: PropTypes.bool,
