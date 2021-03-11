@@ -119,41 +119,7 @@ const styles = StyleSheet.create({
   post: {
     padding: 15,
     backgroundColor: '#FFF',
-    // marginBottom: 10,
   },
-  // image: {
-  //   width: '100%',
-  //   height: undefined,
-  //   aspectRatio: 1,
-  //   marginTop: 10,
-  //   marginBottom: 10,
-  //   borderRadius: 10,
-  // },
-  // description: {
-  //   marginBottom: 10,
-  //   textAlign: 'center',
-  //   fontSize: 16,
-  // },
-  // userInfo: {
-  //   flex: 1,
-  //   flexDirection: 'row',
-  // },
-  // userInfoText: {
-  //   marginLeft: 10,
-  //   fontSize: 18,
-  //   fontWeight: 'bold',
-  //   textAlignVertical: 'center',
-  // },
-  // avatarImage: {
-  //   width: 40,
-  //   height: 40,
-  //   borderRadius: 25,
-  //   overflow: 'hidden',
-  // },
-  // buttons: {
-  //   flex: 1,
-  //   flexDirection: 'row',
-  // },
 });
 
 Modify.propTypes = {

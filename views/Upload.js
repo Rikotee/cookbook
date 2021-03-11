@@ -250,7 +250,7 @@ const Upload = ({navigation}) => {
                 image === null
               }
             />
-            <Button title="Reset" color="#3d9f9f" onPress={doReset} />
+            <Button title="Reset" onPress={doReset} />
           </ThemeProvider>
         </View>
       </KeyboardAvoidingView>

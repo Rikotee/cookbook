@@ -211,7 +211,7 @@ const EditProfile = ({navigation}) => {
             />
             <Button title="Use camera" onPress={() => pickImage(false)} />
             {isUploading && <ActivityIndicator size="large" color="#0000ff" />}
-            <Button title="Save image" color="#3d9f9f" onPress={doUpload} />
+            <Button title="Save image" onPress={doUpload} />
             <Button title="Save bio change" onPress={combinedFunction} />
           </ThemeProvider>
         </View>
