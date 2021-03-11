@@ -30,15 +30,13 @@ const Modify = ({navigation, route}) => {
 
   const doUpdate = async () => {
     try {
-      const data = inputs.description;
-      const data2 = inputs.description2;
+      const data = inputs.description.replace(/[^a-z0-9 ]/gi, '');
+      const data2 = inputs.description2.replace(/[^a-z0-9 ]/gi, '');
       setIsUploading(true);
       const userToken = await AsyncStorage.getItem('userToken');
       const combinedData = JSON.stringify([data, data2]);
       const actualData = {description: combinedData};
-      // console.log('combined data: ' + actualData);
       const resp = await updateFile(file.file_id, actualData, userToken);
-      // console.log('update response', JSON.stringify(resp));
       setUpdate(update + 1);
       navigation.pop();
     } catch (error) {
@@ -50,9 +48,7 @@ const Modify = ({navigation, route}) => {
   };
 
   const settingInputs = () => {
-    // console.log(file.description);
     const fullDesc = JSON.parse(file.description);
-    // console.log(JSON.stringify(fullDesc));
     const instructions = fullDesc[0];
     const ingredients = fullDesc[1];
     setInputs({
