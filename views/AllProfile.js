@@ -12,7 +12,7 @@ const AllProfile = ({navigation}) => {
   const [fetchBio, setFetchBio] = useState('');
   const {isLoggedIn, setIsLoggedIn, guest} = useContext(MainContext);
   const [avatar, setAvatar] = useState('http://placekitten.com/640'); // Placeholder for accounts without profile picture
-  const {getFilesByTag, postTag} = useTag();
+  const {getFilesByTag} = useTag();
   const logout = async () => {
     setIsLoggedIn(false);
     await AsyncStorage.clear();
@@ -20,19 +20,6 @@ const AllProfile = ({navigation}) => {
       // this is to make sure isLoggedIn has changed, will be removed later
       navigation.navigate('Login');
     }
-  };
-  // const {handleInputChange, inputs, uploadErrors, reset} = useUploadForm();
-
-  const settingEmail = async () => {
-    // const userToken = await AsyncStorage.getItem('userToken');
-    // console.log('here are inputs: ' + JSON.stringify(inputs.username));
-    const fullUsername = JSON.parse(guest.username);
-    const realBio = fullUsername[1];
-
-    // const res = await updateUser(userToken, {
-    //   username: JSON.stringify([inputs.username, realBio]),
-    // });
-    // console.log("is this the thing that is undefined? " + res)
   };
 
   const getBio = async () => {

@@ -3,21 +3,19 @@ import {
   ActivityIndicator,
   Alert,
   KeyboardAvoidingView,
-  Platform,
   ScrollView,
   StyleSheet,
   View,
   Button,
 } from 'react-native';
 import PropTypes from 'prop-types';
-import {Input, Text, Image} from 'react-native-elements';
+import {Input, Image} from 'react-native-elements';
 import useUploadForm from '../hooks/UploadHooks';
 import * as ImagePicker from 'expo-image-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useMedia, useTag, useUser} from '../hooks/ApiHooks';
 import {MainContext} from '../contexts/MainContext';
 import {appIdentifier, uploadsUrl} from '../utils/variables';
-import {Video} from 'expo-av';
 import useSignUpForm from '../hooks/RegisterHooks';
 
 const EditProfile = ({navigation}) => {
@@ -26,15 +24,13 @@ const EditProfile = ({navigation}) => {
   const [filetype, setFiletype] = useState('');
   const [isUploading, setIsUploading] = useState(false);
   const {updateUser, getUser} = useUser();
-  const {deleteFile, getFile, upload, updateFile} = useMedia();
+  const {upload} = useMedia();
   const [avatar, setAvatar] = useState('http://placekitten.com/640'); // Placeholder for accounts without profile picture
   const {
     inputs,
     handleInputChange,
     handleInputEnd,
-    checkUserAvailable,
     registerErrors,
-    validateOnSend,
   } = useSignUpForm();
 
   const {postTag} = useTag();
