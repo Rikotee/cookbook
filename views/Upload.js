@@ -196,6 +196,7 @@ const Upload = ({navigation}) => {
             <Picker.Item label="Soup" value="Soup" />
             <Picker.Item label="BBQ food" value="BBQ food" />
             <Picker.Item label="Stew" value="Stew" />
+            <Picker.Item label="Steak" value="Steak" />
           </Picker>
           <Text h4>Main ingredient</Text>
           <Picker
@@ -210,6 +211,8 @@ const Upload = ({navigation}) => {
             <Picker.Item label="Fish" value="Fish" />
             <Picker.Item label="Bread" value="Bread" />
             <Picker.Item label="Lamb" value="Lamb" />
+            <Picker.Item label="Pork" value="Pork" />
+            <Picker.Item label="Beef" value="Beef" />
           </Picker>
 
           <Input
