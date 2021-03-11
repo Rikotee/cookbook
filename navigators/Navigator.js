@@ -40,9 +40,9 @@ const TabScreen = () => {
             case 'Upload':
               iconName = 'cloud-upload';
               break;
-              case 'Search':
-                iconName = 'search';
-                break;
+            case 'Search':
+              iconName = 'search';
+              break;
           }
           return <Icon name={iconName} size={size} color={color} />;
         },
@@ -51,7 +51,7 @@ const TabScreen = () => {
       <Tab.Screen name="Home" component={Home} />
       <Tab.Screen name="Profile" component={Profile} />
       <Tab.Screen name="Upload" component={Upload} />
-      <Tab.Screen name="Search" component={Upload} />
+      <Tab.Screen name="Search" component={Search} />
     </Tab.Navigator>
   );
 };
