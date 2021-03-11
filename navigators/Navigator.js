@@ -47,6 +47,10 @@ const TabScreen = () => {
           return <Icon name={iconName} size={size} color={color} />;
         },
       })}
+      tabBarOptions={{
+        activeTintColor: '#3d9f9f',
+        inactiveTintColor: '#97caca',
+      }}
     >
       <Tab.Screen name="COOKBOOK" component={Home} />
       <Tab.Screen name="PROFILE" component={Profile} />
