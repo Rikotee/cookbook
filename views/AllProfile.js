@@ -54,10 +54,10 @@ const AllProfile = ({navigation}) => {
 
   const fetchAvatar = async () => {
     try {
-
-      const avatar = await getFilesByTag(appIdentifier + guest.user_id);
-      // console.log('AllProfile fetchAvatar', guestUserId);
-      setAvatar(uploadsUrl + avatar.pop().filename);
+      const avatarList = await getFilesByTag(appIdentifier + guest.user_id);
+      if (avatarList.length > 0) {
+        setAvatar(uploadsUrl + avatarList.pop().filename);
+      }
     } catch (error) {
       console.error(error.message);
     }
