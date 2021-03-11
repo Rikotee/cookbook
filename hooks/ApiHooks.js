@@ -19,6 +19,7 @@ const doFetch = async (url, options = {}) => {
   }
 };
 
+// "guestId" is used when user wants to see other people posts.
 const useLoadMedia = (myFilesOnly, userId, guestFilesOnly, guestId) => {
   const [mediaArray, setMediaArray] = useState([]);
   const {update} = useContext(MainContext);

@@ -164,14 +164,11 @@ const Upload = ({navigation}) => {
           {image && (
             <>
               {filetype === 'image' ? (
-                <Image
-                  source={{uri: image}}
-                  style={{width: '100%', height: undefined, aspectRatio: 1}}
-                />
+                <Image source={{uri: image}} style={styles.image} />
               ) : (
                 <Video
                   source={{uri: image}}
-                  style={{width: '100%', height: undefined, aspectRatio: 1}}
+                  style={styles.image}
                   useNativeControls={true}
                 />
               )}
@@ -241,7 +238,11 @@ const Upload = ({navigation}) => {
             color="#3d9f9f"
             onPress={() => pickImage(true)}
           />
-          <Button title="Use camera" color="#3d9f9f" onPress={() => pickImage(false)} />
+          <Button
+            title="Use camera"
+            color="#3d9f9f"
+            onPress={() => pickImage(false)}
+          />
           {isUploading && <ActivityIndicator size="large" color="#0000ff" />}
           <Button
             title="Upload file"
@@ -265,6 +266,11 @@ const styles = StyleSheet.create({
     padding: 15,
     backgroundColor: '#FFF',
     // marginBottom: 10,
+  },
+  image: {
+    width: '100%',
+    height: undefined,
+    aspectRatio: 1,
   },
 });
 
