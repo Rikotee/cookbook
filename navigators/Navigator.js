@@ -32,7 +32,7 @@ const TabScreen = () => {
           let iconName;
           switch (route.name) {
             case 'COOKBOOK':
-              iconName = 'home';
+              iconName = 'lunch-dining';
               break;
             case 'PROFILE':
               iconName = 'account-box';
@@ -48,8 +48,8 @@ const TabScreen = () => {
         },
       })}
       tabBarOptions={{
-        activeTintColor: '#3d9f9f',
-        inactiveTintColor: '#97caca',
+        activeTintColor: '#97caca',
+        inactiveTintColor: '#3d9f9f',
       }}
     >
       <Tab.Screen name="COOKBOOK" component={Home} />
