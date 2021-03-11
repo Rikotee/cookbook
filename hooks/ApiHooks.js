@@ -34,7 +34,6 @@ const useLoadMedia = (myFilesOnly, userId, guestFilesOnly, guestId) => {
         })
       );
       media.reverse();
-      console.log(media);
       if (myFilesOnly) {
         media = media.filter((item) => item.user_id === userId);
       }
