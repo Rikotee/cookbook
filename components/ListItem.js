@@ -24,7 +24,7 @@ import * as ScreenOrientation from 'expo-screen-orientation';
 
 const ListItem = ({navigation, singleMedia, isMyFile}) => {
   const {setUpdate, update, isLoggedIn, setGuest, getRatings} = useContext(
-    MainContext
+    MainContext,
   );
   const {deleteFile, getRating} = useMedia();
   const [avatar, setAvatar] = useState('http://placekitten.com/100');
@@ -41,7 +41,7 @@ const ListItem = ({navigation, singleMedia, isMyFile}) => {
     if (isLoggedIn) {
       try {
         const avatarList = await getFilesByTag(
-          appIdentifier + singleMedia.user_id
+          appIdentifier + singleMedia.user_id,
         );
         if (avatarList.length > 0) {
           setAvatar(uploadsUrl + avatarList.pop().filename);
@@ -99,7 +99,7 @@ const ListItem = ({navigation, singleMedia, isMyFile}) => {
           },
         },
       ],
-      {cancelable: false}
+      {cancelable: false},
     );
   };
 
@@ -114,7 +114,7 @@ const ListItem = ({navigation, singleMedia, isMyFile}) => {
   const lock = async () => {
     try {
       await ScreenOrientation.lockAsync(
-        ScreenOrientation.OrientationLock.PORTRAIT_UP
+        ScreenOrientation.OrientationLock.PORTRAIT_UP,
       );
     } catch (error) {
       console.error('lock', error.message);
@@ -218,7 +218,7 @@ const ListItem = ({navigation, singleMedia, isMyFile}) => {
           </View>
         ) : (
           <View style={styles.userInfo}>
-            <Avatar style={styles.avatarImage} source={{uri: avatar}} />
+            <Avatar style={styles.avatarImage} source={{uri: avatar}}/>
             <Text
               style={styles.userInfoText}
               onPress={() => navigation.navigate('Login')}
@@ -231,7 +231,7 @@ const ListItem = ({navigation, singleMedia, isMyFile}) => {
           <Card.Image
             source={{uri: uploadsUrl + singleMedia.filename}}
             style={styles.image}
-            PlaceholderContent={<ActivityIndicator />}
+            PlaceholderContent={<ActivityIndicator/>}
           />
         ) : (
           <Video
@@ -246,8 +246,8 @@ const ListItem = ({navigation, singleMedia, isMyFile}) => {
             posterSource={{uri: uploadsUrl + singleMedia.screenshot}}
           />
         )}
-        <Text>Rating: {fetchRating}</Text>
         <Card.Title h4>{singleMedia.title}</Card.Title>
+        <Text h4>Rating: {fetchRating}</Text>
         <Text>{fetchTags}</Text>
         <Text>{fetchTags2}</Text>
         <Text>{fetchTags3}</Text>
@@ -256,18 +256,18 @@ const ListItem = ({navigation, singleMedia, isMyFile}) => {
         <RNEListItem.Content>
           {isMyFile && isLoggedIn && (
             <>
-              <Card.Divider />
+              <Card.Divider/>
               <View style={styles.buttons}>
                 <Button
                   title="Modify"
                   color="#97caca"
                   onPress={() => navigation.push('Modify', {file: singleMedia})}
-                ></Button>
+                />
                 <Button
                   title="Delete"
                   color="#3d9f9f"
                   onPress={doDelete}
-                ></Button>
+                />
               </View>
             </>
           )}

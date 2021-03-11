@@ -23,7 +23,6 @@ import * as AlertIOS from 'react-native';
 const Single = ({route}) => {
   const [fetchDescription, setFetchDescription] = useState('');
   const [fetchIngredients, setFetchIngredients] = useState('');
-  // const [fetchRating, setFetchRating] = useState('');
   const [fetchTags, setFetchTags] = useState('');
   const [fetchTags2, setFetchTags2] = useState('');
   const [fetchTags3, setFetchTags3] = useState('');
@@ -130,8 +129,7 @@ const Single = ({route}) => {
     const userToken = await AsyncStorage.getItem('userToken');
     const fileId = file.file_id;
     const rating = selectedRating;
-    // console.log('user id here: ' + user.user_id);
-    // console.log('rating here' + rating);
+
     if (
       rating == null ||
       rating === '0' ||
@@ -225,7 +223,7 @@ const Single = ({route}) => {
             source={{uri: avatar}}
             // onPress={goProfile}
           />
-          <Text
+          <Text h4
             style={styles.userInfoText}
             // onPress={goProfile}
           >
@@ -233,7 +231,7 @@ const Single = ({route}) => {
           </Text>
         </View>
 
-        <Text>Rating: {fetchRating}</Text>
+        <Text style={{fontSize: 16, marginTop: 30}}>Rating: {fetchRating}</Text>
 
         {user.user_id !== undefined && (
           <View>

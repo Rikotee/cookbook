@@ -20,7 +20,7 @@ const constraints = {
       message: 'min length is 5 characters',
     },
   },
-  description2: {
+  ingredients: {
     presence: {
       message: 'cannot be empty',
     },
@@ -35,7 +35,7 @@ const useUploadForm = (callback) => {
   const [inputs, setInputs] = useState({
     title: '',
     description: '',
-    description2: '',
+    ingredients: '',
   });
   const [uploadErrors, setUploadErrors] = useState({});
 

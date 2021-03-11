@@ -7,7 +7,7 @@ import {
   ScrollView,
   StyleSheet,
   View,
-  Button, ToastAndroid,
+  ToastAndroid,
 } from 'react-native';
 import PropTypes from 'prop-types';
 import {Input, Image, Button, ThemeProvider} from 'react-native-elements';
@@ -36,9 +36,8 @@ const EditProfile = ({navigation}) => {
   } = useSignUpForm();
 
   const {postTag} = useTag();
-  const {update, setUpdate, user, setGetPicture, getPicture, setGetBioChange, getBioChange} = useContext(MainContext);
+  const {setGetPicture, getPicture, setGetBioChange, getBioChange} = useContext(MainContext);
   const {update, setUpdate, user} = useContext(MainContext);
-  const {isLoggedIn, setIsLoggedIn} = useContext(MainContext);
   const {theme} = useContext(MainContext);
   const {getFilesByTag} = useTag();
 

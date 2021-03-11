@@ -11,7 +11,6 @@ const MainProvider = ({children}) => {
   const [getRatings, setGetRatings] = useState(true);
   const [getPicture, setGetPicture] = useState(true);
   const [getBioChange, setGetBioChange] = useState(true);
-  const [getBioChange, setGetBioChange] = useState(true)
   // this is used for button colors
   const theme = {
     colors: {

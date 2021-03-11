@@ -44,7 +44,7 @@ const Upload = ({navigation}) => {
     // add text to formData
     formData.append('title', inputs.title);
     const data = inputs.description;
-    const data2 = inputs.description2;
+    const data2 = inputs.ingredients;
     checkNulls(selectedTag);
     checkNulls(selectedTag2);
     checkNulls(selectedTag3);
@@ -70,7 +70,6 @@ const Upload = ({navigation}) => {
       setIsUploading(true);
       const userToken = await AsyncStorage.getItem('userToken');
       const resp = await upload(formData, userToken);
-      // console.log('upload response = file id: ', resp);
       for (let i = 0; i < data3.length; i++) {
         await addTag(userToken, resp, data3[i]);
       }
@@ -91,7 +90,8 @@ const Upload = ({navigation}) => {
             onPress: () => {
               setUpdate(update + 1);
               doReset();
-              navigation.navigate('Home');
+              console.log("navigating.....")
+              navigation.navigate('COOKBOOK');
             },
           },
         ],
@@ -228,9 +228,9 @@ const Upload = ({navigation}) => {
           <Input
             multiline={true}
             placeholder="Ingredients"
-            value={inputs.description2}
-            onChangeText={(txt) => handleInputChange('description2', txt)}
-            errorMessage={uploadErrors.description2}
+            value={inputs.ingredients}
+            onChangeText={(txt) => handleInputChange('ingredients', txt)}
+            errorMessage={uploadErrors.ingredients}
           />
 
           <ThemeProvider theme={theme}>
