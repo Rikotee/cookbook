@@ -67,6 +67,7 @@ const StackScreen = () => {
             component={TabScreen}
             options={({route}) => ({
               headerTitle: getFocusedRouteNameFromRoute(route),
+              headerTitleAlign: 'center',
               headerStyle: {
                 backgroundColor: '#3d9f9f',
               },
