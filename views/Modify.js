@@ -6,10 +6,9 @@ import {
   ScrollView,
   StyleSheet,
   View,
-  Button,
 } from 'react-native';
 import PropTypes from 'prop-types';
-import {Input, Text} from 'react-native-elements';
+import {Input, Text, Button, ThemeProvider} from 'react-native-elements';
 import useUploadForm from '../hooks/UploadHooks';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useMedia} from '../hooks/ApiHooks';
@@ -70,6 +69,14 @@ const Modify = ({navigation, route}) => {
   const doReset = () => {
     reset();
   };
+
+  const theme = {
+    colors: {
+      primary: `#3d9f9f`,
+      secondary: `#97caca`,
+    },
+  };
+
   return (
     <ScrollView>
       <KeyboardAvoidingView behavior="position" enabled>
@@ -99,15 +106,16 @@ const Modify = ({navigation, route}) => {
             errorMessage={uploadErrors.description2}
           />
           {isUploading && <ActivityIndicator size="large" color="#0000ff" />}
-          <Button
-            title="Update"
-            color="#3d9f9f"
-            onPress={doUpdate}
-            // disabled={
-            //   uploadErrors.title !== null || uploadErrors.description !== null
-            // }
-          />
-          <Button title="Reset" color="#3d9f9f" onPress={doReset} />
+          <ThemeProvider theme={theme}>
+            <Button
+              title="Update"
+              onPress={doUpdate}
+              // disabled={
+              //   uploadErrors.title !== null || uploadErrors.description !== null
+              // }
+            />
+            <Button title="Reset" onPress={doReset} />
+          </ThemeProvider>
         </View>
       </KeyboardAvoidingView>
     </ScrollView>
