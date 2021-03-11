@@ -10,8 +10,8 @@ const List = ({navigation, myFilesOnly, guestFilesOnly}) => {
   const mediaArray = useLoadMedia(myFilesOnly, user.user_id, guestFilesOnly, guest.user_id);
   return (
     <FlatList
-      contentContainerStyle={{paddingBottom: 60}}
-      data={mediaArray.reverse()}
+      contentContainerStyle={{paddingBottom: 100}}
+      data={mediaArray}
       keyExtractor={(item, index) => index.toString()}
       renderItem={({item}) => (
         <ListItem

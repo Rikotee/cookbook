@@ -245,7 +245,7 @@ const useMedia = () => {
       data: fd,
       url: baseUrl + 'media',
     };
-    console.log('apihooks upload', options);
+    console.log('apihooks upload', options.data);
 
     try {
       return await axios(options).then((res) => {
@@ -349,6 +349,7 @@ const useMedia = () => {
       },
       body: JSON.stringify(fileInfo),
     };
+    console.log(options.body)
     try {
       const result = await doFetch(baseUrl + 'media/' + fileId, options);
       return result;

@@ -6,7 +6,7 @@ import {
   ScrollView, StyleSheet, View,
 } from 'react-native';
 import PropTypes from 'prop-types';
-import {Input, Text, Button, Card} from 'react-native-elements';
+import {Input, Text, Button} from 'react-native-elements';
 import useUploadForm from '../hooks/UploadHooks';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useMedia} from '../hooks/ApiHooks';
@@ -28,10 +28,15 @@ const Modify = ({navigation, route}) => {
 
   const doUpdate = async () => {
     try {
+      const data = inputs.description;
+      const data2 = inputs.description2;
       setIsUploading(true);
       const userToken = await AsyncStorage.getItem('userToken');
-      const resp = await updateFile(file.file_id, inputs, userToken);
-      console.log('update response', resp);
+      const combinedData = JSON.stringify([data, data2])
+      const actualData = {"description": combinedData}
+      console.log("combined data: " + actualData)
+      const resp = await updateFile(file.file_id, actualData, userToken);
+      console.log('update response', JSON.stringify(resp));
       setUpdate(update + 1);
       navigation.pop();
     } catch (error) {
@@ -76,6 +81,7 @@ const Modify = ({navigation, route}) => {
           />
           <Text>Instructions: </Text>
           <Input
+            multiline={true}
             placeholder="Instructions"
             value={inputs.description}
             onChangeText={(txt) => handleInputChange('description', txt)}
@@ -83,6 +89,7 @@ const Modify = ({navigation, route}) => {
           />
           <Text>Ingredients: </Text>
           <Input
+            multiline={true}
             placeholder="Ingredients"
             value={inputs.description2}
             onChangeText={(txt) => handleInputChange('description2', txt)}

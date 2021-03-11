@@ -222,12 +222,14 @@ const Upload = ({navigation}) => {
             errorMessage={uploadErrors.title}
           />
           <Input
+            multiline={true}
             placeholder="Instructions"
             value={inputs.description}
             onChangeText={(txt) => handleInputChange('description', txt)}
             errorMessage={uploadErrors.description}
           />
           <Input
+            multiline={true}
             placeholder="Ingredients"
             value={inputs.description2}
             onChangeText={(txt) => handleInputChange('description2', txt)}
