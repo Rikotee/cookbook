@@ -7,7 +7,7 @@ import {
   ScrollView,
   StyleSheet,
   View,
-  Button,
+  Button, ToastAndroid,
 } from 'react-native';
 import PropTypes from 'prop-types';
 import {Input, Text, Image} from 'react-native-elements';
@@ -19,6 +19,7 @@ import {MainContext} from '../contexts/MainContext';
 import {appIdentifier, uploadsUrl} from '../utils/variables';
 import {Video} from 'expo-av';
 import useSignUpForm from '../hooks/RegisterHooks';
+import * as AlertIOS from 'react-native';
 
 const EditProfile = ({navigation}) => {
   const [fetchBio, setFetchBio] = useState('');
@@ -26,41 +27,45 @@ const EditProfile = ({navigation}) => {
   const [filetype, setFiletype] = useState('');
   const [isUploading, setIsUploading] = useState(false);
   const {updateUser, getUser} = useUser();
-  const {deleteFile, getFile, upload, updateFile} = useMedia();
+  const {upload} = useMedia();
   const [avatar, setAvatar] = useState('http://placekitten.com/640'); // Placeholder for accounts without profile picture
   const {
     inputs,
     handleInputChange,
     handleInputEnd,
-    checkUserAvailable,
     registerErrors,
-    validateOnSend,
   } = useSignUpForm();
 
   const {postTag} = useTag();
-  const {update, setUpdate, user} = useContext(MainContext);
-  const {isLoggedIn, setIsLoggedIn} = useContext(MainContext);
+  const {update, setUpdate, user, setGetPicture, getPicture, setGetBioChange, getBioChange} = useContext(MainContext);
   const {getFilesByTag} = useTag();
-
-  const {setInputs, uploadErrors} = useUploadForm();
 
   const settingBio = async () => {
     let realEmail;
     const userToken = await AsyncStorage.getItem('userToken');
-    console.log('here are inputs: ' + JSON.stringify(inputs.email));
     const fullEmail = user.email;
     if (fullEmail.includes(']')) {
       const fullEmailWithBio = JSON.parse(fullEmail);
       realEmail = fullEmailWithBio[0];
-      console.log(realEmail);
     } else {
       realEmail = user.email;
     }
     const res = await updateUser(userToken, {
       email: JSON.stringify([realEmail, inputs.email]),
     });
+    setGetBioChange(!getBioChange)
+    notifyMessage("Bio changed")
   };
 
+  const notifyMessage = (msg) => {
+    if (Platform.OS === 'android') {
+      ToastAndroid.show(msg, ToastAndroid.SHORT);
+    } else {
+      AlertIOS.alert(msg);
+    }
+  };
+
+  // Function for fetching the avatar and showing it on the view
   const fetchAvatar = async () => {
     try {
       const avatarList = await getFilesByTag(appIdentifier + user.user_id);
@@ -72,6 +77,7 @@ const EditProfile = ({navigation}) => {
     }
   };
 
+  // Function for fetching the bio and showing it on the view
   const getBio = async () => {
     let realEmail;
     let bio;
@@ -81,9 +87,7 @@ const EditProfile = ({navigation}) => {
     if (fullEmail.includes(']')) {
       const fullEmailWithBio = JSON.parse(fullEmail);
       realEmail = fullEmailWithBio[0];
-      console.log('real email here: ' + realEmail);
       bio = fullEmailWithBio[1];
-      console.log('bio here: ' + bio);
     } else {
       bio = '';
     }
@@ -106,6 +110,7 @@ const EditProfile = ({navigation}) => {
     // add text to formData
     formData.append('description', 'profile picture');
     // add image to formData
+    console.log("image here: " + image)
     const filename = image.split('/').pop();
     const match = /\.(\w+)$/.exec(filename);
     let type = match ? `${filetype}/${match[1]}` : filetype;
@@ -118,13 +123,12 @@ const EditProfile = ({navigation}) => {
     try {
       setIsUploading(true);
       const resp = await upload(formData, userToken);
-      console.log('response here: ' + resp);
       const tagResponse = await postTag(
         {
           file_id: resp,
           tag: appIdentifier + user.user_id,
         },
-        userToken
+        userToken,
       );
       Alert.alert(
         'Upload',
@@ -138,7 +142,7 @@ const EditProfile = ({navigation}) => {
             },
           },
         ],
-        {cancelable: false}
+        {cancelable: false},
       );
       // const response = await deleteFile(getCurrentProfileFileId(), userToken);
     } catch (error) {
@@ -146,6 +150,9 @@ const EditProfile = ({navigation}) => {
       console.error(error);
     } finally {
       setIsUploading(false);
+      console.log("here is the image" + image)
+      setAvatar(image)
+      setGetPicture(!getPicture)
     }
   };
 
@@ -163,12 +170,8 @@ const EditProfile = ({navigation}) => {
       result = await ImagePicker.launchCameraAsync(options);
     }
 
-    console.log(result);
-
     if (!result.cancelled) {
-      // console.log('pickImage result', result);
       setFiletype(result.type);
-      // console.log('here is the result file ' + result.uri);
       setImage(result.uri);
     }
   };
@@ -178,21 +181,12 @@ const EditProfile = ({navigation}) => {
       <KeyboardAvoidingView behavior="position" enabled>
         <View style={styles.container}>
           <View style={styles.imageArea}>
-            {image === null ? (
-              <Image
-                style={styles.image}
-                source={{uri: avatar}}
-                onPress={pickImage}
-              />
-            ) : (
-              <Image
-                style={styles.image}
-                source={{uri: image}}
-                onPress={pickImage}
-              />
-            )}
+            <Image
+              style={styles.image}
+              source={{uri: avatar}}
+              onPress={pickImage}
+            />
           </View>
-
           <View style={styles.bioTextArea}>
             <Input
               defaultValue={fetchBio}
@@ -218,8 +212,8 @@ const EditProfile = ({navigation}) => {
             color="#3d9f9f"
             onPress={() => pickImage(false)}
           />
-          {isUploading && <ActivityIndicator size="large" color="#0000ff" />}
-          <Button title="Save image" color="#3d9f9f" onPress={doUpload} />
+          {isUploading && <ActivityIndicator size="large" color="#0000ff"/>}
+          <Button title="Save image" color="#3d9f9f" onPress={doUpload}/>
           <Button
             title="Save bio change"
             color="#3d9f9f"
@@ -239,9 +233,11 @@ const styles = StyleSheet.create({
   },
   imageArea: {
     height: 150,
+    paddingBottom: 50,
     alignItems: 'center',
   },
   bioTextArea: {
+    marginTop: 50,
     height: 150,
   },
   buttonArea: {
@@ -264,20 +260,6 @@ const styles = StyleSheet.create({
   buttons: {
     width: 50,
   },
-
-  // image2: {
-  //   marginTop: 16,
-  //   width: '40%',
-  //   height: undefined,
-  //   aspectRatio: 1,
-  //   borderWidth: 1,
-  //   borderRadius: 150,
-  //   overflow: 'hidden',
-  //   flex: 1,
-  // },
-  // images: {
-  //   flexDirection: 'row',
-  // },
 });
 
 EditProfile.propTypes = {
