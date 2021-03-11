@@ -6,9 +6,10 @@ import {
   StyleSheet,
   View,
   FlatList,
+  Button,
 } from 'react-native';
 import PropTypes from 'prop-types';
-import {Input, Text, Button} from 'react-native-elements';
+import {Input, Text} from 'react-native-elements';
 import useSearchForm from '../hooks/SearchHooks';
 import ListItem from '../components/ListItem';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -105,6 +106,7 @@ const Search = ({navigation}) => {
             </Picker>
             <Button
               title="Search recipe"
+              color="#3d9f9f"
               onPress={doSearch}
               disabled={searchErrors.title !== null}
             />
