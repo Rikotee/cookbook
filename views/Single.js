@@ -1,5 +1,12 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {StyleSheet, ActivityIndicator, View, Alert, Button} from 'react-native';
+import {
+  StyleSheet,
+  ActivityIndicator,
+  View,
+  Alert,
+  Button,
+  ToastAndroid,
+} from 'react-native';
 import PropTypes from 'prop-types';
 import {appIdentifier, uploadsUrl} from '../utils/variables';
 import {Avatar, Card, Text} from 'react-native-elements';
@@ -11,11 +18,11 @@ import * as ScreenOrientation from 'expo-screen-orientation';
 import {ScrollView} from 'react-native-gesture-handler';
 import {Picker} from '@react-native-picker/picker';
 import {MainContext} from '../contexts/MainContext';
+import * as AlertIOS from 'react-native';
 
 const Single = ({route}) => {
   const [fetchDescription, setFetchDescription] = useState('');
   const [fetchIngredients, setFetchIngredients] = useState('');
-  // const [fetchRating, setFetchRating] = useState('');
   const [fetchTags, setFetchTags] = useState('');
   const [fetchTags2, setFetchTags2] = useState('');
   const [fetchTags3, setFetchTags3] = useState('');
@@ -122,8 +129,7 @@ const Single = ({route}) => {
     const userToken = await AsyncStorage.getItem('userToken');
     const fileId = file.file_id;
     const rating = selectedRating;
-    // console.log('user id here: ' + user.user_id);
-    // console.log('rating here' + rating);
+
     if (
       rating == null ||
       rating === '0' ||
@@ -142,10 +148,18 @@ const Single = ({route}) => {
         },
         userToken
       );
-      Alert.alert('Rating', 'Rating succeeded');
+      notifyMessage("Rating succeeded")
     }
     await fetchRatings();
     setGetRatings(!getRatings);
+  };
+
+  const notifyMessage = (msg) => {
+    if (Platform.OS === 'android') {
+      ToastAndroid.show(msg, ToastAndroid.SHORT);
+    } else {
+      AlertIOS.alert(msg);
+    }
   };
 
   const unlock = async () => {
@@ -209,7 +223,7 @@ const Single = ({route}) => {
             source={{uri: avatar}}
             // onPress={goProfile}
           />
-          <Text
+          <Text h4
             style={styles.userInfoText}
             // onPress={goProfile}
           >
@@ -217,7 +231,7 @@ const Single = ({route}) => {
           </Text>
         </View>
 
-        <Text>Rating: {fetchRating}</Text>
+        <Text style={{fontSize: 16, marginTop: 30}}>Rating: {fetchRating}</Text>
 
         {user.user_id !== undefined && (
           <View>

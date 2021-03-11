@@ -63,6 +63,7 @@ const Profile = ({navigation}) => {
   };
 
   const fetchAvatar = async () => {
+    console.log("fetchavataer has been summoned")
     try {
       const avatarList = await getFilesByTag(appIdentifier + user.user_id);
       if (avatarList.length > 0) {
