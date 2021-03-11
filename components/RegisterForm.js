@@ -24,13 +24,13 @@ const RegisterForm = ({navigation}) => {
   const doRegister = async () => {
     if (!validateOnSend()) {
       Alert.alert('Input validation failed!');
-      console.log('validate on send failed');
+      // console.log('validate on send failed');
       return;
     }
     delete inputs.confirmPassword;
     try {
       const result = await postRegister(inputs);
-      console.log('doRegister ok', result.message);
+      // console.log('doRegister ok', result.message);
       Alert.alert(result.message);
       // do automatic login after registering
       const userData = await postLogin(inputs);
@@ -38,7 +38,7 @@ const RegisterForm = ({navigation}) => {
       setIsLoggedIn(true);
       setUser(userData.user);
     } catch (error) {
-      console.log('registration error', error);
+      // console.log('registration error', error);
       Alert.alert(error.message);
     }
   };

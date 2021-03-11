@@ -172,7 +172,7 @@ const ListItem = ({navigation, singleMedia, isMyFile}) => {
     getFileTags();
 
     const orientSub = ScreenOrientation.addOrientationChangeListener((evt) => {
-      console.log('orientation', evt);
+      // console.log('orientation', evt);
       if (evt.orientationInfo.orientation > 2) {
         // show video in fullscreen
         showVideoInFullscreen();
