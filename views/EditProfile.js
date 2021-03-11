@@ -7,9 +7,10 @@ import {
   ScrollView,
   StyleSheet,
   View,
+  Button,
 } from 'react-native';
 import PropTypes from 'prop-types';
-import {Input, Text, Image, Button, Card} from 'react-native-elements';
+import {Input, Text, Image} from 'react-native-elements';
 import useUploadForm from '../hooks/UploadHooks';
 import * as ImagePicker from 'expo-image-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -92,7 +93,7 @@ const EditProfile = ({navigation}) => {
   const combinedFunction = () => {
     settingBio();
     getBio();
-  }
+  };
 
   useEffect(() => {
     fetchAvatar();
@@ -208,13 +209,22 @@ const EditProfile = ({navigation}) => {
         <View style={styles.buttonArea}>
           <Button
             style={styles.buttons}
+            color="#3d9f9f"
             title="Choose from library"
             onPress={() => pickImage(true)}
           />
-          <Button title="Use camera" onPress={() => pickImage(false)} />
+          <Button
+            title="Use camera"
+            color="#3d9f9f"
+            onPress={() => pickImage(false)}
+          />
           {isUploading && <ActivityIndicator size="large" color="#0000ff" />}
-          <Button title="Save image" onPress={doUpload} />
-          <Button title="Save bio change" onPress={combinedFunction} />
+          <Button title="Save image" color="#3d9f9f" onPress={doUpload} />
+          <Button
+            title="Save bio change"
+            color="#3d9f9f"
+            onPress={combinedFunction}
+          />
         </View>
       </KeyboardAvoidingView>
     </ScrollView>
