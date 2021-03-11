@@ -12,6 +12,13 @@ const MainProvider = ({children}) => {
   const [getPicture, setGetPicture] = useState(true);
   const [getBioChange, setGetBioChange] = useState(true)
 
+  const theme = {
+    colors: {
+      primary: `#3d9f9f`,
+      secondary: `#97caca`,
+    },
+  };
+
   return (
     <MainContext.Provider
       value={{
@@ -28,7 +35,8 @@ const MainProvider = ({children}) => {
         getPicture,
         setGetPicture,
         getBioChange,
-        setGetBioChange
+        setGetBioChange,
+        theme
       }}
     >
       {children}

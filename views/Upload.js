@@ -23,7 +23,7 @@ const Upload = ({navigation}) => {
   const [selectedTag, setSelectedTag] = useState();
   const [selectedTag2, setSelectedTag2] = useState();
   const [selectedTag3, setSelectedTag3] = useState();
-
+  const {theme} = useContext(MainContext);
   const [image, setImage] = useState(null);
   const [filetype, setFiletype] = useState('');
   const [isUploading, setIsUploading] = useState(false);
@@ -153,13 +153,6 @@ const Upload = ({navigation}) => {
   const doReset = () => {
     setImage(null);
     reset();
-  };
-
-  const theme = {
-    colors: {
-      primary: `#3d9f9f`,
-      secondary: `#97caca`,
-    },
   };
 
   return (

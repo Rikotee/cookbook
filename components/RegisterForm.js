@@ -10,6 +10,7 @@ import {Input, Button, ThemeProvider} from 'react-native-elements';
 
 const RegisterForm = ({navigation}) => {
   const {setIsLoggedIn, setUser} = useContext(MainContext);
+  const {theme} = useContext(MainContext);
   const {
     inputs,
     handleInputChange,
@@ -41,13 +42,6 @@ const RegisterForm = ({navigation}) => {
       // console.log('registration error', error);
       Alert.alert(error.message);
     }
-  };
-
-  const theme = {
-    colors: {
-      primary: `#3d9f9f`,
-      secondary: `#97caca`,
-    },
   };
 
   return (

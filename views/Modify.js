@@ -19,7 +19,7 @@ const Modify = ({navigation, route}) => {
   const [isUploading, setIsUploading] = useState(false);
   const {updateFile} = useMedia();
   const {update, setUpdate} = useContext(MainContext);
-
+  const {theme} = useContext(MainContext);
   const {
     handleInputChange,
     inputs,
@@ -68,13 +68,6 @@ const Modify = ({navigation, route}) => {
 
   const doReset = () => {
     reset();
-  };
-
-  const theme = {
-    colors: {
-      primary: `#3d9f9f`,
-      secondary: `#97caca`,
-    },
   };
 
   return (

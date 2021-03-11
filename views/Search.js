@@ -25,6 +25,7 @@ const Search = ({navigation}) => {
   const [selectedTag, setSelectedTag] = useState();
   const [selectedTag2, setSelectedTag2] = useState();
   const [selectedTag3, setSelectedTag3] = useState();
+  const {theme} = useContext(MainContext);
 
   const doSearch = async () => {
     const userToken = await AsyncStorage.getItem('userToken');
@@ -46,13 +47,6 @@ const Search = ({navigation}) => {
     if (item == null || item === 0) {
       return '';
     } else return item;
-  };
-
-  const theme = {
-    colors: {
-      primary: `#3d9f9f`,
-      secondary: `#97caca`,
-    },
   };
 
   return (

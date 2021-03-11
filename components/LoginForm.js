@@ -12,6 +12,7 @@ const LoginForm = ({navigation}) => {
   const {inputs, handleInputChange} = useLoginForm();
   const {postLogin} = useLogin();
   const {setUser, setIsLoggedIn} = useContext(MainContext);
+  const {theme} = useContext(MainContext);
 
   const doLogin = async () => {
     setLoading(true);
@@ -26,13 +27,6 @@ const LoginForm = ({navigation}) => {
       console.error('postLogin error', error.message);
       Alert.alert('Invalid username or password');
     }
-  };
-
-  const theme = {
-    colors: {
-      primary: `#3d9f9f`,
-      secondary: `#97caca`,
-    },
   };
 
   return (

@@ -35,6 +35,7 @@ const EditProfile = ({navigation}) => {
   const {postTag} = useTag();
   const {update, setUpdate, user} = useContext(MainContext);
   const {isLoggedIn, setIsLoggedIn} = useContext(MainContext);
+  const {theme} = useContext(MainContext);
   const {getFilesByTag} = useTag();
 
   const {setInputs, uploadErrors} = useUploadForm();
@@ -166,13 +167,6 @@ const EditProfile = ({navigation}) => {
       // console.log('here is the result file ' + result.uri);
       setImage(result.uri);
     }
-  };
-
-  const theme = {
-    colors: {
-      primary: `#3d9f9f`,
-      secondary: `#97caca`,
-    },
   };
 
   return (
