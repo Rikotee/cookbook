@@ -7,10 +7,9 @@ import {
   ScrollView,
   StyleSheet,
   View,
-  Button,
 } from 'react-native';
 import PropTypes from 'prop-types';
-import {Input, Text, Image} from 'react-native-elements';
+import {Input, Text, Image, ThemeProvider, Button} from 'react-native-elements';
 import useUploadForm from '../hooks/UploadHooks';
 import * as ImagePicker from 'expo-image-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -24,7 +23,7 @@ const Upload = ({navigation}) => {
   const [selectedTag, setSelectedTag] = useState();
   const [selectedTag2, setSelectedTag2] = useState();
   const [selectedTag3, setSelectedTag3] = useState();
-
+  const {theme} = useContext(MainContext);
   const [image, setImage] = useState(null);
   const [filetype, setFiletype] = useState('');
   const [isUploading, setIsUploading] = useState(false);
@@ -55,7 +54,7 @@ const Upload = ({navigation}) => {
       checkNulls(selectedTag3),
     ];
     const combinedData = JSON.stringify([data, data2]);
-    console.log('combinedData: ' + combinedData);
+    // console.log('combinedData: ' + combinedData);
     formData.append('description', combinedData);
     // add image to formData
     const filename = image.split('/').pop();
@@ -71,7 +70,7 @@ const Upload = ({navigation}) => {
       setIsUploading(true);
       const userToken = await AsyncStorage.getItem('userToken');
       const resp = await upload(formData, userToken);
-      console.log('upload response = file id: ', resp);
+      // console.log('upload response = file id: ', resp);
       for (let i = 0; i < data3.length; i++) {
         await addTag(userToken, resp, data3[i]);
       }
@@ -82,7 +81,7 @@ const Upload = ({navigation}) => {
         },
         userToken
       );
-      console.log('posting app identifier', tagResponse);
+      // console.log('posting app identifier', tagResponse);
       Alert.alert(
         'Upload',
         'File uploaded',
@@ -143,7 +142,7 @@ const Upload = ({navigation}) => {
       result = await ImagePicker.launchCameraAsync(options);
     }
 
-    console.log(result);
+    // console.log(result);
 
     if (!result.cancelled) {
       setFiletype(result.type);
@@ -164,14 +163,11 @@ const Upload = ({navigation}) => {
           {image && (
             <>
               {filetype === 'image' ? (
-                <Image
-                  source={{uri: image}}
-                  style={{width: '100%', height: undefined, aspectRatio: 1}}
-                />
+                <Image source={{uri: image}} style={styles.image} />
               ) : (
                 <Video
                   source={{uri: image}}
-                  style={{width: '100%', height: undefined, aspectRatio: 1}}
+                  style={styles.image}
                   useNativeControls={true}
                 />
               )}
@@ -236,24 +232,26 @@ const Upload = ({navigation}) => {
             onChangeText={(txt) => handleInputChange('description2', txt)}
             errorMessage={uploadErrors.description2}
           />
-          <Button
-            title="Choose from library"
-            color="#3d9f9f"
-            onPress={() => pickImage(true)}
-          />
-          <Button title="Use camera" color="#3d9f9f" onPress={() => pickImage(false)} />
-          {isUploading && <ActivityIndicator size="large" color="#0000ff" />}
-          <Button
-            title="Upload file"
-            color="#3d9f9f"
-            onPress={doUpload}
-            disabled={
-              uploadErrors.title !== null ||
-              uploadErrors.description !== null ||
-              image === null
-            }
-          />
-          <Button title="Reset" color="#3d9f9f" onPress={doReset} />
+
+          <ThemeProvider theme={theme}>
+            <Button
+              title="Choose from library"
+              onPress={() => pickImage(true)}
+            />
+            <Button title="Use camera" onPress={() => pickImage(false)} />
+            {isUploading && <ActivityIndicator size="large" color="#0000ff" />}
+
+            <Button
+              title="Upload file"
+              onPress={doUpload}
+              disabled={
+                uploadErrors.title !== null ||
+                uploadErrors.description !== null ||
+                image === null
+              }
+            />
+            <Button title="Reset" onPress={doReset} />
+          </ThemeProvider>
         </View>
       </KeyboardAvoidingView>
     </ScrollView>
@@ -265,6 +263,11 @@ const styles = StyleSheet.create({
     padding: 15,
     backgroundColor: '#FFF',
     // marginBottom: 10,
+  },
+  image: {
+    width: '100%',
+    height: undefined,
+    aspectRatio: 1,
   },
 });
 

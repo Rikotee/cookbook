@@ -8,11 +8,12 @@ import {useTag} from '../hooks/ApiHooks';
 import {uploadsUrl, appIdentifier} from '../utils/variables';
 import {ScrollView} from 'react-native-gesture-handler';
 
+// AllProfiles is used to show other users profiles. It uses "guest" instead of "user" when fetching data
 const AllProfile = ({navigation}) => {
   const [fetchBio, setFetchBio] = useState('');
   const {isLoggedIn, setIsLoggedIn, guest} = useContext(MainContext);
   const [avatar, setAvatar] = useState('http://placekitten.com/640'); // Placeholder for accounts without profile picture
-  const {getFilesByTag, postTag} = useTag();
+  const {getFilesByTag} = useTag();
   const logout = async () => {
     setIsLoggedIn(false);
     await AsyncStorage.clear();
@@ -21,24 +22,10 @@ const AllProfile = ({navigation}) => {
       navigation.navigate('Login');
     }
   };
-  // const {handleInputChange, inputs, uploadErrors, reset} = useUploadForm();
-
-  const settingEmail = async () => {
-    // const userToken = await AsyncStorage.getItem('userToken');
-    // console.log('here are inputs: ' + JSON.stringify(inputs.username));
-    const fullUsername = JSON.parse(guest.username);
-    const realBio = fullUsername[1];
-
-    // const res = await updateUser(userToken, {
-    //   username: JSON.stringify([inputs.username, realBio]),
-    // });
-    // console.log("is this the thing that is undefined? " + res)
-  };
 
   const getBio = async () => {
     let realEmail;
     let bio;
-
     const fullEmail = guest.email;
     if (fullEmail.includes(']')) {
       const fullEmailWithBio = JSON.parse(fullEmail);
@@ -84,6 +71,7 @@ const AllProfile = ({navigation}) => {
           </Text>
         )}
       </View>
+
       <View style={styles.view}>
         <Image
           source={{uri: avatar}}
@@ -98,6 +86,8 @@ const AllProfile = ({navigation}) => {
         <Text>{'Biography: '}</Text>
         <Text>{fetchBio}</Text>
       </View>
+      <View style={styles.container}></View>
+
       <ListItem bottomDivider onPress={() => navigation.push('GuestFiles')}>
         <Avatar icon={{name: 'perm-media', color: 'black'}} />
         <ListItem.Content>
@@ -110,6 +100,9 @@ const AllProfile = ({navigation}) => {
 };
 
 const styles = StyleSheet.create({
+  container: {
+    height: 50,
+  },
   image: {
     marginTop: 16,
     width: '40%',
@@ -131,7 +124,6 @@ const styles = StyleSheet.create({
     paddingBottom: 5,
     paddingTop: 5,
   },
-
   view: {
     alignItems: 'center',
     flex: 1,

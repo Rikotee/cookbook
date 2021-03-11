@@ -6,10 +6,9 @@ import {
   ScrollView,
   StyleSheet,
   View,
-  Button,
 } from 'react-native';
 import PropTypes from 'prop-types';
-import {Input, Text} from 'react-native-elements';
+import {Input, Text, Button, ThemeProvider} from 'react-native-elements';
 import useUploadForm from '../hooks/UploadHooks';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useMedia} from '../hooks/ApiHooks';
@@ -20,7 +19,7 @@ const Modify = ({navigation, route}) => {
   const [isUploading, setIsUploading] = useState(false);
   const {updateFile} = useMedia();
   const {update, setUpdate} = useContext(MainContext);
-
+  const {theme} = useContext(MainContext);
   const {
     handleInputChange,
     inputs,
@@ -37,9 +36,9 @@ const Modify = ({navigation, route}) => {
       const userToken = await AsyncStorage.getItem('userToken');
       const combinedData = JSON.stringify([data, data2]);
       const actualData = {description: combinedData};
-      console.log('combined data: ' + actualData);
+      // console.log('combined data: ' + actualData);
       const resp = await updateFile(file.file_id, actualData, userToken);
-      console.log('update response', JSON.stringify(resp));
+      // console.log('update response', JSON.stringify(resp));
       setUpdate(update + 1);
       navigation.pop();
     } catch (error) {
@@ -51,9 +50,9 @@ const Modify = ({navigation, route}) => {
   };
 
   const settingInputs = () => {
-    console.log(file.description);
+    // console.log(file.description);
     const fullDesc = JSON.parse(file.description);
-    console.log(JSON.stringify(fullDesc));
+    // console.log(JSON.stringify(fullDesc));
     const instructions = fullDesc[0];
     const ingredients = fullDesc[1];
     setInputs({
@@ -70,6 +69,7 @@ const Modify = ({navigation, route}) => {
   const doReset = () => {
     reset();
   };
+
   return (
     <ScrollView>
       <KeyboardAvoidingView behavior="position" enabled>
@@ -99,15 +99,16 @@ const Modify = ({navigation, route}) => {
             errorMessage={uploadErrors.description2}
           />
           {isUploading && <ActivityIndicator size="large" color="#0000ff" />}
-          <Button
-            title="Update"
-            color="#3d9f9f"
-            onPress={doUpdate}
-            // disabled={
-            //   uploadErrors.title !== null || uploadErrors.description !== null
-            // }
-          />
-          <Button title="Reset" color="#3d9f9f" onPress={doReset} />
+          <ThemeProvider theme={theme}>
+            <Button
+              title="Update"
+              onPress={doUpdate}
+              // disabled={
+              //   uploadErrors.title !== null || uploadErrors.description !== null
+              // }
+            />
+            <Button title="Reset" onPress={doReset} />
+          </ThemeProvider>
         </View>
       </KeyboardAvoidingView>
     </ScrollView>
@@ -118,40 +119,6 @@ const styles = StyleSheet.create({
   post: {
     padding: 15,
     backgroundColor: '#FFF',
-    // marginBottom: 10,
-  },
-  image: {
-    width: '100%',
-    height: undefined,
-    aspectRatio: 1,
-    marginTop: 10,
-    marginBottom: 10,
-    borderRadius: 10,
-  },
-  // description: {
-  //   marginBottom: 10,
-  //   textAlign: 'center',
-  //   fontSize: 16,
-  // },
-  userInfo: {
-    flex: 1,
-    flexDirection: 'row',
-  },
-  userInfoText: {
-    marginLeft: 10,
-    fontSize: 18,
-    fontWeight: 'bold',
-    textAlignVertical: 'center',
-  },
-  avatarImage: {
-    width: 40,
-    height: 40,
-    borderRadius: 25,
-    overflow: 'hidden',
-  },
-  buttons: {
-    flex: 1,
-    flexDirection: 'row',
   },
 });
 

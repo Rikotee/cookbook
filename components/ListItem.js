@@ -23,14 +23,9 @@ import {Video} from 'expo-av';
 import * as ScreenOrientation from 'expo-screen-orientation';
 
 const ListItem = ({navigation, singleMedia, isMyFile}) => {
-  const {
-    setUpdate,
-    update,
-    isLoggedIn,
-    guest,
-    setGuest,
-    getRatings,
-  } = useContext(MainContext);
+  const {setUpdate, update, isLoggedIn, setGuest, getRatings} = useContext(
+    MainContext
+  );
   const {deleteFile, getRating} = useMedia();
   const [avatar, setAvatar] = useState('http://placekitten.com/100');
   const {getFilesByTag, getTagsOfFile} = useTag();
@@ -172,7 +167,7 @@ const ListItem = ({navigation, singleMedia, isMyFile}) => {
     getFileTags();
 
     const orientSub = ScreenOrientation.addOrientationChangeListener((evt) => {
-      console.log('orientation', evt);
+      // console.log('orientation', evt);
       if (evt.orientationInfo.orientation > 2) {
         // show video in fullscreen
         showVideoInFullscreen();
@@ -185,21 +180,20 @@ const ListItem = ({navigation, singleMedia, isMyFile}) => {
     };
   }, [videoRef]);
 
+  // When user push avatar or username, goProfile fetch userinformation of the media then set that info to "guest",
+  // that is used in AllProfile page to fill all the information and to fetch all users posts.
   const goProfile = async () => {
     const profileInfo = async () => {
       if (isLoggedIn) {
         try {
           const userToken = await AsyncStorage.getItem('userToken');
           const userData = await getUser(singleMedia.user_id, userToken);
-          // console.log('ProfileInfo send test: ', userData);
-          // await AsyncStorage.setItem('userId', JSON.stringify(userData));
           setGuest(userData);
         } catch (error) {
           console.error(error.message);
         }
       }
     };
-
     await profileInfo();
     navigation.navigate('AllProfile');
   };
@@ -278,7 +272,6 @@ const ListItem = ({navigation, singleMedia, isMyFile}) => {
             </>
           )}
         </RNEListItem.Content>
-        {/* <Card.Divider /> */}
       </View>
     </TouchableOpacity>
   );

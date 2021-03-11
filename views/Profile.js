@@ -1,41 +1,18 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {
-  StyleSheet,
-  ActivityIndicator,
-  View,
-  SafeAreaView,
-  TextInput,
-} from 'react-native';
+import {StyleSheet, ActivityIndicator, View} from 'react-native';
 import {MainContext} from '../contexts/MainContext';
 import PropTypes from 'prop-types';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {
-  Text,
-  ListItem,
-  Avatar,
-  Image,
-  Button,
-  Input,
-  Card,
-} from 'react-native-elements';
-import {useTag, useMedia, useUser} from '../hooks/ApiHooks';
+import {Text, ListItem, Avatar, Image} from 'react-native-elements';
+import {useTag, useUser} from '../hooks/ApiHooks';
 import {uploadsUrl, appIdentifier} from '../utils/variables';
 import {ScrollView} from 'react-native-gesture-handler';
-import useUploadForm from '../hooks/UploadHooks';
 import useSignUpForm from '../hooks/RegisterHooks';
 
 const Profile = ({navigation}) => {
   const [fetchBio, setFetchBio] = useState('');
   const {updateUser, getUser} = useUser();
-  const {
-    inputs,
-    handleInputChange,
-    handleInputEnd,
-    checkUserAvailable,
-    registerErrors,
-    validateOnSend,
-  } = useSignUpForm();
-  const [filetype, setFiletype] = useState('');
+  const {inputs} = useSignUpForm();
   const {
     isLoggedIn,
     setIsLoggedIn,
@@ -44,7 +21,7 @@ const Profile = ({navigation}) => {
     getBioChange,
   } = useContext(MainContext);
   const [avatar, setAvatar] = useState('http://placekitten.com/640'); // Placeholder for accounts without profile picture
-  const {getFilesByTag, postTag} = useTag();
+  const {getFilesByTag} = useTag();
   const logout = async () => {
     setIsLoggedIn(false);
     await AsyncStorage.clear();
@@ -57,7 +34,7 @@ const Profile = ({navigation}) => {
 
   const settingEmail = async () => {
     const userToken = await AsyncStorage.getItem('userToken');
-    console.log('here are inputs: ' + JSON.stringify(inputs.username));
+    // console.log('here are inputs: ' + JSON.stringify(inputs.username));
     const fullUsername = JSON.parse(user.username);
     const realBio = fullUsername[1];
 
@@ -135,6 +112,7 @@ const Profile = ({navigation}) => {
         <Text>{'Biography: '}</Text>
         <Text>{fetchBio}</Text>
       </View>
+      <View style={styles.container}></View>
       <ListItem bottomDivider onPress={() => navigation.push('My Files')}>
         <Avatar icon={{name: 'perm-media', color: 'black'}} />
         <ListItem.Content>
@@ -142,13 +120,6 @@ const Profile = ({navigation}) => {
         </ListItem.Content>
         <ListItem.Chevron />
       </ListItem>
-      {/* <ListItem bottomDivider onPress={() => navigation.navigate('Upload')}>
-        <Avatar icon={{name: 'perm-media', color: 'black'}} />
-        <ListItem.Content>
-          <ListItem.Title>Upload recipe</ListItem.Title>
-        </ListItem.Content>
-        <ListItem.Chevron />
-      </ListItem> */}
       <ListItem
         bottomDivider
         onPress={() => navigation.navigate('EditProfile')}
@@ -164,6 +135,9 @@ const Profile = ({navigation}) => {
 };
 
 const styles = StyleSheet.create({
+  container: {
+    height: 50,
+  },
   image: {
     marginTop: 16,
     width: '40%',
@@ -185,7 +159,6 @@ const styles = StyleSheet.create({
     paddingBottom: 5,
     paddingTop: 5,
   },
-
   view: {
     alignItems: 'center',
     flex: 1,

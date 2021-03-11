@@ -10,14 +10,13 @@ import {
   Button, ToastAndroid,
 } from 'react-native';
 import PropTypes from 'prop-types';
-import {Input, Text, Image} from 'react-native-elements';
+import {Input, Image, Button, ThemeProvider} from 'react-native-elements';
 import useUploadForm from '../hooks/UploadHooks';
 import * as ImagePicker from 'expo-image-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useMedia, useTag, useUser} from '../hooks/ApiHooks';
 import {MainContext} from '../contexts/MainContext';
 import {appIdentifier, uploadsUrl} from '../utils/variables';
-import {Video} from 'expo-av';
 import useSignUpForm from '../hooks/RegisterHooks';
 import * as AlertIOS from 'react-native';
 
@@ -38,6 +37,9 @@ const EditProfile = ({navigation}) => {
 
   const {postTag} = useTag();
   const {update, setUpdate, user, setGetPicture, getPicture, setGetBioChange, getBioChange} = useContext(MainContext);
+  const {update, setUpdate, user} = useContext(MainContext);
+  const {isLoggedIn, setIsLoggedIn} = useContext(MainContext);
+  const {theme} = useContext(MainContext);
   const {getFilesByTag} = useTag();
 
   const settingBio = async () => {
@@ -123,6 +125,7 @@ const EditProfile = ({navigation}) => {
     try {
       setIsUploading(true);
       const resp = await upload(formData, userToken);
+      console.log('response here: ' + resp);
       const tagResponse = await postTag(
         {
           file_id: resp,
@@ -181,11 +184,19 @@ const EditProfile = ({navigation}) => {
       <KeyboardAvoidingView behavior="position" enabled>
         <View style={styles.container}>
           <View style={styles.imageArea}>
-            <Image
-              style={styles.image}
-              source={{uri: avatar}}
-              onPress={pickImage}
-            />
+            {image === null ? (
+              <Image
+                style={styles.image}
+                source={{uri: avatar}}
+                onPress={pickImage}
+              />
+            ) : (
+              <Image
+                style={styles.image}
+                source={{uri: image}}
+                onPress={pickImage}
+              />
+            )}
           </View>
           <View style={styles.bioTextArea}>
             <Input
@@ -201,24 +212,17 @@ const EditProfile = ({navigation}) => {
           </View>
         </View>
         <View style={styles.buttonArea}>
-          <Button
-            style={styles.buttons}
-            color="#3d9f9f"
-            title="Choose from library"
-            onPress={() => pickImage(true)}
-          />
-          <Button
-            title="Use camera"
-            color="#3d9f9f"
-            onPress={() => pickImage(false)}
-          />
-          {isUploading && <ActivityIndicator size="large" color="#0000ff"/>}
-          <Button title="Save image" color="#3d9f9f" onPress={doUpload}/>
-          <Button
-            title="Save bio change"
-            color="#3d9f9f"
-            onPress={combinedFunction}
-          />
+          <ThemeProvider theme={theme}>
+            <Button
+              style={styles.buttons}
+              title="Choose from library"
+              onPress={() => pickImage(true)}
+            />
+            <Button title="Use camera" onPress={() => pickImage(false)} />
+            {isUploading && <ActivityIndicator size="large" color="#0000ff" />}
+            <Button title="Save image" onPress={doUpload} />
+            <Button title="Save bio change" onPress={combinedFunction} />
+          </ThemeProvider>
         </View>
       </KeyboardAvoidingView>
     </ScrollView>
@@ -233,7 +237,6 @@ const styles = StyleSheet.create({
   },
   imageArea: {
     height: 150,
-    paddingBottom: 50,
     alignItems: 'center',
   },
   bioTextArea: {

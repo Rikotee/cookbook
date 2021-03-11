@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import PropTypes from 'prop-types';
 import {appIdentifier, uploadsUrl} from '../utils/variables';
-import {Avatar, Card, ListItem, Text} from 'react-native-elements';
+import {Avatar, Card, Text} from 'react-native-elements';
 import moment from 'moment';
 import {useMedia, useTag, useUser} from '../hooks/ApiHooks';
 import {Video} from 'expo-av';
@@ -28,7 +28,6 @@ const Single = ({route}) => {
   const [fetchTags2, setFetchTags2] = useState('');
   const [fetchTags3, setFetchTags3] = useState('');
   const {user, getRatings, setGetRatings} = useContext(MainContext);
-
   const {file} = route.params;
   const [avatar, setAvatar] = useState('http://placekitten.com/100');
   const [owner, setOwner] = useState({username: 'somebody'});
@@ -50,6 +49,7 @@ const Single = ({route}) => {
       console.error(error.message);
     }
   };
+
   const fetchOwner = async () => {
     try {
       const userToken = await AsyncStorage.getItem('userToken');
@@ -130,8 +130,8 @@ const Single = ({route}) => {
     const userToken = await AsyncStorage.getItem('userToken');
     const fileId = file.file_id;
     const rating = selectedRating;
-    console.log('user id here: ' + user.user_id);
-    console.log('rating here' + rating);
+    // console.log('user id here: ' + user.user_id);
+    // console.log('rating here' + rating);
     if (
       rating == null ||
       rating === '0' ||
@@ -203,7 +203,7 @@ const Single = ({route}) => {
     fetchRatings();
 
     const orientSub = ScreenOrientation.addOrientationChangeListener((evt) => {
-      console.log('orientation', evt);
+      // console.log('orientation', evt);
       if (evt.orientationInfo.orientation > 2) {
         // show video in fullscreen
         showVideoInFullscreen();
