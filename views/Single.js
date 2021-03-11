@@ -1,8 +1,8 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {StyleSheet, ActivityIndicator, View, Alert} from 'react-native';
+import {StyleSheet, ActivityIndicator, View, Alert, Button} from 'react-native';
 import PropTypes from 'prop-types';
 import {appIdentifier, uploadsUrl} from '../utils/variables';
-import {Avatar, Button, Card, ListItem, Text} from 'react-native-elements';
+import {Avatar, Card, ListItem, Text} from 'react-native-elements';
 import moment from 'moment';
 import {useMedia, useTag, useUser} from '../hooks/ApiHooks';
 import {Video} from 'expo-av';
@@ -123,8 +123,13 @@ const Single = ({route}) => {
     const fileId = file.file_id;
     const rating = selectedRating;
     console.log('user id here: ' + user.user_id);
-    console.log("rating here" + rating)
-    if (rating == null || rating === '0' || rating === undefined || rating === "") {
+    console.log('rating here' + rating);
+    if (
+      rating == null ||
+      rating === '0' ||
+      rating === undefined ||
+      rating === ''
+    ) {
       alert('pick rating first');
     } else {
       if (fetchHaveRated === 'true') {
@@ -214,24 +219,24 @@ const Single = ({route}) => {
 
         <Text>Rating: {fetchRating}</Text>
 
-        {user.user_id !== undefined &&
-        <View>
-          <Picker
-            selectedValue={selectedRating}
-            onValueChange={(itemValue, itemIndex) =>
-              setSelectedRating(itemValue)
-            }>
-            <Picker.Item label="pick rating..." value="0"/>
-            <Picker.Item label="1" value="1"/>
-            <Picker.Item label="2" value="2"/>
-            <Picker.Item label="3" value="3"/>
-            <Picker.Item label="4" value="4"/>
-            <Picker.Item label="5" value="5"/>
-          </Picker>
-          <Button title="Rate" onPress={addRating}/>
-        </View>
-        }
-
+        {user.user_id !== undefined && (
+          <View>
+            <Picker
+              selectedValue={selectedRating}
+              onValueChange={(itemValue, itemIndex) =>
+                setSelectedRating(itemValue)
+              }
+            >
+              <Picker.Item label="pick rating..." value="0" />
+              <Picker.Item label="1" value="1" />
+              <Picker.Item label="2" value="2" />
+              <Picker.Item label="3" value="3" />
+              <Picker.Item label="4" value="4" />
+              <Picker.Item label="5" value="5" />
+            </Picker>
+            <Button title="Rate" color="#3d9f9f" onPress={addRating} />
+          </View>
+        )}
 
         {file.media_type === 'image' ? (
           <Card.Image
