@@ -31,7 +31,6 @@ const RegisterForm = ({navigation}) => {
     delete inputs.confirmPassword;
     try {
       const result = await postRegister(inputs);
-      // console.log('doRegister ok', result.message);
       Alert.alert(result.message);
       // do automatic login after registering
       const userData = await postLogin(inputs);

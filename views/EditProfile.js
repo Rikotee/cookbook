@@ -85,6 +85,7 @@ const EditProfile = ({navigation}) => {
     const userToken = await AsyncStorage.getItem('userToken');
     const userInfo = await getUser(user.user_id, userToken);
     const fullEmail = userInfo.email;
+    // Check
     if (fullEmail.includes(']')) {
       const fullEmailWithBio = JSON.parse(fullEmail);
       realEmail = fullEmailWithBio[0];
@@ -95,6 +96,7 @@ const EditProfile = ({navigation}) => {
     setFetchBio(bio);
   };
 
+  // Function to combine 2 function so both can be called from same button press
   const combinedFunction = () => {
     settingBio();
     getBio();
@@ -105,6 +107,7 @@ const EditProfile = ({navigation}) => {
     getBio();
   }, []);
 
+  //
   const doUpload = async () => {
     const userToken = await AsyncStorage.getItem('userToken');
     const formData = new FormData();
