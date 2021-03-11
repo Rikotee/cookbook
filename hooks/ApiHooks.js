@@ -70,7 +70,7 @@ const useLogin = () => {
 
 const useUser = () => {
   const postRegister = async (inputs) => {
-    console.log('trying to create user', inputs);
+    // console.log('trying to create user', inputs);
     const fetchOptions = {
       method: 'POST',
       headers: {
@@ -80,7 +80,7 @@ const useUser = () => {
     };
     try {
       const json = await doFetch(baseUrl + 'users', fetchOptions);
-      console.log('register resp', json);
+      // console.log('register resp', json);
       return json;
     } catch (e) {
       throw new Error(e.message);
@@ -109,7 +109,7 @@ const useUser = () => {
       data: inputs,
       url: baseUrl + 'users',
     };
-    console.log('apihooks modify', options.data);
+    // console.log('apihooks modify', options.data);
 
     try {
       await axios(options).then(
@@ -175,7 +175,7 @@ const useTag = () => {
   };
 
   const postTag = async (tagAndFileId, token) => {
-    console.log('Tag = ' + JSON.stringify(tagAndFileId));
+    // console.log('Tag = ' + JSON.stringify(tagAndFileId));
     const options = {
       method: 'POST',
       headers: {'Content-Type': 'application/json', 'x-access-token': token},
@@ -194,7 +194,7 @@ const useTag = () => {
 
 const useMedia = () => {
   const rate = async (ratingAndFileId, token) => {
-    console.log('Who called me??? ' + JSON.stringify(ratingAndFileId));
+    // console.log('Who called me??? ' + JSON.stringify(ratingAndFileId));
     const options = {
       method: 'POST',
       headers: {
@@ -227,7 +227,7 @@ const useMedia = () => {
     };
     try {
       const result = await doFetch(baseUrl + 'ratings/file/' + fileId, options);
-      console.log('rating delete: ' + JSON.stringify(result));
+      // console.log('rating delete: ' + JSON.stringify(result));
       return result;
     } catch (error) {
       throw new Error('deleteFile error: ' + error.message);
