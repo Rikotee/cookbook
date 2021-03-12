@@ -42,7 +42,7 @@ const Upload = ({navigation}) => {
   const doUpload = async () => {
     const formData = new FormData();
     // add text to formData
-    formData.append('title', inputs.title;
+    formData.append('title', inputs.title);
     const data = inputs.description;
     const data2 = inputs.ingredients
     checkNulls(selectedTag);
