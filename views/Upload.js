@@ -42,9 +42,9 @@ const Upload = ({navigation}) => {
   const doUpload = async () => {
     const formData = new FormData();
     // add text to formData
-    formData.append('title', inputs.title.replace(/[^a-z0-9 ]/gi, ''));
-    const data = inputs.description.replace(/[^a-z0-9 ]/gi, '');;
-    const data2 = inputs.ingredients.replace(/[^a-z0-9 ]/gi, '');;
+    formData.append('title', inputs.title;
+    const data = inputs.description;
+    const data2 = inputs.ingredients
     checkNulls(selectedTag);
     checkNulls(selectedTag2);
     checkNulls(selectedTag3);

@@ -30,8 +30,8 @@ const Modify = ({navigation, route}) => {
 
   const doUpdate = async () => {
     try {
-      const data = inputs.description.replace(/[^a-z0-9 ]/gi, '');
-      const data2 = inputs.description2.replace(/[^a-z0-9 ]/gi, '');
+      const data = inputs.description;
+      const data2 = inputs.description2;
       setIsUploading(true);
       const userToken = await AsyncStorage.getItem('userToken');
       const combinedData = JSON.stringify([data, data2]);
@@ -94,7 +94,7 @@ const Modify = ({navigation, route}) => {
             onChangeText={(txt) => handleInputChange('description2', txt)}
             errorMessage={uploadErrors.description2}
           />
-          {isUploading && <ActivityIndicator size="large" color="#0000ff" />}
+          {isUploading && <ActivityIndicator size="large" color="#0000ff"/>}
           <ThemeProvider theme={theme}>
             <Button
               title="Update"
@@ -103,7 +103,7 @@ const Modify = ({navigation, route}) => {
               //   uploadErrors.title !== null || uploadErrors.description !== null
               // }
             />
-            <Button title="Reset" onPress={doReset} />
+            <Button title="Reset" onPress={doReset}/>
           </ThemeProvider>
         </View>
       </KeyboardAvoidingView>
