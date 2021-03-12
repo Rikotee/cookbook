@@ -112,8 +112,8 @@ const Profile = ({navigation}) => {
         <Text>{'Biography: '}</Text>
         <Text>{fetchBio}</Text>
       </View>
-      <View style={styles.container}></View>
-      <ListItem bottomDivider onPress={() => navigation.push('My Files')}>
+      <View style={styles.container}/>
+      <ListItem bottomDivider onPress={() => navigation.push('My recipes')}>
         <Avatar icon={{name: 'perm-media', color: 'black'}} />
         <ListItem.Content>
           <ListItem.Title>My Files</ListItem.Title>

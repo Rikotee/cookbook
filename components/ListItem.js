@@ -136,11 +136,13 @@ const ListItem = ({navigation, singleMedia, isMyFile}) => {
     }
   };
 
+  // getting tags for this file
   const getFileTags = async () => {
     let actualTag;
     let actuallyActualTag;
     const actualTags = [];
     const tags = await getTagsOfFile(singleMedia.file_id);
+    // Looping through the tags and displaying them if it is not empty
     for (let i = 0; i < tags.length; i++) {
       if (tags[i].tag !== appIdentifier) {
         actualTag = tags[i].tag;
