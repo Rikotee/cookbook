@@ -79,7 +79,6 @@ const ListItem = ({navigation, singleMedia, isMyFile}) => {
       }
     }
     setUpdate(update + 1);
-    console.log('testing fetchOwner')
   };
 
   const doDelete = () => {
